@@ -28,6 +28,11 @@ body {
     text-decoration: none;
 }
 
+nav {
+    display: flex;
+    gap: 1rem;
+}
+
 nav a {
     color: #31523f;
     text-decoration: none;
@@ -173,4 +178,71 @@ h1 {
 
 .recipe-section h2 {
     margin-bottom: 0.5rem;
+}
+
+.profile-page {
+    max-width: 620px;
+}
+
+.profile-form,
+.estimate-card {
+    display: grid;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: #ffffff;
+    border-radius: 12px;
+}
+
+.profile-form label {
+    display: grid;
+    gap: 0.35rem;
+    font-weight: bold;
+}
+
+.profile-form input,
+.profile-form select,
+.profile-form button {
+    padding: 0.65rem;
+    border: 1px solid #b9c8bd;
+    border-radius: 6px;
+    font: inherit;
+}
+
+.profile-form fieldset {
+    display: grid;
+    gap: 0.6rem;
+    border: 1px solid #b9c8bd;
+    border-radius: 6px;
+}
+
+.profile-form fieldset label {
+    display: block;
+    font-weight: normal;
+}
+
+.profile-form button {
+    border: 0;
+    background: #31523f;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+.estimate-card {
+    border: 1px solid #b9c8bd;
+}
+
+.estimate-card h2,
+.estimate-card p {
+    margin: 0;
+}
+
+.estimate-note,
+.form-error {
+    color: #587064;
+    font-size: 0.9rem;
+}
+
+.form-error {
+    color: #a12a2a;
 }
