@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Meal Plan | Recipes{% endblock %}
+
+{% block content %}
+    <section class="recipe-heading">
+        <p class="eyebrow">Recipe collection</p>
+        <h1>Recipes</h1>
+        <p>{{ recipes|length }} predefined recipes to use later in your meal plans.</p>
+    </section>
+
+    <section class="recipe-grid" aria-label="All recipes">
+        {% for recipe in recipes %}
+            <article class="recipe-card">
+                <p class="recipe-type">{{ recipe.meal_type }}</p>
+                <h2>{{ recipe.name }}</h2>
+                <p class="recipe-meta">{{ recipe.servings }} servings · {{ recipe.calories }} kcal per serving</p>
+                <dl class="nutrition">
+                    <div><dt>Protein</dt><dd>{{ recipe.protein }} g</dd></div>
+                    <div><dt>Carbs</dt><dd>{{ recipe.carbohydrates }} g</dd></div>
+                    <div><dt>Fat</dt><dd>{{ recipe.fat }} g</dd></div>
+                </dl>
+                <p class="tags">
+                    {% for tag in recipe.tags %}
+                        <span>{{ tag }}</span>
+                    {% endfor %}
+                </p>
+                <h3>Ingredients</h3>
+                <ul>
+                    {% for ingredient in recipe.ingredients %}
+                        <li>{{ ingredient.amount }} {{ ingredient.unit }} {{ ingredient.name }}</li>
+                    {% endfor %}
+                </ul>
+
+                <h3>Instructions</h3>
+                <ol>
+                    {% for step in recipe.instructions %}
+                        <li>{{ step }}</li>
+                    {% endfor %}
+                </ol>
+            </article>
+        {% endfor %}
+    </section>
+{% endblock %}

@@ -16,12 +16,20 @@ body {
     padding: 1rem 2rem;
     background: #ffffff;
     border-bottom: 1px solid #dfe5dc;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .logo {
     color: inherit;
     font-size: 1.25rem;
     font-weight: bold;
+    text-decoration: none;
+}
+
+nav a {
+    color: #31523f;
     text-decoration: none;
 }
 
@@ -47,4 +55,76 @@ body {
 h1 {
     margin: 0.5rem 0;
     font-size: clamp(2rem, 6vw, 3.5rem);
+}
+
+.recipe-heading {
+    margin-bottom: 2rem;
+}
+
+.recipe-grid {
+    display: grid;
+    gap: 1.25rem;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.recipe-card {
+    padding: 1.5rem;
+    background: #ffffff;
+    border: 1px solid #dfe5dc;
+    border-radius: 12px;
+}
+
+.recipe-card h2 {
+    margin: 0.25rem 0;
+}
+
+.recipe-card h3 {
+    margin-bottom: 0.25rem;
+    font-size: 1rem;
+}
+
+.recipe-card ul {
+    margin: 0;
+    padding-left: 1.2rem;
+}
+
+.recipe-type, .recipe-meta {
+    color: #587064;
+    margin: 0;
+}
+
+.recipe-type {
+    font-size: 0.8rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.nutrition {
+    display: flex;
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.nutrition div {
+    display: grid;
+}
+
+.nutrition dt {
+    color: #587064;
+    font-size: 0.8rem;
+}
+
+.nutrition dd {
+    margin: 0.15rem 0 0;
+    font-weight: bold;
+}
+
+.tags span {
+    display: inline-block;
+    margin: 0 0.3rem 0.3rem 0;
+    padding: 0.2rem 0.5rem;
+    border-radius: 999px;
+    background: #e6f0e8;
+    color: #31523f;
+    font-size: 0.8rem;
 }
