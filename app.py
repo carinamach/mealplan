@@ -5,7 +5,7 @@ from pathlib import Path
 from flask import Flask, abort, redirect, render_template, request, session, url_for
 
 from calculations import calculate_targets
-from meal_planner import generate_daily_plan
+from meal_planner import calculate_plan_totals, find_swap_recipe, generate_daily_plan
 
 
 app = Flask(__name__)
@@ -82,6 +82,7 @@ def profile():
                 goal=profile_data["goal"],
                 biological_sex=profile_data["biological_sex"],
             )
+            session.pop("meal_plan", None)
             return redirect(url_for("profile"))
         except (KeyError, ValueError) as exception:
             error = str(exception)
@@ -103,12 +104,38 @@ def meal_plan():
     if not targets or not profile_data:
         return render_template("meal_plan.html", plan=None)
 
-    plan = generate_daily_plan(
-        load_recipes(),
-        calorie_target=targets["calories"],
-        goal=profile_data["goal"],
-    )
+    plan = session.get("meal_plan")
+    if plan is None:
+        plan = generate_daily_plan(
+            load_recipes(),
+            calorie_target=targets["calories"],
+            goal=profile_data["goal"],
+        )
+        session["meal_plan"] = plan
+
     return render_template("meal_plan.html", plan=plan, targets=targets)
+
+
+@app.post("/meal-plan/swap/<meal_name>")
+def swap_meal(meal_name):
+    """Swap one meal while keeping the rest of the saved plan unchanged."""
+    plan = session.get("meal_plan")
+    profile_data = session.get("profile")
+
+    if not plan or not profile_data or meal_name not in plan["meals"]:
+        abort(404)
+
+    current_recipe = plan["meals"][meal_name]
+    if current_recipe is None:
+        abort(404)
+
+    alternative = find_swap_recipe(current_recipe, load_recipes(), profile_data["goal"])
+    if alternative:
+        plan["meals"][meal_name] = alternative
+        plan.update(calculate_plan_totals(plan["meals"]))
+        session["meal_plan"] = plan
+
+    return redirect(url_for("meal_plan"))
 
 
 if __name__ == "__main__":

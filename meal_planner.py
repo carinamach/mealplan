@@ -3,6 +3,41 @@
 from itertools import product
 
 
+def calculate_plan_totals(meals):
+    """Calculate totals from the recipes currently selected in a plan."""
+    selected_recipes = [recipe for recipe in meals.values() if recipe]
+    return {
+        "total_calories": sum(recipe["calories"] for recipe in selected_recipes),
+        "total_protein": sum(recipe["protein"] for recipe in selected_recipes),
+    }
+
+
+def find_swap_recipe(current_recipe, recipes, goal):
+    """Find a same-type alternative that is close in calories and suits the goal."""
+    alternatives = [
+        recipe
+        for recipe in recipes
+        if recipe["meal_type"] == current_recipe["meal_type"] and recipe["id"] != current_recipe["id"]
+    ]
+
+    if not alternatives:
+        return None
+
+    def swap_score(recipe):
+        calorie_difference = abs(recipe["calories"] - current_recipe["calories"])
+
+        if goal == "high_protein":
+            goal_score = -recipe["protein"]
+        elif goal in ("lose_weight", "low_calorie"):
+            goal_score = recipe["calories"]
+        else:
+            goal_score = 0
+
+        return calorie_difference, goal_score
+
+    return min(alternatives, key=swap_score)
+
+
 def generate_daily_plan(recipes, calorie_target, goal):
     """Choose the recipe combination closest to the daily calorie target.
 
@@ -33,8 +68,16 @@ def generate_daily_plan(recipes, calorie_target, goal):
         if snack:
             selected_recipes.append(snack)
 
-        total_calories = sum(recipe["calories"] for recipe in selected_recipes)
-        total_protein = sum(recipe["protein"] for recipe in selected_recipes)
+        totals = calculate_plan_totals(
+            {
+                "Breakfast": breakfast,
+                "Lunch": lunch,
+                "Dinner": dinner,
+                "Snack": snack,
+            }
+        )
+        total_calories = totals["total_calories"]
+        total_protein = totals["total_protein"]
 
         # High-protein plans prefer more protein only when calorie closeness is equal.
         score = (abs(total_calories - calorie_target), -total_protein if goal == "high_protein" else 0)
@@ -48,8 +91,7 @@ def generate_daily_plan(recipes, calorie_target, goal):
                     "Dinner": dinner,
                     "Snack": snack,
                 },
-                "total_calories": total_calories,
-                "total_protein": total_protein,
+                **totals,
             }
 
     return best_plan

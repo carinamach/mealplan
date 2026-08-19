@@ -203,6 +203,20 @@ h1 {
     color: inherit;
 }
 
+.swap-button {
+    padding: 0.45rem 0.75rem;
+    border: 1px solid #31523f;
+    border-radius: 6px;
+    background: #ffffff;
+    color: #31523f;
+    font: inherit;
+    cursor: pointer;
+}
+
+.swap-button:hover {
+    background: #e6f0e8;
+}
+
 .plan-total {
     margin-top: 1.5rem;
 }

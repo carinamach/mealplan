@@ -1,7 +1,7 @@
 import unittest
 
 from app import load_recipes
-from meal_planner import generate_daily_plan
+from meal_planner import calculate_plan_totals, find_swap_recipe, generate_daily_plan
 
 
 class MealPlannerTests(unittest.TestCase):
@@ -21,6 +21,20 @@ class MealPlannerTests(unittest.TestCase):
 
         remaining_calories = 2200 - plan["total_calories"]
         self.assertGreater(remaining_calories, 0)
+
+    def test_swap_changes_only_one_same_type_recipe_and_recalculates_totals(self):
+        recipes = load_recipes()
+        plan = generate_daily_plan(recipes, 1800, "high_protein")
+        original_meals = plan["meals"].copy()
+
+        alternative = find_swap_recipe(plan["meals"]["Breakfast"], recipes, "high_protein")
+        plan["meals"]["Breakfast"] = alternative
+        plan.update(calculate_plan_totals(plan["meals"]))
+
+        self.assertNotEqual(plan["meals"]["Breakfast"]["id"], original_meals["Breakfast"]["id"])
+        self.assertEqual(plan["meals"]["Lunch"], original_meals["Lunch"])
+        self.assertEqual(plan["meals"]["Dinner"], original_meals["Dinner"])
+        self.assertEqual(plan["total_calories"], sum(recipe["calories"] for recipe in plan["meals"].values() if recipe))
 
 
 if __name__ == "__main__":

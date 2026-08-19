@@ -49,6 +49,33 @@ class ProfileTest(unittest.TestCase):
                 ["vegetarian", "gluten-free"],
             )
 
+    def test_swap_changes_only_the_selected_meal_in_session(self):
+        client = app.test_client()
+        client.post(
+            "/profile",
+            data={
+                "age": "30",
+                "height": "170",
+                "weight": "70",
+                "target_weight": "65",
+                "biological_sex": "female",
+                "activity_level": "moderate",
+                "goal": "high_protein",
+            },
+        )
+        client.get("/meal-plan")
+
+        with client.session_transaction() as saved_session:
+            original_breakfast_id = saved_session["meal_plan"]["meals"]["Breakfast"]["id"]
+            original_lunch_id = saved_session["meal_plan"]["meals"]["Lunch"]["id"]
+
+        response = client.post("/meal-plan/swap/Breakfast", follow_redirects=True)
+        self.assertEqual(response.status_code, 200)
+
+        with client.session_transaction() as saved_session:
+            self.assertNotEqual(saved_session["meal_plan"]["meals"]["Breakfast"]["id"], original_breakfast_id)
+            self.assertEqual(saved_session["meal_plan"]["meals"]["Lunch"]["id"], original_lunch_id)
+
 
 if __name__ == "__main__":
     unittest.main()
