@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Meal Plan | Shopping list{% endblock %}
+
+{% block content %}
+    <section class="recipe-heading">
+        <p class="eyebrow">From your meal plan</p>
+        <h1>Shopping list</h1>
+    </section>
+
+    {% if shopping_list %}
+        <p class="plan-intro">Ingredients from your selected meals, combined where they match.</p>
+        <section class="shopping-list" data-shopping-list aria-label="Shopping list">
+            {% for category, items in shopping_list %}
+                <section class="shopping-category">
+                    <h2>{{ category }}</h2>
+                    <ul>
+                        {% for item in items %}
+                            <li>
+                                <label>
+                                    <input type="checkbox" value="{{ item.name }}|{{ item.unit }}">
+                                    <span>{{ item.amount }}{% if item.unit %}{{ item.unit }}{% endif %} {{ item.name }} </span>
+                                </label>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </section>
+            {% endfor %}
+        </section>
+    {% else %}
+        <section class="profile-form">
+            <h2>Create a meal plan first</h2>
+            <p>Save your profile and generate a meal plan before viewing the shopping list.</p>
+            <a class="button-link" href="{{ url_for('meal_plan') }}">Go to meal plan</a>
+        </section>
+    {% endif %}
+{% endblock %}

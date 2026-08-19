@@ -20,6 +20,14 @@ class RecipeInstructionsTest(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn(b"Instructions", response.data)
 
+    def test_recipe_detail_page_has_meal_prep_controls(self):
+        client = app.test_client()
+        response = client.get("/recipes/1")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b"How many servings do you want to make?", response.data)
+        self.assertIn(b"data-original-servings", response.data)
+
 
 class ProfileTest(unittest.TestCase):
     def test_profile_saves_target_weight_and_preferences(self):
@@ -75,6 +83,32 @@ class ProfileTest(unittest.TestCase):
         with client.session_transaction() as saved_session:
             self.assertNotEqual(saved_session["meal_plan"]["meals"]["Breakfast"]["id"], original_breakfast_id)
             self.assertEqual(saved_session["meal_plan"]["meals"]["Lunch"]["id"], original_lunch_id)
+
+
+class ShoppingListPageTest(unittest.TestCase):
+    def test_shopping_list_page_shows_combined_ingredients(self):
+        client = app.test_client()
+        client.post(
+            "/profile",
+            data={
+                "age": "30",
+                "height": "170",
+                "weight": "70",
+                "target_weight": "65",
+                "biological_sex": "female",
+                "activity_level": "moderate",
+                "goal": "high_protein",
+            },
+        )
+        client.get("/meal-plan")
+        response = client.get("/shopping-list")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b"Shopping list", response.data)
+        self.assertIn(b'type="checkbox"', response.data)
+        self.assertTrue(
+            any(category in response.data for category in (b"Meat &amp; fish", b"Vegetables", b"Fruit", b"Dairy", b"Pantry"))
+        )
 
 
 if __name__ == "__main__":

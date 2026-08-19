@@ -9,13 +9,23 @@
         <div class="recipe-detail-image" aria-hidden="true">Recipe image</div>
         <p class="recipe-type">{{ recipe.meal_type }}</p>
         <h1>{{ recipe.name }}</h1>
-        <p class="recipe-meta">{{ recipe.servings }} servings - {{ recipe.calories }} kcal per serving</p>
+        <p class="recipe-meta">Original recipe: {{ recipe.servings }} servings - {{ recipe.calories }} kcal per serving</p>
 
-        <dl class="nutrition">
-            <div><dt>Protein</dt><dd>{{ recipe.protein }} g</dd></div>
-            <div><dt>Carbs</dt><dd>{{ recipe.carbohydrates }} g</dd></div>
-            <div><dt>Fat</dt><dd>{{ recipe.fat }} g</dd></div>
-        </dl>
+        <section class="meal-prep-controls" aria-label="Meal prep portions">
+            <label for="serving-count">How many servings do you want to make?</label>
+            <input id="serving-count" type="number" min="1" step="1" value="{{ recipe.servings }}" data-serving-input data-original-servings="{{ recipe.servings }}">
+            <p>Ingredient quantities and nutrition totals update automatically. The original recipe stays unchanged.</p>
+        </section>
+
+        <section class="meal-prep-nutrition">
+            <h2>Nutrition for <span data-selected-servings>{{ recipe.servings }}</span> servings</h2>
+            <dl class="nutrition">
+                <div><dt>Calories</dt><dd><span data-nutrient data-per-serving="{{ recipe.calories }}">{{ recipe.calories * recipe.servings }}</span> kcal</dd></div>
+                <div><dt>Protein</dt><dd><span data-nutrient data-per-serving="{{ recipe.protein }}">{{ recipe.protein * recipe.servings }}</span> g</dd></div>
+                <div><dt>Carbs</dt><dd><span data-nutrient data-per-serving="{{ recipe.carbohydrates }}">{{ recipe.carbohydrates * recipe.servings }}</span> g</dd></div>
+                <div><dt>Fat</dt><dd><span data-nutrient data-per-serving="{{ recipe.fat }}">{{ recipe.fat * recipe.servings }}</span> g</dd></div>
+            </dl>
+        </section>
 
         <p class="tags">
             {% for tag in recipe.tags %}
@@ -27,7 +37,7 @@
             <h2>Ingredients</h2>
             <ul>
                 {% for ingredient in recipe.ingredients %}
-                    <li>{{ ingredient.amount }} {{ ingredient.unit }} {{ ingredient.name }}</li>
+                    <li><span data-ingredient-amount data-original-amount="{{ ingredient.amount }}">{{ ingredient.amount }}</span> {{ ingredient.unit }} {{ ingredient.name }}</li>
                 {% endfor %}
             </ul>
         </section>

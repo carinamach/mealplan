@@ -6,6 +6,7 @@ from flask import Flask, abort, redirect, render_template, request, session, url
 
 from calculations import calculate_targets
 from meal_planner import calculate_plan_totals, find_swap_recipe, generate_daily_plan
+from shopping_list import build_shopping_list
 
 
 app = Flask(__name__)
@@ -136,6 +137,14 @@ def swap_meal(meal_name):
         session["meal_plan"] = plan
 
     return redirect(url_for("meal_plan"))
+
+
+@app.route("/shopping-list")
+def shopping_list():
+    """Display a combined shopping list from the saved meal plan."""
+    plan = session.get("meal_plan")
+    grouped_items = build_shopping_list(plan["meals"]) if plan else []
+    return render_template("shopping_list.html", shopping_list=grouped_items)
 
 
 if __name__ == "__main__":

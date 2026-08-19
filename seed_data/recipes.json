@@ -1,210 +1,647 @@
 [
   {
-    "id": 1,
-    "name": "Berry overnight oats",
+    "id": 13,
+    "name": "Apple cinnamon porridge",
     "meal_type": "breakfast",
     "servings": 1,
     "ingredients": [
       {"name": "rolled oats", "amount": 60, "unit": "g"},
-      {"name": "Greek yogurt", "amount": 150, "unit": "g"},
-      {"name": "mixed berries", "amount": 100, "unit": "g"}
+      {"name": "milk", "amount": 250, "unit": "ml"},
+      {"name": "apple", "amount": 1, "unit": ""},
+      {"name": "cinnamon", "amount": 2, "unit": "g"}
     ],
     "instructions": [
-      "Mix the oats and yogurt in a jar or bowl.",
-      "Fold in the berries, cover, and refrigerate overnight.",
-      "Stir before serving and add extra fruit if you like."
+      "Add the oats and milk to a saucepan and cook until creamy.",
+      "Dice the apple and stir half of it into the porridge.",
+      "Top with the remaining apple and sprinkle with cinnamon."
     ],
-    "calories": 420,
-    "protein": 24,
-    "carbohydrates": 56,
-    "fat": 11,
-    "tags": ["vegetarian", "make-ahead"]
-  },
-  {
-    "id": 2,
-    "name": "Spinach egg wrap",
-    "meal_type": "breakfast",
-    "servings": 1,
-    "ingredients": [{"name": "eggs", "amount": 2, "unit": ""}, {"name": "spinach", "amount": 50, "unit": "g"}, {"name": "whole-wheat tortilla", "amount": 1, "unit": ""}],
-    "instructions": [
-      "Whisk the eggs in a bowl and season lightly with salt and pepper.",
-      "Cook the spinach briefly in a skillet, then add the eggs and scramble until just set.",
-      "Place the filling in the tortilla, fold it up, and warm for a minute before serving."
-    ],
-    "calories": 380,
-    "protein": 23,
-    "carbohydrates": 31,
-    "fat": 17,
+    "calories": 390,
+    "protein": 14,
+    "carbohydrates": 67,
+    "fat": 8,
     "tags": ["vegetarian", "quick"]
   },
   {
-    "id": 3,
-    "name": "Chicken rice bowl",
+    "id": 14,
+    "name": "Avocado egg toast",
+    "meal_type": "breakfast",
+    "servings": 1,
+    "ingredients": [
+      {"name": "whole-grain bread", "amount": 2, "unit": "slices"},
+      {"name": "avocado", "amount": 80, "unit": "g"},
+      {"name": "eggs", "amount": 2, "unit": ""}
+    ],
+    "instructions": [
+      "Toast the bread until golden and crisp.",
+      "Mash the avocado and spread it over the toast.",
+      "Top with fried or poached eggs and season to taste."
+    ],
+    "calories": 430,
+    "protein": 20,
+    "carbohydrates": 35,
+    "fat": 25,
+    "tags": ["vegetarian", "quick"]
+  },
+  {
+    "id": 15,
+    "name": "Banana protein pancakes",
+    "meal_type": "breakfast",
+    "servings": 1,
+    "ingredients": [
+      {"name": "banana", "amount": 1, "unit": ""},
+      {"name": "eggs", "amount": 2, "unit": ""},
+      {"name": "rolled oats", "amount": 50, "unit": "g"},
+      {"name": "Greek yogurt", "amount": 50, "unit": "g"}
+    ],
+    "instructions": [
+      "Mash the banana and mix with the eggs, oats, and yogurt.",
+      "Cook small pancakes in a lightly greased skillet over medium heat.",
+      "Flip when bubbles appear and cook until golden."
+    ],
+    "calories": 410,
+    "protein": 23,
+    "carbohydrates": 48,
+    "fat": 14,
+    "tags": ["vegetarian", "high-protein"]
+  },
+  {
+    "id": 16,
+    "name": "Tomato feta omelette",
+    "meal_type": "breakfast",
+    "servings": 1,
+    "ingredients": [
+      {"name": "eggs", "amount": 3, "unit": ""},
+      {"name": "cherry tomatoes", "amount": 100, "unit": "g"},
+      {"name": "feta cheese", "amount": 40, "unit": "g"},
+      {"name": "spinach", "amount": 40, "unit": "g"}
+    ],
+    "instructions": [
+      "Whisk the eggs and season with salt and pepper.",
+      "Cook the spinach and tomatoes briefly in a skillet.",
+      "Pour in the eggs, add feta, and fold the omelette when set."
+    ],
+    "calories": 390,
+    "protein": 27,
+    "carbohydrates": 8,
+    "fat": 27,
+    "tags": ["vegetarian", "high-protein", "quick"]
+  },
+  {
+    "id": 17,
+    "name": "Peanut butter overnight oats",
+    "meal_type": "breakfast",
+    "servings": 1,
+    "ingredients": [
+      {"name": "rolled oats", "amount": 60, "unit": "g"},
+      {"name": "milk", "amount": 200, "unit": "ml"},
+      {"name": "peanut butter", "amount": 20, "unit": "g"},
+      {"name": "banana", "amount": 1, "unit": ""}
+    ],
+    "instructions": [
+      "Combine the oats, milk, and peanut butter in a jar.",
+      "Stir well and refrigerate overnight.",
+      "Top with sliced banana before serving."
+    ],
+    "calories": 450,
+    "protein": 16,
+    "carbohydrates": 62,
+    "fat": 17,
+    "tags": ["vegetarian", "make-ahead", "quick"]
+  },
+  {
+    "id": 18,
+    "name": "Smoked salmon bagel",
+    "meal_type": "breakfast",
+    "servings": 1,
+    "ingredients": [
+      {"name": "whole-grain bagel", "amount": 1, "unit": ""},
+      {"name": "cream cheese", "amount": 40, "unit": "g"},
+      {"name": "smoked salmon", "amount": 80, "unit": "g"},
+      {"name": "cucumber", "amount": 50, "unit": "g"}
+    ],
+    "instructions": [
+      "Slice the bagel in half and toast lightly if desired.",
+      "Spread cream cheese over both halves.",
+      "Top with smoked salmon and cucumber slices."
+    ],
+    "calories": 460,
+    "protein": 25,
+    "carbohydrates": 48,
+    "fat": 19,
+    "tags": ["fish", "quick"]
+  },
+  {
+    "id": 19,
+    "name": "Chicken avocado wrap",
+    "meal_type": "lunch",
+    "servings": 1,
+    "ingredients": [
+      {"name": "chicken breast", "amount": 120, "unit": "g"},
+      {"name": "whole-wheat tortilla", "amount": 1, "unit": ""},
+      {"name": "avocado", "amount": 60, "unit": "g"},
+      {"name": "lettuce", "amount": 40, "unit": "g"}
+    ],
+    "instructions": [
+      "Cook the chicken until fully cooked and slice it thinly.",
+      "Spread mashed avocado over the tortilla.",
+      "Add lettuce and chicken, then roll tightly and serve."
+    ],
+    "calories": 480,
+    "protein": 38,
+    "carbohydrates": 39,
+    "fat": 20,
+    "tags": ["high-protein", "quick"]
+  },
+  {
+    "id": 20,
+    "name": "Tuna pasta salad",
     "meal_type": "lunch",
     "servings": 2,
-    "ingredients": [{"name": "chicken breast", "amount": 300, "unit": "g"}, {"name": "cooked rice", "amount": 300, "unit": "g"}, {"name": "broccoli", "amount": 200, "unit": "g"}],
-    "instructions": [
-      "Season the chicken and cook it in a skillet until browned and fully cooked.",
-      "Steam or roast the broccoli until tender and fluffy.",
-      "Serve the chicken and broccoli over warm rice and add your preferred sauce or seasoning."
+    "ingredients": [
+      {"name": "whole-wheat pasta", "amount": 180, "unit": "g"},
+      {"name": "canned tuna", "amount": 160, "unit": "g"},
+      {"name": "cherry tomatoes", "amount": 150, "unit": "g"},
+      {"name": "Greek yogurt", "amount": 60, "unit": "g"}
     ],
-    "calories": 510,
-    "protein": 42,
-    "carbohydrates": 52,
+    "instructions": [
+      "Cook the pasta according to the package instructions and let it cool.",
+      "Mix the pasta with tuna and halved cherry tomatoes.",
+      "Stir in the Greek yogurt and season before serving."
+    ],
+    "calories": 490,
+    "protein": 35,
+    "carbohydrates": 59,
     "fat": 12,
+    "tags": ["fish", "meal-prep", "high-protein"]
+  },
+  {
+    "id": 21,
+    "name": "Chicken pesto pasta",
+    "meal_type": "lunch",
+    "servings": 2,
+    "ingredients": [
+      {"name": "chicken breast", "amount": 250, "unit": "g"},
+      {"name": "pasta", "amount": 200, "unit": "g"},
+      {"name": "pesto", "amount": 50, "unit": "g"},
+      {"name": "cherry tomatoes", "amount": 150, "unit": "g"}
+    ],
+    "instructions": [
+      "Cook the pasta according to the package instructions.",
+      "Cook the chicken in a skillet until browned and fully cooked.",
+      "Toss the pasta with pesto, chicken, and tomatoes before serving."
+    ],
+    "calories": 610,
+    "protein": 42,
+    "carbohydrates": 66,
+    "fat": 20,
     "tags": ["high-protein", "meal-prep"]
   },
   {
-    "id": 4,
-    "name": "Turkey hummus sandwich",
-    "meal_type": "lunch",
-    "servings": 1,
-    "ingredients": [{"name": "whole-grain bread", "amount": 2, "unit": "slices"}, {"name": "turkey slices", "amount": 100, "unit": "g"}, {"name": "hummus", "amount": 30, "unit": "g"}],
-    "instructions": [
-      "Spread hummus evenly over both slices of bread.",
-      "Layer the turkey slices on one side and add any extra vegetables you like.",
-      "Close the sandwich and serve immediately or pack it for later."
-    ],
-    "calories": 430,
-    "protein": 31,
-    "carbohydrates": 44,
-    "fat": 13,
-    "tags": ["quick", "high-protein"]
-  },
-  {
-    "id": 5,
-    "name": "Lentil feta salad",
+    "id": 22,
+    "name": "Mediterranean quinoa bowl",
     "meal_type": "lunch",
     "servings": 2,
-    "ingredients": [{"name": "cooked lentils", "amount": 300, "unit": "g"}, {"name": "feta cheese", "amount": 80, "unit": "g"}, {"name": "cherry tomatoes", "amount": 200, "unit": "g"}],
-    "instructions": [
-      "Place the lentils in a large bowl and add the halved tomatoes.",
-      "Crumble over the feta and toss gently to combine.",
-      "Season with salt, pepper, and a splash of dressing before serving."
+    "ingredients": [
+      {"name": "cooked quinoa", "amount": 300, "unit": "g"},
+      {"name": "chickpeas", "amount": 200, "unit": "g"},
+      {"name": "cucumber", "amount": 150, "unit": "g"},
+      {"name": "feta cheese", "amount": 60, "unit": "g"}
     ],
-    "calories": 460,
-    "protein": 24,
-    "carbohydrates": 49,
+    "instructions": [
+      "Add the cooked quinoa and chickpeas to two bowls.",
+      "Top with chopped cucumber and crumbled feta.",
+      "Season with herbs, lemon juice, and a little olive oil."
+    ],
+    "calories": 510,
+    "protein": 20,
+    "carbohydrates": 66,
     "fat": 18,
     "tags": ["vegetarian", "meal-prep"]
   },
   {
-    "id": 6,
-    "name": "Salmon with potatoes",
-    "meal_type": "dinner",
+    "id": 23,
+    "name": "Turkey rice bowl",
+    "meal_type": "lunch",
     "servings": 2,
-    "ingredients": [{"name": "salmon fillet", "amount": 300, "unit": "g"}, {"name": "potatoes", "amount": 500, "unit": "g"}, {"name": "green beans", "amount": 200, "unit": "g"}],
-    "instructions": [
-      "Roast or boil the potatoes until tender, then season with salt and pepper.",
-      "Cook the salmon in the oven or on a skillet until it flakes easily.",
-      "Steam the green beans until crisp-tender and serve alongside the salmon and potatoes."
+    "ingredients": [
+      {"name": "ground turkey", "amount": 300, "unit": "g"},
+      {"name": "cooked rice", "amount": 300, "unit": "g"},
+      {"name": "bell pepper", "amount": 150, "unit": "g"}
     ],
-    "calories": 590,
-    "protein": 38,
-    "carbohydrates": 48,
-    "fat": 27,
-    "tags": ["fish", "gluten-free"]
-  },
-  {
-    "id": 7,
-    "name": "Beef taco bowl",
-    "meal_type": "dinner",
-    "servings": 2,
-    "ingredients": [{"name": "lean ground beef", "amount": 300, "unit": "g"}, {"name": "black beans", "amount": 240, "unit": "g"}, {"name": "cooked rice", "amount": 250, "unit": "g"}],
     "instructions": [
-      "Brown the beef in a frying pan and season with taco spices.",
-      "Warm the black beans and rice in a saucepan or microwave.",
-      "Assemble in bowls with beef, beans, rice, and any taco toppings you like."
+      "Cook the ground turkey in a skillet until browned and fully cooked.",
+      "Add sliced bell pepper and cook until tender.",
+      "Serve the turkey mixture over warm rice."
     ],
-    "calories": 640,
-    "protein": 43,
-    "carbohydrates": 61,
-    "fat": 24,
+    "calories": 540,
+    "protein": 40,
+    "carbohydrates": 55,
+    "fat": 16,
     "tags": ["high-protein", "meal-prep"]
   },
   {
-    "id": 8,
-    "name": "Chickpea coconut curry",
-    "meal_type": "dinner",
-    "servings": 3,
-    "ingredients": [{"name": "chickpeas", "amount": 480, "unit": "g"}, {"name": "light coconut milk", "amount": 400, "unit": "ml"}, {"name": "spinach", "amount": 150, "unit": "g"}],
-    "instructions": [
-      "Add the chickpeas and coconut milk to a saucepan and bring to a gentle simmer.",
-      "Stir in the spinach and cook until wilted and the sauce thickens slightly.",
-      "Serve the curry hot with rice, naan, or your preferred side."
+    "id": 24,
+    "name": "Mozzarella tomato toast",
+    "meal_type": "lunch",
+    "servings": 1,
+    "ingredients": [
+      {"name": "sourdough bread", "amount": 2, "unit": "slices"},
+      {"name": "mozzarella", "amount": 80, "unit": "g"},
+      {"name": "tomato", "amount": 1, "unit": ""},
+      {"name": "basil", "amount": 10, "unit": "g"}
     ],
-    "calories": 520,
-    "protein": 18,
-    "carbohydrates": 65,
-    "fat": 20,
-    "tags": ["vegan", "meal-prep"]
+    "instructions": [
+      "Toast the sourdough bread until crisp.",
+      "Top with sliced mozzarella and tomato.",
+      "Add fresh basil and season with salt and pepper."
+    ],
+    "calories": 420,
+    "protein": 22,
+    "carbohydrates": 37,
+    "fat": 21,
+    "tags": ["vegetarian", "quick"]
   },
   {
-    "id": 9,
-    "name": "Tofu noodle stir-fry",
+    "id": 25,
+    "name": "Chicken fajita bowl",
+    "meal_type": "lunch",
+    "servings": 2,
+    "ingredients": [
+      {"name": "chicken breast", "amount": 300, "unit": "g"},
+      {"name": "cooked rice", "amount": 300, "unit": "g"},
+      {"name": "bell pepper", "amount": 150, "unit": "g"},
+      {"name": "black beans", "amount": 150, "unit": "g"}
+    ],
+    "instructions": [
+      "Slice the chicken and cook it with fajita seasoning.",
+      "Add sliced bell peppers and cook until tender.",
+      "Serve the chicken and peppers over rice with warm black beans."
+    ],
+    "calories": 560,
+    "protein": 45,
+    "carbohydrates": 63,
+    "fat": 12,
+    "tags": ["high-protein", "meal-prep"]
+  },
+  {
+    "id": 26,
+    "name": "Creamy tomato chicken",
     "meal_type": "dinner",
     "servings": 2,
-    "ingredients": [{"name": "firm tofu", "amount": 300, "unit": "g"}, {"name": "rice noodles", "amount": 160, "unit": "g"}, {"name": "stir-fry vegetables", "amount": 300, "unit": "g"}],
-    "instructions": [
-      "Cook the rice noodles according to the package instructions and set aside.",
-      "Pan-fry the tofu until golden, then add the vegetables and stir-fry until tender-crisp.",
-      "Mix in the noodles and toss with sauce before serving warm."
+    "ingredients": [
+      {"name": "chicken breast", "amount": 300, "unit": "g"},
+      {"name": "crushed tomatoes", "amount": 300, "unit": "g"},
+      {"name": "light cream", "amount": 100, "unit": "ml"},
+      {"name": "spinach", "amount": 100, "unit": "g"}
     ],
-    "calories": 540,
-    "protein": 25,
-    "carbohydrates": 68,
-    "fat": 19,
+    "instructions": [
+      "Brown the chicken pieces in a skillet until cooked through.",
+      "Add crushed tomatoes and simmer for several minutes.",
+      "Stir in the cream and spinach and cook until the spinach wilts."
+    ],
+    "calories": 470,
+    "protein": 45,
+    "carbohydrates": 16,
+    "fat": 24,
+    "tags": ["high-protein", "gluten-free"]
+  },
+  {
+    "id": 27,
+    "name": "Beef and vegetable stir-fry",
+    "meal_type": "dinner",
+    "servings": 2,
+    "ingredients": [
+      {"name": "lean beef strips", "amount": 300, "unit": "g"},
+      {"name": "stir-fry vegetables", "amount": 350, "unit": "g"},
+      {"name": "cooked rice", "amount": 300, "unit": "g"}
+    ],
+    "instructions": [
+      "Cook the beef strips in a hot skillet until browned.",
+      "Add the vegetables and stir-fry until crisp-tender.",
+      "Serve the beef and vegetables over warm rice with your preferred sauce."
+    ],
+    "calories": 570,
+    "protein": 43,
+    "carbohydrates": 58,
+    "fat": 18,
+    "tags": ["high-protein", "quick", "meal-prep"]
+  },
+  {
+    "id": 28,
+    "name": "Vegetable chickpea pasta",
+    "meal_type": "dinner",
+    "servings": 2,
+    "ingredients": [
+      {"name": "chickpea pasta", "amount": 180, "unit": "g"},
+      {"name": "zucchini", "amount": 150, "unit": "g"},
+      {"name": "cherry tomatoes", "amount": 150, "unit": "g"},
+      {"name": "parmesan", "amount": 30, "unit": "g"}
+    ],
+    "instructions": [
+      "Cook the chickpea pasta according to the package instructions.",
+      "Sauté zucchini and tomatoes until softened.",
+      "Toss the pasta with the vegetables and finish with parmesan."
+    ],
+    "calories": 490,
+    "protein": 27,
+    "carbohydrates": 65,
+    "fat": 12,
+    "tags": ["vegetarian", "high-protein"]
+  },
+  {
+    "id": 29,
+    "name": "Shrimp garlic noodles",
+    "meal_type": "dinner",
+    "servings": 2,
+    "ingredients": [
+      {"name": "shrimp", "amount": 250, "unit": "g"},
+      {"name": "rice noodles", "amount": 160, "unit": "g"},
+      {"name": "stir-fry vegetables", "amount": 250, "unit": "g"},
+      {"name": "garlic", "amount": 2, "unit": "cloves"}
+    ],
+    "instructions": [
+      "Cook the rice noodles according to the package instructions.",
+      "Sauté garlic and shrimp until the shrimp are pink and cooked through.",
+      "Add the vegetables and noodles and toss everything together."
+    ],
+    "calories": 500,
+    "protein": 34,
+    "carbohydrates": 66,
+    "fat": 11,
+    "tags": ["fish", "quick", "dairy-free"]
+  },
+  {
+    "id": 30,
+    "name": "Turkey meatball pasta",
+    "meal_type": "dinner",
+    "servings": 2,
+    "ingredients": [
+      {"name": "ground turkey", "amount": 300, "unit": "g"},
+      {"name": "spaghetti", "amount": 180, "unit": "g"},
+      {"name": "tomato sauce", "amount": 300, "unit": "g"}
+    ],
+    "instructions": [
+      "Shape the ground turkey into small meatballs and brown them in a skillet.",
+      "Add the tomato sauce and simmer until the meatballs are fully cooked.",
+      "Cook the spaghetti and serve with the meatballs and sauce."
+    ],
+    "calories": 590,
+    "protein": 43,
+    "carbohydrates": 67,
+    "fat": 17,
+    "tags": ["high-protein", "meal-prep"]
+  },
+  {
+    "id": 31,
+    "name": "Vegetable tofu curry",
+    "meal_type": "dinner",
+    "servings": 2,
+    "ingredients": [
+      {"name": "firm tofu", "amount": 300, "unit": "g"},
+      {"name": "light coconut milk", "amount": 300, "unit": "ml"},
+      {"name": "mixed vegetables", "amount": 300, "unit": "g"}
+    ],
+    "instructions": [
+      "Cube the tofu and pan-fry until golden.",
+      "Add the vegetables and coconut milk to the pan.",
+      "Simmer with curry seasoning until the vegetables are tender."
+    ],
+    "calories": 480,
+    "protein": 27,
+    "carbohydrates": 25,
+    "fat": 29,
     "tags": ["vegan", "dairy-free"]
   },
   {
-    "id": 10,
-    "name": "Greek yogurt fruit bowl",
+    "id": 32,
+    "name": "Chicken sweet potato tray bake",
+    "meal_type": "dinner",
+    "servings": 2,
+    "ingredients": [
+      {"name": "chicken breast", "amount": 300, "unit": "g"},
+      {"name": "sweet potato", "amount": 400, "unit": "g"},
+      {"name": "broccoli", "amount": 200, "unit": "g"}
+    ],
+    "instructions": [
+      "Cut the sweet potato and broccoli into bite-sized pieces.",
+      "Place the vegetables and chicken on a baking tray and season.",
+      "Roast until the vegetables are tender and the chicken is fully cooked."
+    ],
+    "calories": 520,
+    "protein": 45,
+    "carbohydrates": 51,
+    "fat": 14,
+    "tags": ["high-protein", "meal-prep", "gluten-free"]
+  },
+  {
+    "id": 33,
+    "name": "Black bean burrito bowl",
+    "meal_type": "dinner",
+    "servings": 2,
+    "ingredients": [
+      {"name": "black beans", "amount": 300, "unit": "g"},
+      {"name": "cooked rice", "amount": 300, "unit": "g"},
+      {"name": "corn", "amount": 150, "unit": "g"},
+      {"name": "avocado", "amount": 100, "unit": "g"}
+    ],
+    "instructions": [
+      "Warm the black beans, rice, and corn separately.",
+      "Divide everything between two bowls.",
+      "Top with sliced avocado and your preferred salsa or seasoning."
+    ],
+    "calories": 560,
+    "protein": 18,
+    "carbohydrates": 86,
+    "fat": 17,
+    "tags": ["vegan", "meal-prep", "dairy-free"]
+  },
+  {
+    "id": 34,
+    "name": "Cod with roasted vegetables",
+    "meal_type": "dinner",
+    "servings": 2,
+    "ingredients": [
+      {"name": "cod fillet", "amount": 300, "unit": "g"},
+      {"name": "potatoes", "amount": 400, "unit": "g"},
+      {"name": "carrots", "amount": 200, "unit": "g"}
+    ],
+    "instructions": [
+      "Cut the potatoes and carrots and roast until almost tender.",
+      "Place the cod on the tray and season with herbs and lemon.",
+      "Continue roasting until the cod flakes easily and the vegetables are tender."
+    ],
+    "calories": 440,
+    "protein": 40,
+    "carbohydrates": 53,
+    "fat": 9,
+    "tags": ["fish", "gluten-free", "high-protein"]
+  },
+  {
+    "id": 35,
+    "name": "Lentil vegetable curry",
+    "meal_type": "dinner",
+    "servings": 3,
+    "ingredients": [
+      {"name": "cooked lentils", "amount": 400, "unit": "g"},
+      {"name": "light coconut milk", "amount": 300, "unit": "ml"},
+      {"name": "mixed vegetables", "amount": 300, "unit": "g"}
+    ],
+    "instructions": [
+      "Add the lentils, vegetables, and coconut milk to a saucepan.",
+      "Season with curry powder and simmer until the vegetables are tender.",
+      "Serve hot with rice or another preferred side."
+    ],
+    "calories": 430,
+    "protein": 20,
+    "carbohydrates": 55,
+    "fat": 15,
+    "tags": ["vegan", "meal-prep", "dairy-free"]
+  },
+  {
+    "id": 36,
+    "name": "Apple peanut butter snack",
     "meal_type": "snack",
     "servings": 1,
-    "ingredients": [{"name": "Greek yogurt", "amount": 200, "unit": "g"}, {"name": "banana", "amount": 1, "unit": ""}, {"name": "almonds", "amount": 20, "unit": "g"}],
-    "instructions": [
-      "Spoon the yogurt into a bowl.",
-      "Slice the banana over the top and sprinkle on the almonds.",
-      "Serve immediately or chill for a few minutes before eating."
+    "ingredients": [
+      {"name": "apple", "amount": 1, "unit": ""},
+      {"name": "peanut butter", "amount": 25, "unit": "g"}
     ],
-    "calories": 350,
-    "protein": 23,
-    "carbohydrates": 39,
-    "fat": 12,
+    "instructions": [
+      "Wash and slice the apple into wedges.",
+      "Place the apple slices on a plate.",
+      "Serve with peanut butter for dipping."
+    ],
+    "calories": 250,
+    "protein": 7,
+    "carbohydrates": 31,
+    "fat": 13,
     "tags": ["vegetarian", "quick"]
   },
   {
-    "id": 11,
-    "name": "Cottage cheese toast",
+    "id": 37,
+    "name": "Greek yogurt granola cup",
     "meal_type": "snack",
     "servings": 1,
-    "ingredients": [{"name": "whole-grain bread", "amount": 2, "unit": "slices"}, {"name": "cottage cheese", "amount": 150, "unit": "g"}, {"name": "tomato", "amount": 1, "unit": ""}],
-    "instructions": [
-      "Toast the bread until golden and crisp.",
-      "Spread the cottage cheese over the slices and top with tomato slices.",
-      "Season lightly and serve as a quick snack or light meal."
+    "ingredients": [
+      {"name": "Greek yogurt", "amount": 200, "unit": "g"},
+      {"name": "granola", "amount": 40, "unit": "g"},
+      {"name": "mixed berries", "amount": 80, "unit": "g"}
     ],
-    "calories": 330,
+    "instructions": [
+      "Spoon the Greek yogurt into a bowl or glass.",
+      "Add the berries and granola.",
+      "Serve immediately or refrigerate until ready to eat."
+    ],
+    "calories": 360,
+    "protein": 22,
+    "carbohydrates": 48,
+    "fat": 9,
+    "tags": ["vegetarian", "quick"]
+  },
+  {
+    "id": 38,
+    "name": "Hummus veggie crackers",
+    "meal_type": "snack",
+    "servings": 1,
+    "ingredients": [
+      {"name": "hummus", "amount": 60, "unit": "g"},
+      {"name": "whole-grain crackers", "amount": 40, "unit": "g"},
+      {"name": "carrot", "amount": 1, "unit": ""}
+    ],
+    "instructions": [
+      "Slice the carrot into sticks.",
+      "Arrange the crackers and carrot sticks on a plate.",
+      "Serve with hummus for dipping."
+    ],
+    "calories": 310,
+    "protein": 9,
+    "carbohydrates": 42,
+    "fat": 13,
+    "tags": ["vegan", "quick", "dairy-free"]
+  },
+  {
+    "id": 39,
+    "name": "Cottage cheese berry bowl",
+    "meal_type": "snack",
+    "servings": 1,
+    "ingredients": [
+      {"name": "cottage cheese", "amount": 200, "unit": "g"},
+      {"name": "mixed berries", "amount": 100, "unit": "g"},
+      {"name": "honey", "amount": 10, "unit": "g"}
+    ],
+    "instructions": [
+      "Add the cottage cheese to a bowl.",
+      "Top with mixed berries.",
+      "Drizzle with honey and serve."
+    ],
+    "calories": 280,
     "protein": 25,
-    "carbohydrates": 35,
-    "fat": 10,
+    "carbohydrates": 27,
+    "fat": 8,
     "tags": ["vegetarian", "quick", "high-protein"]
   },
   {
-    "id": 12,
-    "name": "Peanut butter banana smoothie",
+    "id": 40,
+    "name": "Chocolate banana smoothie",
     "meal_type": "snack",
     "servings": 1,
-    "ingredients": [{"name": "milk", "amount": 250, "unit": "ml"}, {"name": "banana", "amount": 1, "unit": ""}, {"name": "peanut butter", "amount": 25, "unit": "g"}],
-    "instructions": [
-      "Add the milk, banana, and peanut butter to a blender.",
-      "Blend until smooth and creamy.",
-      "Pour into a glass and enjoy immediately."
+    "ingredients": [
+      {"name": "milk", "amount": 250, "unit": "ml"},
+      {"name": "banana", "amount": 1, "unit": ""},
+      {"name": "cocoa powder", "amount": 10, "unit": "g"},
+      {"name": "Greek yogurt", "amount": 100, "unit": "g"}
     ],
-    "calories": 410,
-    "protein": 18,
+    "instructions": [
+      "Add all ingredients to a blender.",
+      "Blend until smooth and creamy.",
+      "Pour into a glass and serve immediately."
+    ],
+    "calories": 330,
+    "protein": 21,
     "carbohydrates": 48,
-    "fat": 17,
-    "tags": ["vegetarian", "quick"]
+    "fat": 7,
+    "tags": ["vegetarian", "quick", "high-protein"]
+  },
+  {
+    "id": 41,
+    "name": "Edamame snack bowl",
+    "meal_type": "snack",
+    "servings": 1,
+    "ingredients": [
+      {"name": "edamame", "amount": 150, "unit": "g"},
+      {"name": "sesame seeds", "amount": 10, "unit": "g"},
+      {"name": "soy sauce", "amount": 10, "unit": "ml"}
+    ],
+    "instructions": [
+      "Cook the edamame according to the package instructions.",
+      "Drain and place the edamame in a bowl.",
+      "Drizzle with soy sauce and sprinkle with sesame seeds."
+    ],
+    "calories": 250,
+    "protein": 20,
+    "carbohydrates": 18,
+    "fat": 12,
+    "tags": ["vegan", "quick", "high-protein", "dairy-free"]
+  },
+  {
+    "id": 42,
+    "name": "Rice cakes with avocado",
+    "meal_type": "snack",
+    "servings": 1,
+    "ingredients": [
+      {"name": "rice cakes", "amount": 3, "unit": ""},
+      {"name": "avocado", "amount": 80, "unit": "g"},
+      {"name": "cherry tomatoes", "amount": 80, "unit": "g"}
+    ],
+    "instructions": [
+      "Mash the avocado in a small bowl.",
+      "Spread the avocado over the rice cakes.",
+      "Top with sliced cherry tomatoes and season to taste."
+    ],
+    "calories": 290,
+    "protein": 5,
+    "carbohydrates": 35,
+    "fat": 15,
+    "tags": ["vegan", "quick", "dairy-free"]
   }
 ]
