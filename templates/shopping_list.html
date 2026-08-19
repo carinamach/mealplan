@@ -13,7 +13,7 @@
         <section class="shopping-list" data-shopping-list aria-label="Shopping list">
             {% for category, items in shopping_list %}
                 <section class="shopping-category">
-                    <h2>{{ category }}</h2>
+                    <h2>{% if category == "Meat & fish" %}🐟 {% elif category == "Vegetables" %}🥦 {% elif category == "Fruit" %}🍓 {% elif category == "Dairy" %}🥛 {% else %}🧺 {% endif %}{{ category }}</h2>
                     <ul>
                         {% for item in items %}
                             <li>

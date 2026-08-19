@@ -12,7 +12,7 @@
     <section class="recipe-grid" aria-label="All recipes">
         {% for recipe in recipes %}
             <a class="recipe-card" href="{{ url_for('recipe_detail', recipe_id=recipe.id) }}">
-                <div class="recipe-image-placeholder" aria-hidden="true">Recipe image</div>
+                <div class="recipe-image-placeholder" aria-hidden="true">🥗</div>
                 <p class="recipe-type">{{ recipe.meal_type }}</p>
                 <h2>{{ recipe.name }}</h2>
                 <p class="recipe-meta">{{ recipe.servings }} servings - {{ recipe.calories }} kcal per serving</p>

@@ -7,5 +7,9 @@
         <p class="eyebrow">Welcome</p>
         <h1>Plan meals with less stress.</h1>
         <p>Your meal-planning app is ready for its first feature.</p>
+        <div class="welcome-actions">
+            <a class="button-link" href="{{ url_for('profile') }}">Set up your profile</a>
+            <a class="button-link" href="{{ url_for('recipes') }}">Browse recipes</a>
+        </div>
     </section>
 {% endblock %}

@@ -16,8 +16,8 @@
                     <article class="plan-meal">
                         <p class="recipe-type">{{ meal_name }}</p>
                         <h2><a href="{{ url_for('recipe_detail', recipe_id=recipe.id) }}">{{ recipe.name }}</a></h2>
-                        <p>{{ recipe.calories }} kcal</p>
-                        <p>{{ recipe.protein }} g protein</p>
+                        <p class="meal-stat">{{ recipe.calories }} kcal</p>
+                        <p class="meal-stat">{{ recipe.protein }} g protein</p>
                         <form method="post" action="{{ url_for('swap_meal', meal_name=meal_name) }}">
                             <button class="swap-button" type="submit">Swap</button>
                         </form>
@@ -27,8 +27,10 @@
         </section>
         <section class="plan-total">
             <h2>Daily total</h2>
-            <p><strong>{{ plan.total_calories }} kcal</strong></p>
-            <p><strong>{{ plan.total_protein }} g protein</strong></p>
+            <div class="daily-figures">
+                <p><strong>{{ plan.total_calories }} kcal</strong></p>
+                <p><strong>{{ plan.total_protein }} g protein</strong></p>
+            </div>
             {% if plan.total_calories > targets.calories %}
                 {% set green_percentage = targets.calories / plan.total_calories * 100 %}
                 {% set red_percentage = (plan.total_calories - targets.calories) / plan.total_calories * 100 %}
@@ -45,7 +47,7 @@
                 {% endif %}
                 <span class="target-marker" style="left: {{ target_marker_position }}%" aria-hidden="true"></span>
             </div>
-            <p class="progress-label"><span class="green-key">Green: planned calories</span> · <span class="target-key">Line: daily target</span>{% if red_percentage > 0 %} · <span class="red-key">Red: above target</span>{% endif %}</p>
+            <p class="progress-label"><span class="green-key">Peach: planned calories</span> · <span class="target-key">Line: daily target</span>{% if red_percentage > 0 %} · <span class="red-key">Rose: above target</span>{% endif %}</p>
             <p class="progress-label">{{ plan.total_calories }} of {{ targets.calories }} kcal</p>
             {% set calorie_difference = targets.calories - plan.total_calories %}
             {% if calorie_difference > 0 %}

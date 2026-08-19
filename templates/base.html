@@ -4,16 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Meal Plan{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
     <header class="site-header">
-        <a class="logo" href="{{ url_for('home') }}">Meal Plan</a>
+        <a class="logo" href="{{ url_for('home') }}"><span class="logo-mark" aria-hidden="true">🍽️</span>Meal Plan</a>
         <nav aria-label="Main navigation">
-            <a href="{{ url_for('recipes') }}">Recipes</a>
-            <a href="{{ url_for('profile') }}">Profile</a>
-            <a href="{{ url_for('meal_plan') }}">Meal plan</a>
-            <a href="{{ url_for('shopping_list') }}">Shopping list</a>
+            <a href="{{ url_for('recipes') }}" class="{{ 'is-active' if request.endpoint in ('recipes', 'recipe_detail') else '' }}">Recipes</a>
+            <a href="{{ url_for('profile') }}" class="{{ 'is-active' if request.endpoint == 'profile' else '' }}">Profile</a>
+            <a href="{{ url_for('meal_plan') }}" class="{{ 'is-active' if request.endpoint == 'meal_plan' else '' }}">Meal plan</a>
+            <a href="{{ url_for('shopping_list') }}" class="{{ 'is-active' if request.endpoint == 'shopping_list' else '' }}">Shopping list</a>
         </nav>
     </header>
 
