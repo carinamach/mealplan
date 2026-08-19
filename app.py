@@ -5,6 +5,7 @@ from pathlib import Path
 from flask import Flask, abort, redirect, render_template, request, session, url_for
 
 from calculations import calculate_targets
+from meal_planner import generate_daily_plan
 
 
 app = Flask(__name__)
@@ -91,6 +92,23 @@ def profile():
         targets=session.get("targets"),
         error=error,
     )
+
+
+@app.route("/meal-plan")
+def meal_plan():
+    """Display a simple daily plan based on the saved profile estimates."""
+    targets = session.get("targets")
+    profile_data = session.get("profile")
+
+    if not targets or not profile_data:
+        return render_template("meal_plan.html", plan=None)
+
+    plan = generate_daily_plan(
+        load_recipes(),
+        calorie_target=targets["calories"],
+        goal=profile_data["goal"],
+    )
+    return render_template("meal_plan.html", plan=plan, targets=targets)
 
 
 if __name__ == "__main__":

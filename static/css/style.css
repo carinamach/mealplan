@@ -180,6 +180,97 @@ h1 {
     margin-bottom: 0.5rem;
 }
 
+.meal-plan-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.plan-meal,
+.plan-total {
+    padding: 1.5rem;
+    background: #ffffff;
+    border: 1px solid #dfe5dc;
+    border-radius: 12px;
+}
+
+.plan-meal h2 {
+    margin: 0.3rem 0 1rem;
+    font-size: 1.25rem;
+}
+
+.plan-meal h2 a {
+    color: inherit;
+}
+
+.plan-total {
+    margin-top: 1.5rem;
+}
+
+.plan-total h2,
+.plan-total p {
+    margin: 0.35rem 0;
+}
+
+.calorie-progress {
+    position: relative;
+    display: flex;
+    height: 14px;
+    margin-top: 1rem;
+    overflow: hidden;
+    border-radius: 999px;
+    background: #dfe5dc;
+}
+
+.calorie-progress-green,
+.calorie-progress-red {
+    height: 100%;
+}
+
+.calorie-progress-green {
+    border-radius: 999px 0 0 999px;
+    background: #4e7b63;
+}
+
+.calorie-progress-red {
+    background: #bd3d3d;
+}
+
+.target-marker {
+    position: absolute;
+    top: -4px;
+    bottom: -4px;
+    width: 3px;
+    transform: translateX(-1px);
+    background: #20352d;
+}
+
+.progress-label {
+    color: #587064;
+    font-size: 0.9rem;
+}
+
+.green-key {
+    color: #31523f;
+}
+
+.red-key {
+    color: #a12a2a;
+}
+
+.target-key {
+    color: #20352d;
+}
+
+.button-link {
+    display: inline-block;
+    padding: 0.65rem;
+    border-radius: 6px;
+    background: #31523f;
+    color: #ffffff;
+    text-decoration: none;
+}
+
 .profile-page {
     max-width: 620px;
 }
