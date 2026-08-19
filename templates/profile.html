@@ -22,20 +22,52 @@
                 <input type="number" name="weight" min="1" step="0.1" required value="{{ profile.get('weight', '') }}">
             </label>
             <label>
+                Target weight (kg)
+                <input type="number" name="target_weight" min="1" step="0.1" required value="{{ profile.get('target_weight', '') }}">
+            </label>
+            <label>
+                Biological sex used for calorie estimate
+                <select name="biological_sex" required>
+                    <option value="" disabled {% if not profile.get('biological_sex') %}selected{% endif %}>Choose an option</option>
+                    <option value="female" {% if profile.get('biological_sex') == 'female' %}selected{% endif %}>Female</option>
+                    <option value="male" {% if profile.get('biological_sex') == 'male' %}selected{% endif %}>Male</option>
+                    <option value="prefer_not_to_say" {% if profile.get('biological_sex') == 'prefer_not_to_say' %}selected{% endif %}>Prefer not to say</option>
+                </select>
+            </label>
+            <p class="field-help">This is only used to make the calorie estimate more personalised. “Prefer not to say” uses a middle estimate.</p>
+            <label>
                 Activity level
                 <select name="activity_level" required>
                     <option value="" disabled {% if not profile.get('activity_level') %}selected{% endif %}>Choose an activity level</option>
-                    {% for level in activity_levels %}
-                        <option value="{{ level }}" {% if profile.get('activity_level') == level %}selected{% endif %}>{{ level|replace('_', ' ')|title }}</option>
-                    {% endfor %}
+                    <option value="sedentary" {% if profile.get('activity_level') == 'sedentary' %}selected{% endif %}>Sedentary</option>
+                    <option value="light" {% if profile.get('activity_level') == 'light' %}selected{% endif %}>Light</option>
+                    <option value="moderate" {% if profile.get('activity_level') == 'moderate' %}selected{% endif %}>Moderate</option>
+                    <option value="active" {% if profile.get('activity_level') == 'active' %}selected{% endif %}>Active</option>
                 </select>
             </label>
+            <div class="activity-help">
+                <p>Choose the closest match. These are only rough examples:</p>
+                <ul>
+                    <li><strong>Sedentary:</strong> mostly sitting; little or no planned exercise.</li>
+                    <li><strong>Light:</strong> light exercise or walking around 1–3 days per week.</li>
+                    <li><strong>Moderate:</strong> moderate exercise around 3–5 days per week.</li>
+                    <li><strong>Active:</strong> hard exercise or a physically active job most days of the week.</li>
+                </ul>
+            </div>
             <fieldset>
                 <legend>Goal</legend>
                 <label><input type="radio" name="goal" value="lose_weight" required {% if profile.get('goal') == 'lose_weight' %}checked{% endif %}> Lose weight</label>
                 <label><input type="radio" name="goal" value="maintain_weight" {% if profile.get('goal') == 'maintain_weight' %}checked{% endif %}> Maintain weight</label>
                 <label><input type="radio" name="goal" value="low_calorie" {% if profile.get('goal') == 'low_calorie' %}checked{% endif %}> Low calorie</label>
                 <label><input type="radio" name="goal" value="high_protein" {% if profile.get('goal') == 'high_protein' %}checked{% endif %}> High protein</label>
+            </fieldset>
+            <fieldset>
+                <legend>Dietary preferences</legend>
+                <label><input type="checkbox" name="dietary_preferences" value="vegetarian" {% if 'vegetarian' in profile.get('dietary_preferences', []) %}checked{% endif %}> Vegetarian</label>
+                <label><input type="checkbox" name="dietary_preferences" value="vegan" {% if 'vegan' in profile.get('dietary_preferences', []) %}checked{% endif %}> Vegan</label>
+                <label><input type="checkbox" name="dietary_preferences" value="gluten-free" {% if 'gluten-free' in profile.get('dietary_preferences', []) %}checked{% endif %}> Gluten-free</label>
+                <label><input type="checkbox" name="dietary_preferences" value="dairy-free" {% if 'dairy-free' in profile.get('dietary_preferences', []) %}checked{% endif %}> Dairy-free</label>
+                <label><input type="checkbox" name="dietary_preferences" value="nut-free" {% if 'nut-free' in profile.get('dietary_preferences', []) %}checked{% endif %}> Nut-free</label>
             </fieldset>
             <button type="submit">Save profile and calculate</button>
         </form>
@@ -50,6 +82,8 @@
                 <h2>Your daily targets</h2>
                 <p><strong>{{ targets.calories }} kcal</strong> per day</p>
                 <p><strong>{{ targets.protein }} g protein</strong> per day</p>
+                <p><strong>BMI: {{ targets.bmi }}</strong></p>
+                <p class="estimate-note">BMI is a simple height-and-weight estimate for adults. It does not measure body fat or account for factors such as muscle mass.</p>
                 <p class="estimate-note">These are simple estimates for this project, not medical or dietary advice.</p>
             </section>
         {% endif %}
