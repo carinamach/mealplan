@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-from flask import Flask, render_template
+from flask import Flask, abort, render_template
 
 
 app = Flask(__name__)
@@ -14,6 +14,16 @@ def load_recipes():
         return json.load(recipe_file)
 
 
+def get_recipe(recipe_id):
+    """Return one recipe by its id, or stop with a 404 page if it is missing."""
+    recipe = next((recipe for recipe in load_recipes() if recipe["id"] == recipe_id), None)
+
+    if recipe is None:
+        abort(404)
+
+    return recipe
+
+
 @app.route("/")
 def home():
     """Display the application's home page."""
@@ -24,6 +34,12 @@ def home():
 def recipes():
     """Display all predefined recipes."""
     return render_template("recipes.html", recipes=load_recipes())
+
+
+@app.route("/recipes/<int:recipe_id>")
+def recipe_detail(recipe_id):
+    """Display one recipe with its ingredients and instructions."""
+    return render_template("recipe_detail.html", recipe=get_recipe(recipe_id))
 
 
 if __name__ == "__main__":

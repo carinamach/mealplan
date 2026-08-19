@@ -13,9 +13,9 @@ class RecipeInstructionsTest(unittest.TestCase):
             "Every recipe should include preparation instructions.",
         )
 
-    def test_recipes_page_displays_instructions(self):
+    def test_recipe_detail_page_displays_instructions(self):
         client = app.test_client()
-        response = client.get("/recipes")
+        response = client.get("/recipes/1")
 
         self.assertEqual(response.status_code, 200)
         self.assertIn(b"Instructions", response.data)
