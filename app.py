@@ -4,7 +4,7 @@ from pathlib import Path
 
 from flask import Flask, abort, redirect, render_template, request, session, url_for
 
-from calculations import ACTIVITY_MULTIPLIERS, calculate_targets
+from calculations import calculate_targets
 
 
 app = Flask(__name__)
@@ -57,15 +57,30 @@ def profile():
                 "age": int(request.form["age"]),
                 "height": float(request.form["height"]),
                 "weight": float(request.form["weight"]),
+                "target_weight": float(request.form["target_weight"]),
+                "biological_sex": request.form["biological_sex"],
                 "activity_level": request.form["activity_level"],
                 "goal": request.form["goal"],
+                "dietary_preferences": request.form.getlist("dietary_preferences"),
             }
 
-            if profile_data["age"] < 13 or profile_data["height"] <= 0 or profile_data["weight"] <= 0:
-                raise ValueError("Enter a valid age, height, and weight.")
+            if (
+                profile_data["age"] < 13
+                or profile_data["height"] <= 0
+                or profile_data["weight"] <= 0
+                or profile_data["target_weight"] <= 0
+            ):
+                raise ValueError("Enter a valid age, height, current weight, and target weight.")
 
             session["profile"] = profile_data
-            session["targets"] = calculate_targets(**profile_data)
+            session["targets"] = calculate_targets(
+                age=profile_data["age"],
+                height=profile_data["height"],
+                weight=profile_data["weight"],
+                activity_level=profile_data["activity_level"],
+                goal=profile_data["goal"],
+                biological_sex=profile_data["biological_sex"],
+            )
             return redirect(url_for("profile"))
         except (KeyError, ValueError) as exception:
             error = str(exception)
@@ -74,7 +89,6 @@ def profile():
         "profile.html",
         profile=session.get("profile", {}),
         targets=session.get("targets"),
-        activity_levels=ACTIVITY_MULTIPLIERS,
         error=error,
     )
 

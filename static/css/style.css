@@ -221,6 +221,30 @@ h1 {
     font-weight: normal;
 }
 
+.activity-help {
+    padding: 0.75rem 1rem;
+    border-left: 3px solid #8fb59a;
+    background: #f1f6f1;
+    color: #3e5849;
+    font-size: 0.9rem;
+}
+
+.activity-help p,
+.activity-help ul {
+    margin: 0;
+}
+
+.field-help {
+    margin: -0.5rem 0 0;
+    color: #587064;
+    font-size: 0.9rem;
+}
+
+.activity-help ul {
+    margin-top: 0.4rem;
+    padding-left: 1.2rem;
+}
+
 .profile-form button {
     border: 0;
     background: #31523f;
