@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Meal Plan | {{ recipe.name }}{% endblock %}
+
+{% block content %}
+    <a class="back-link" href="{{ url_for('recipes') }}">← Back to recipes</a>
+
+    <article class="recipe-detail">
+        <div class="recipe-detail-image" aria-hidden="true">Recipe image</div>
+        <p class="recipe-type">{{ recipe.meal_type }}</p>
+        <h1>{{ recipe.name }}</h1>
+        <p class="recipe-meta">{{ recipe.servings }} servings - {{ recipe.calories }} kcal per serving</p>
+
+        <dl class="nutrition">
+            <div><dt>Protein</dt><dd>{{ recipe.protein }} g</dd></div>
+            <div><dt>Carbs</dt><dd>{{ recipe.carbohydrates }} g</dd></div>
+            <div><dt>Fat</dt><dd>{{ recipe.fat }} g</dd></div>
+        </dl>
+
+        <p class="tags">
+            {% for tag in recipe.tags %}
+                <span>{{ tag }}</span>
+            {% endfor %}
+        </p>
+
+        <section class="recipe-section">
+            <h2>Ingredients</h2>
+            <ul>
+                {% for ingredient in recipe.ingredients %}
+                    <li>{{ ingredient.amount }} {{ ingredient.unit }} {{ ingredient.name }}</li>
+                {% endfor %}
+            </ul>
+        </section>
+
+        <section class="recipe-section">
+            <h2>Instructions</h2>
+            <ol>
+                {% for step in recipe.instructions %}
+                    <li>{{ step }}</li>
+                {% endfor %}
+            </ol>
+        </section>
+    </article>
+{% endblock %}

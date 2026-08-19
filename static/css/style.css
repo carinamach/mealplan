@@ -16,12 +16,25 @@ body {
     padding: 1rem 2rem;
     background: #ffffff;
     border-bottom: 1px solid #dfe5dc;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .logo {
     color: inherit;
     font-size: 1.25rem;
     font-weight: bold;
+    text-decoration: none;
+}
+
+nav {
+    display: flex;
+    gap: 1rem;
+}
+
+nav a {
+    color: #31523f;
     text-decoration: none;
 }
 
@@ -47,4 +60,189 @@ body {
 h1 {
     margin: 0.5rem 0;
     font-size: clamp(2rem, 6vw, 3.5rem);
+}
+
+.recipe-heading {
+    margin-bottom: 2rem;
+}
+
+.recipe-grid {
+    display: grid;
+    gap: 1.25rem;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.recipe-card {
+    padding: 1.5rem;
+    background: #ffffff;
+    border: 1px solid #dfe5dc;
+    border-radius: 12px;
+    color: inherit;
+    text-decoration: none;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.recipe-card:hover,
+.recipe-card:focus-visible {
+    box-shadow: 0 5px 15px rgb(32 53 45 / 15%);
+    transform: translateY(-2px);
+}
+
+.recipe-card h2 {
+    margin: 0.25rem 0;
+}
+
+.recipe-card h3 {
+    margin-bottom: 0.25rem;
+    font-size: 1rem;
+}
+
+.recipe-card ul {
+    margin: 0;
+    padding-left: 1.2rem;
+}
+
+.recipe-image-placeholder,
+.recipe-detail-image {
+    display: grid;
+    min-height: 150px;
+    place-items: center;
+    margin: -1.5rem -1.5rem 1.25rem;
+    border-radius: 12px 12px 0 0;
+    background: #dce9df;
+    color: #587064;
+    font-size: 0.9rem;
+}
+
+.recipe-type, .recipe-meta {
+    color: #587064;
+    margin: 0;
+}
+
+.recipe-type {
+    font-size: 0.8rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.nutrition {
+    display: flex;
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.nutrition div {
+    display: grid;
+}
+
+.nutrition dt {
+    color: #587064;
+    font-size: 0.8rem;
+}
+
+.nutrition dd {
+    margin: 0.15rem 0 0;
+    font-weight: bold;
+}
+
+.tags span {
+    display: inline-block;
+    margin: 0 0.3rem 0.3rem 0;
+    padding: 0.2rem 0.5rem;
+    border-radius: 999px;
+    background: #e6f0e8;
+    color: #31523f;
+    font-size: 0.8rem;
+}
+
+.back-link {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    color: #31523f;
+}
+
+.recipe-detail {
+    padding: 2rem;
+    background: #ffffff;
+    border-radius: 12px;
+}
+
+.recipe-detail-image {
+    min-height: 260px;
+    margin: -2rem -2rem 1.5rem;
+}
+
+.recipe-section {
+    margin-top: 2rem;
+}
+
+.recipe-section h2 {
+    margin-bottom: 0.5rem;
+}
+
+.profile-page {
+    max-width: 620px;
+}
+
+.profile-form,
+.estimate-card {
+    display: grid;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: #ffffff;
+    border-radius: 12px;
+}
+
+.profile-form label {
+    display: grid;
+    gap: 0.35rem;
+    font-weight: bold;
+}
+
+.profile-form input,
+.profile-form select,
+.profile-form button {
+    padding: 0.65rem;
+    border: 1px solid #b9c8bd;
+    border-radius: 6px;
+    font: inherit;
+}
+
+.profile-form fieldset {
+    display: grid;
+    gap: 0.6rem;
+    border: 1px solid #b9c8bd;
+    border-radius: 6px;
+}
+
+.profile-form fieldset label {
+    display: block;
+    font-weight: normal;
+}
+
+.profile-form button {
+    border: 0;
+    background: #31523f;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+.estimate-card {
+    border: 1px solid #b9c8bd;
+}
+
+.estimate-card h2,
+.estimate-card p {
+    margin: 0;
+}
+
+.estimate-note,
+.form-error {
+    color: #587064;
+    font-size: 0.9rem;
+}
+
+.form-error {
+    color: #a12a2a;
 }

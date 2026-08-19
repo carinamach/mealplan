@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Meal Plan | Profile{% endblock %}
+
+{% block content %}
+    <section class="profile-page">
+        <p class="eyebrow">Your starting point</p>
+        <h1>Profile and goal</h1>
+        <p>Enter a few details to receive simple daily estimates.</p>
+
+        <form class="profile-form" method="post">
+            <label>
+                Age
+                <input type="number" name="age" min="13" required value="{{ profile.get('age', '') }}">
+            </label>
+            <label>
+                Height (cm)
+                <input type="number" name="height" min="1" step="0.1" required value="{{ profile.get('height', '') }}">
+            </label>
+            <label>
+                Weight (kg)
+                <input type="number" name="weight" min="1" step="0.1" required value="{{ profile.get('weight', '') }}">
+            </label>
+            <label>
+                Activity level
+                <select name="activity_level" required>
+                    <option value="" disabled {% if not profile.get('activity_level') %}selected{% endif %}>Choose an activity level</option>
+                    {% for level in activity_levels %}
+                        <option value="{{ level }}" {% if profile.get('activity_level') == level %}selected{% endif %}>{{ level|replace('_', ' ')|title }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+            <fieldset>
+                <legend>Goal</legend>
+                <label><input type="radio" name="goal" value="lose_weight" required {% if profile.get('goal') == 'lose_weight' %}checked{% endif %}> Lose weight</label>
+                <label><input type="radio" name="goal" value="maintain_weight" {% if profile.get('goal') == 'maintain_weight' %}checked{% endif %}> Maintain weight</label>
+                <label><input type="radio" name="goal" value="low_calorie" {% if profile.get('goal') == 'low_calorie' %}checked{% endif %}> Low calorie</label>
+                <label><input type="radio" name="goal" value="high_protein" {% if profile.get('goal') == 'high_protein' %}checked{% endif %}> High protein</label>
+            </fieldset>
+            <button type="submit">Save profile and calculate</button>
+        </form>
+
+        {% if error %}
+            <p class="form-error">{{ error }}</p>
+        {% endif %}
+
+        {% if targets %}
+            <section class="estimate-card" aria-live="polite">
+                <p class="eyebrow">Estimates</p>
+                <h2>Your daily targets</h2>
+                <p><strong>{{ targets.calories }} kcal</strong> per day</p>
+                <p><strong>{{ targets.protein }} g protein</strong> per day</p>
+                <p class="estimate-note">These are simple estimates for this project, not medical or dietary advice.</p>
+            </section>
+        {% endif %}
+    </section>
+{% endblock %}
