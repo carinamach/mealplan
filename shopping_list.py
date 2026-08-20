@@ -93,28 +93,34 @@ def build_shopping_list(meals, portions=None):
     return [(category, items) for category, items in grouped.items() if items]
 
 
-def build_weekly_shopping_list(weekly_plan):
+def build_weekly_shopping_list(weekly_plan, portions_map=None):
     """Build a combined shopping list from a weekly plan.
 
-    Each planned meal is counted as one serving by default. If a recipe's
-    `servings` value is greater than 1, ingredient amounts are scaled so that
-    one planned meal corresponds to `1 / servings` of the recipe's ingredient
-    quantities. The function returns the grouped list and the total number of
-    planned portions in the week.
-    """
-    combined = {}
-    portions = 0
+    `weekly_plan` is a mapping day -> plan. `portions_map` is an optional
+    mapping day -> { meal_name: planned_portions } that controls how many
+    portions the user intends to cook for each meal. If omitted, each planned
+    meal counts as one portion. Ingredient amounts are scaled by
+    `planned_portions / recipe.servings` for each occurrence and then summed
+    across the week.
 
-    for day_plan in weekly_plan.values():
+    Returns a tuple of (grouped_list, total_planned_portions).
+    """
+    portions_map = portions_map or {}
+    combined = {}
+    total_portions = 0
+
+    for day, day_plan in weekly_plan.items():
         meals = day_plan.get("meals", {})
-        for recipe in meals.values():
+        day_portions = portions_map.get(day, {})
+
+        for meal_name, recipe in meals.items():
             if not recipe:
                 continue
 
-            portions += 1
-            recipe_servings = recipe.get("servings", 1) or 1
-            # Each planned meal represents one desired portion.
-            multiplier = 1.0 / recipe_servings
+            planned = float(day_portions.get(meal_name, 1) or 1)
+            total_portions += planned
+            recipe_servings = float(recipe.get("servings", 1) or 1)
+            multiplier = planned / recipe_servings
 
             for ingredient in recipe["ingredients"]:
                 name = ingredient["name"]
@@ -131,11 +137,4 @@ def build_weekly_shopping_list(weekly_plan):
         item["amount"] = format_amount(item["amount"])
         grouped[categorize_ingredient(item["name"])].append(item)
 
-    return [(category, items) for category, items in grouped.items() if items], portions
-
-    grouped = {category: [] for category in CATEGORY_ORDER}
-    for item in sorted(combined.values(), key=lambda item: item["name"].casefold()):
-        item["amount"] = format_amount(item["amount"])
-        grouped[categorize_ingredient(item["name"])].append(item)
-
-    return [(category, items) for category, items in grouped.items() if items]
+    return [(category, items) for category, items in grouped.items() if items], int(total_portions)

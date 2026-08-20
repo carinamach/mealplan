@@ -177,8 +177,10 @@ def meal_plan():
 
     # Portions stored per-meal for daily plan
     portions = session.get("meal_plan_portions", {})
+    # Portions stored per-day+meal for weekly plan
+    weekly_portions = session.get("weekly_plan_portions", {})
 
-    return render_template("meal_plan.html", plan=plan, weekly_plan=weekly, weekdays=WEEKDAYS, targets=targets, portions=portions)
+    return render_template("meal_plan.html", plan=plan, weekly_plan=weekly, weekdays=WEEKDAYS, targets=targets, portions=portions, weekly_portions=weekly_portions)
 
 
 @app.post('/meal-plan/portions/<meal_name>')
@@ -328,6 +330,58 @@ def swap_weekly_meal(day, meal_name):
     return redirect(url_for("weekly_plan"))
 
 
+@app.post("/weekly-plan/portions/<day>/<meal_name>")
+def set_weekly_portions(day, meal_name):
+    """Set how many portions the user plans to cook for one weekly meal (AJAX JSON)."""
+    if not request.is_json:
+        abort(400)
+
+    data = request.get_json() or {}
+    try:
+        portions_value = int(data.get('portions', 1))
+    except Exception:
+        portions_value = 1
+
+    weekly = session.get('weekly_plan')
+    if not weekly or day not in weekly:
+        abort(404)
+
+    day_plan = weekly[day]
+    if meal_name not in day_plan.get('meals', {}):
+        abort(404)
+
+    # store portions in session
+    weekly_portions = session.get('weekly_plan_portions', {})
+    weekly_portions.setdefault(day, {})[meal_name] = max(1, portions_value)
+    session['weekly_plan_portions'] = weekly_portions
+
+    # recompute day totals accounting for portions
+    total_cal = 0
+    total_protein = 0
+    for m, r in day_plan['meals'].items():
+        if not r:
+            continue
+        p = weekly_portions.get(day, {}).get(m, 1)
+        s = r.get('servings', 1) or 1
+        cal_per = r['calories'] / s
+        prot_per = r['protein'] / s
+        total_cal += cal_per * p
+        total_protein += prot_per * p
+
+    # save updated totals in session weekly_plan as well
+    day_plan['total_calories'] = total_cal
+    day_plan['total_protein'] = total_protein
+    session['weekly_plan'] = weekly
+
+    return {
+        'day_totals': {
+            'total_calories': round(total_cal, 1),
+            'total_protein': round(total_protein, 1),
+        },
+        'portions': weekly_portions.get(day, {}).get(meal_name, 1)
+    }
+
+
 @app.route("/weekly-plan/alternatives/<day>/<meal_name>")
 def weekly_alternatives(day, meal_name):
     """Return JSON alternatives for a given day and meal to power the swap UI."""
@@ -366,7 +420,8 @@ def shopping_list():
     # Prefer a saved weekly plan if available; otherwise fall back to the daily plan.
     weekly = session.get("weekly_plan")
     if weekly:
-        grouped_items, portions = build_weekly_shopping_list(weekly)
+        portions_map = session.get('weekly_plan_portions', {})
+        grouped_items, portions = build_weekly_shopping_list(weekly, portions_map=portions_map)
         return render_template("shopping_list.html", shopping_list=grouped_items, portions=portions, weekly=True)
 
     plan = session.get("meal_plan")
