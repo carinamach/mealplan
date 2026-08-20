@@ -48,7 +48,7 @@
                 <span class="target-marker" style="left: {{ target_marker_position }}%" aria-hidden="true"></span>
             </div>
             <p class="progress-label"><span class="green-key">Peach: planned calories</span> · <span class="target-key">Line: daily target</span>{% if red_percentage > 0 %} · <span class="red-key">Rose: above target</span>{% endif %}</p>
-            <p class="progress-label">{{ plan.total_calories }} of {{ targets.calories }} kcal</p>
+            <p class="progress-label">{{ plan.total_calories }}  of {{ targets.calories }} kcal</p>
             {% set calorie_difference = targets.calories - plan.total_calories %}
             {% if calorie_difference > 0 %}
                 <p><strong>{{ calorie_difference }} kcal remaining</strong> to reach your estimated daily target.</p>
@@ -59,7 +59,6 @@
             {% endif %}
             <p class="estimate-note">This is a simple estimate based on the predefined recipes and may not match your target exactly.</p>
             <p><a class="button-link" href="{{ url_for('shopping_list') }}">View shopping list</a></p>
-            <p><a class="button-link" href="{{ url_for('weekly_plan') }}">View weekly plan</a></p>
         </section>
     {% else %}
         <section class="profile-form">

@@ -5,7 +5,7 @@ from pathlib import Path
 from flask import Flask, abort, redirect, render_template, request, session, url_for
 
 from calculations import calculate_targets
-from meal_planner import WEEKDAYS, calculate_plan_totals, find_swap_recipe, generate_daily_plan, generate_weekly_plan
+from meal_planner import calculate_plan_totals, find_swap_recipe, generate_daily_plan
 from recipe_filters import MEAL_TYPES, filter_recipes
 from shopping_list import build_shopping_list
 
@@ -134,7 +134,6 @@ def profile():
                 biological_sex=profile_data["biological_sex"],
             )
             session.pop("meal_plan", None)
-            session.pop("weekly_plan", None)
             return redirect(url_for("profile"))
         except (KeyError, ValueError) as exception:
             error = str(exception)
@@ -188,112 +187,6 @@ def swap_meal(meal_name):
         session["meal_plan"] = plan
 
     return redirect(url_for("meal_plan"))
-
-
-@app.route("/weekly-plan")
-def weekly_plan():
-    """Display a Monday–Sunday plan using the same daily generation logic."""
-    targets = session.get("targets")
-    profile_data = session.get("profile")
-
-    if not targets or not profile_data:
-        return render_template("weekly_plan.html", weekly_plan=None)
-
-    plan = session.get("weekly_plan")
-    if plan is None:
-        plan = generate_weekly_plan(
-            load_recipes(),
-            calorie_target=targets["calories"],
-            goal=profile_data["goal"],
-        )
-        session["weekly_plan"] = plan
-
-    return render_template("weekly_plan.html", weekly_plan=plan, weekdays=WEEKDAYS, targets=targets)
-
-
-@app.post("/weekly-plan/swap/<day>/<meal_name>")
-def swap_weekly_meal(day, meal_name):
-    """Swap one meal in the saved weekly plan for the given day and meal."""
-    plan = session.get("weekly_plan")
-    profile_data = session.get("profile")
-
-    if not plan or not profile_data or day not in plan:
-        abort(404)
-
-    day_plan = plan[day]
-    if meal_name not in day_plan["meals"]:
-        abort(404)
-
-    current_recipe = day_plan["meals"][meal_name]
-    if current_recipe is None:
-        abort(404)
-
-    # If the client posted a specific recipe id (AJAX), use it.
-    if request.is_json:
-        data = request.get_json() or {}
-        recipe_id = data.get("recipe_id")
-        if recipe_id:
-            try:
-                chosen = get_recipe(int(recipe_id))
-            except Exception:
-                return ("Not found", 404)
-            day_plan["meals"][meal_name] = chosen
-            day_plan.update(calculate_plan_totals(day_plan["meals"]))
-            session["weekly_plan"] = plan
-            return {
-                "meal": {
-                    "id": chosen["id"],
-                    "name": chosen["name"],
-                    "calories": chosen["calories"],
-                    "protein": chosen["protein"],
-                    "url": url_for("recipe_detail", recipe_id=chosen["id"]),
-                },
-                "totals": {
-                    "total_calories": day_plan["total_calories"],
-                    "total_protein": day_plan["total_protein"],
-                },
-            }
-
-    # Fallback for non-AJAX: pick an automatic alternative and redirect.
-    alternative = find_swap_recipe(current_recipe, load_recipes(), profile_data["goal"])
-    if alternative:
-        day_plan["meals"][meal_name] = alternative
-        day_plan.update(calculate_plan_totals(day_plan["meals"]))
-        session["weekly_plan"] = plan
-
-    return redirect(url_for("weekly_plan"))
-
-
-@app.route("/weekly-plan/alternatives/<day>/<meal_name>")
-def weekly_alternatives(day, meal_name):
-    """Return JSON alternatives for a given day and meal to power the swap UI."""
-    plan = session.get("weekly_plan")
-    profile_data = session.get("profile")
-
-    if not plan or not profile_data or day not in plan:
-        abort(404)
-
-    day_plan = plan[day]
-    current = day_plan["meals"].get(meal_name)
-    if not current:
-        return ([], 200)
-
-    # Find same-type alternatives, exclude current id
-    candidates = [r for r in load_recipes() if r["meal_type"] == current["meal_type"] and r["id"] != current["id"]]
-
-    # Return up to 5 alternatives sorted by closeness in calories
-    candidates.sort(key=lambda r: abs(r["calories"] - current["calories"]))
-    results = []
-    for r in candidates[:5]:
-        results.append({
-            "id": r["id"],
-            "name": r["name"],
-            "calories": r["calories"],
-            "protein": r["protein"],
-            "url": url_for("recipe_detail", recipe_id=r["id"]),
-        })
-
-    return {"alternatives": results}
 
 
 @app.route("/shopping-list")
