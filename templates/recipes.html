@@ -3,44 +3,46 @@
 {% block title %}Meal Plan | Recipes{% endblock %}
 
 {% block content %}
-    <section class="recipe-heading">
-        <p class="eyebrow">Recipe collection</p>
-        <h1>Recipes</h1>
-        <p>{{ recipes|length }} recipes{% if selected_meal_type or match_diet or search_query %} matching your filters{% else %} to use later in your meal plans{% endif %}.</p>
+    <section class="mb-6 max-w-3xl">
+        <p class="mb-2 text-xs font-extrabold uppercase tracking-[0.18em] text-[#b8a9d9]">Recipe collection</p>
+        <h1 class="font-display text-4xl font-semibold tracking-tight text-slate-700 sm:text-5xl">Recipes</h1>
+        <p class="mt-3 text-slate-500">{{ recipes|length }} recipes{% if selected_meal_type or match_diet or search_query %} matching your filters{% else %} to use later in your meal plans{% endif %}.</p>
     </section>
 
-    <form class="recipe-filters" method="get" action="{{ url_for('recipes') }}" data-recipe-filters>
-        <label class="recipe-search">
+    <form class="mb-8 flex flex-col gap-4 rounded-[1.5rem] border border-stone-200 bg-white/80 p-4 shadow-sm sm:p-5" method="get" action="{{ url_for('recipes') }}" data-recipe-filters>
+        <label class="grid gap-2 text-sm font-extrabold uppercase tracking-[0.12em] text-slate-500">
             Search recipes
-            <input type="search" name="q" value="{{ search_query }}" placeholder="Search names or ingredients" data-recipe-search>
+            <input class="rounded-full border border-stone-200 bg-white px-4 py-3 text-base text-slate-700 outline-none ring-0 transition focus:border-[#b8a9d9]" type="search" name="q" value="{{ search_query }}" placeholder="Search names or ingredients" data-recipe-search>
         </label>
-        <div class="filter-group" role="group" aria-label="Meal type">
-            <button type="submit" name="meal_type" value="" class="filter-chip{% if not selected_meal_type %} is-active{% endif %}">All</button>
+        <div class="flex flex-wrap gap-2" role="group" aria-label="Meal type">
+            <button type="submit" name="meal_type" value="" class="rounded-full border px-4 py-2 text-sm font-extrabold transition {{ 'border-transparent bg-[#e8e1f3] text-slate-700' if not selected_meal_type else 'border-stone-200 bg-white text-slate-600 hover:bg-stone-50' }}">All</button>
             {% for meal_type in meal_types %}
-                <button type="submit" name="meal_type" value="{{ meal_type }}" class="filter-chip{% if selected_meal_type == meal_type %} is-active{% endif %}">{{ meal_type }}</button>
+                <button type="submit" name="meal_type" value="{{ meal_type }}" class="rounded-full border px-4 py-2 text-sm font-extrabold capitalize transition {{ 'border-transparent bg-[#e8e1f3] text-slate-700' if selected_meal_type == meal_type else 'border-stone-200 bg-white text-slate-600 hover:bg-stone-50' }}">{{ meal_type }}</button>
             {% endfor %}
         </div>
         {% if selected_meal_type %}
             <input type="hidden" name="meal_type" value="{{ selected_meal_type }}">
         {% endif %}
         {% if dietary_preferences %}
-            <label class="diet-filter">
-                <input type="checkbox" name="match_diet" value="1" {% if match_diet %}checked{% endif %}>
-                Match my dietary preferences
-            </label>
-            <button class="filter-apply" type="submit">Apply diet filter</button>
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <label class="inline-flex items-center gap-2 text-sm font-bold text-slate-600">
+                    <input type="checkbox" name="match_diet" value="1" {% if match_diet %}checked{% endif %} class="h-4 w-4 accent-[#efa7a0]">
+                    Match my dietary preferences
+                </label>
+                <button class="rounded-full bg-[#efa7a0] px-4 py-2 text-sm font-extrabold text-slate-700 transition hover:bg-[#f5b7ac]" type="submit">Apply diet filter</button>
+            </div>
         {% else %}
-            <p class="field-help">Save dietary preferences in your <a href="{{ url_for('profile') }}">profile</a> to filter recipes by diet.</p>
+            <p class="text-sm text-slate-500">Save dietary preferences in your <a class="font-bold text-slate-700 underline" href="{{ url_for('profile') }}">profile</a> to filter recipes by diet.</p>
         {% endif %}
     </form>
 
-    <section class="recipe-grid" aria-label="All recipes" data-recipe-grid {% if not recipes %}hidden{% endif %}>
+    <section class="grid gap-5 md:grid-cols-2 xl:grid-cols-3" aria-label="All recipes" data-recipe-grid {% if not recipes %}hidden{% endif %}>
         {% for recipe in recipes %}
             {% include "_recipe_card.html" %}
         {% endfor %}
     </section>
-    <section class="profile-form" data-empty-recipes {% if recipes %}hidden{% endif %}>
-        <h2>No matching recipes</h2>
-        <p>Try another search, meal type, or turn off the dietary preference filter.</p>
+    <section class="mt-6 rounded-[1.5rem] border border-stone-200 bg-white/80 p-6 shadow-sm" data-empty-recipes {% if recipes %}hidden{% endif %}>
+        <h2 class="font-display text-2xl text-slate-700">No matching recipes</h2>
+        <p class="mt-2 text-slate-500">Try another search, meal type, or turn off the dietary preference filter.</p>
     </section>
 {% endblock %}

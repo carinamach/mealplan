@@ -3,45 +3,45 @@
 {% block title %}Meal Plan | Shopping list{% endblock %}
 
 {% block content %}
-    <section class="recipe-heading">
-        <p class="eyebrow">From your meal plan</p>
-        <h1>Shopping list</h1>
+    <section class="mb-6 max-w-3xl">
+        <p class="mb-2 text-xs font-extrabold uppercase tracking-[0.18em] text-[#b8a9d9]">From your meal plan</p>
+        <h1 class="font-display text-4xl font-semibold tracking-tight text-slate-700 sm:text-5xl">Shopping list</h1>
     </section>
 
     {% if shopping_list %}
-        <section class="shopping-controls" aria-label="Shopping list portion controls">
-            <form method="get" action="{{ url_for('shopping_list') }}">
-                <label for="portion-count">Adjust portion count</label>
-                <div class="portion-row">
-                    <input id="portion-count" name="portions" type="number" min="1" step="1" value="{{ portion_multiplier }}">
-                    <button type="submit" class="button-link">Update list</button>
+        <section class="mb-6 rounded-[1.5rem] border border-stone-200 bg-white/80 p-4 shadow-sm" aria-label="Shopping list portion controls">
+            <form method="get" action="{{ url_for('shopping_list') }}" class="flex flex-col gap-3 sm:flex-row sm:items-center">
+                <label for="portion-count" class="text-sm font-extrabold uppercase tracking-[0.08em] text-slate-500">Adjust portion count</label>
+                <div class="flex gap-3">
+                    <input id="portion-count" name="portions" type="number" min="1" step="1" value="{{ portion_multiplier }}" class="w-28 rounded-xl border border-stone-200 bg-white px-3 py-2.5 text-base text-slate-700 outline-none focus:border-[#b8a9d9]">
+                    <button type="submit" class="inline-flex items-center justify-center rounded-full bg-[#efa7a0] px-4 py-2.5 text-sm font-extrabold text-slate-700 transition hover:bg-[#f5b7ac]">Update list</button>
                 </div>
             </form>
         </section>
 
-        <section class="meal-summary" aria-label="Meals included in the shopping list">
-            <h2>Meals included</h2>
-            <ul>
+        <section class="mb-6 rounded-[1.5rem] border border-stone-200 bg-white/80 p-5 shadow-sm" aria-label="Meals included in the shopping list">
+            <h2 class="font-display text-3xl text-slate-700">Meals included</h2>
+            <ul class="mt-4 space-y-2 text-slate-600">
                 {% for meal in meal_summary %}
-                    <li>
-                        <strong>{{ meal.meal_name }}:</strong> {{ meal.recipe_name }}
+                    <li class="rounded-2xl bg-[#fff9f3] px-3 py-2">
+                        <strong class="text-slate-700">{{ meal.meal_name }}:</strong> {{ meal.recipe_name }}
                         <span>({{ meal.portions }} {% if meal.portions == 1 %}portion{% else %}portions{% endif %})</span>
                     </li>
                 {% endfor %}
             </ul>
         </section>
 
-        <p class="plan-intro">Ingredients from your selected meals, combined where they match, scaled for {{ portion_multiplier }} {% if portion_multiplier == 1 %}portion{% else %}portions{% endif %}.</p>
-        <section class="shopping-list" data-shopping-list aria-label="Shopping list">
+        <p class="mb-6 text-slate-500">Ingredients from your selected meals, combined where they match, scaled for {{ portion_multiplier }} {% if portion_multiplier == 1 %}portion{% else %}portions{% endif %}.</p>
+        <section class="grid gap-5 md:grid-cols-2 xl:grid-cols-3" data-shopping-list aria-label="Shopping list">
             {% for category, items in shopping_list %}
-                <section class="shopping-category">
-                    <h2>{% if category == "Meat & fish" %}🐟 {% elif category == "Vegetables" %}🥦 {% elif category == "Fruit" %}🍓 {% elif category == "Dairy" %}🥛 {% else %}🧺 {% endif %}{{ category }}</h2>
-                    <ul>
+                <section class="rounded-[1.5rem] border border-stone-200 bg-white/80 p-4 shadow-sm">
+                    <h2 class="mb-3 flex items-center gap-2 font-display text-2xl text-slate-700">{% if category == "Meat & fish" %}🐟 {% elif category == "Vegetables" %}🥦 {% elif category == "Fruit" %}🍓 {% elif category == "Dairy" %}🥛 {% else %}🧺 {% endif %}{{ category }}</h2>
+                    <ul class="space-y-2">
                         {% for item in items %}
-                            <li>
-                                <label>
-                                    <input type="checkbox" value="{{ item.name }}|{{ item.unit }}">
-                                    <span>{{ item.amount }}{% if item.unit %}{{ item.unit }}{% endif %} {{ item.name }} </span>
+                            <li class="rounded-xl bg-[#fffaf5] px-3 py-2">
+                                <label class="flex items-center gap-2 text-slate-600">
+                                    <input type="checkbox" value="{{ item.name }}|{{ item.unit }}" class="h-4 w-4 accent-[#efa7a0]">
+                                    <span>{{ item.amount }}{% if item.unit %}{{ item.unit }}{% endif %} {{ item.name }}</span>
                                 </label>
                             </li>
                         {% endfor %}
@@ -50,10 +50,10 @@
             {% endfor %}
         </section>
     {% else %}
-        <section class="profile-form">
-            <h2>Create a meal plan first</h2>
-            <p>Save your profile and generate a meal plan before viewing the shopping list.</p>
-            <a class="button-link" href="{{ url_for('meal_plan') }}">Go to meal plan</a>
+        <section class="rounded-[1.5rem] border border-stone-200 bg-white/80 p-6 shadow-sm">
+            <h2 class="font-display text-3xl text-slate-700">Create a meal plan first</h2>
+            <p class="mt-3 text-slate-500">Save your profile and generate a meal plan before viewing the shopping list.</p>
+            <a class="mt-5 inline-flex items-center justify-center rounded-full bg-[#efa7a0] px-5 py-3 text-sm font-extrabold text-slate-700 no-underline transition hover:bg-[#f5b7ac]" href="{{ url_for('meal_plan') }}">Go to meal plan</a>
         </section>
     {% endif %}
 {% endblock %}

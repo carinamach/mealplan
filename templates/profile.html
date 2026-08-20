@@ -3,89 +3,103 @@
 {% block title %}Meal Plan | Profile{% endblock %}
 
 {% block content %}
-    <section class="profile-page">
-        <p class="eyebrow">Your starting point</p>
-        <h1>Profile and goal</h1>
-        <p>Enter a few details to receive simple daily estimates.</p>
+    <section class="mx-auto max-w-4xl">
+        <p class="mb-2 text-xs font-extrabold uppercase tracking-[0.18em] text-[#b8a9d9]">Your starting point</p>
+        <h1 class="font-display text-4xl font-semibold tracking-tight text-slate-700 sm:text-5xl">Profile and goal</h1>
+        <p class="mt-3 text-slate-500">Enter a few details to receive simple daily estimates.</p>
 
-        <form class="profile-form" method="post">
-            <label>
-                Age
-                <input type="number" name="age" min="13" required value="{{ profile.get('age', '') }}">
-            </label>
-            <label>
-                Height (cm)
-                <input type="number" name="height" min="1" step="0.1" required value="{{ profile.get('height', '') }}">
-            </label>
-            <label>
-                Weight (kg)
-                <input type="number" name="weight" min="1" step="0.1" required value="{{ profile.get('weight', '') }}">
-            </label>
-            <label>
-                Target weight (kg)
-                <input type="number" name="target_weight" min="1" step="0.1" required value="{{ profile.get('target_weight', '') }}">
-            </label>
-            <label>
-                Biological sex used for calorie estimate
-                <select name="biological_sex" required>
-                    <option value="" disabled {% if not profile.get('biological_sex') %}selected{% endif %}>Choose an option</option>
-                    <option value="female" {% if profile.get('biological_sex') == 'female' %}selected{% endif %}>Female</option>
-                    <option value="male" {% if profile.get('biological_sex') == 'male' %}selected{% endif %}>Male</option>
-                    <option value="prefer_not_to_say" {% if profile.get('biological_sex') == 'prefer_not_to_say' %}selected{% endif %}>Prefer not to say</option>
-                </select>
-            </label>
-            <p class="field-help">This is only used to make the calorie estimate more personalised. “Prefer not to say” uses a middle estimate.</p>
-            <label>
-                Activity level
-                <select name="activity_level" required>
-                    <option value="" disabled {% if not profile.get('activity_level') %}selected{% endif %}>Choose an activity level</option>
-                    <option value="sedentary" {% if profile.get('activity_level') == 'sedentary' %}selected{% endif %}>Sedentary</option>
-                    <option value="light" {% if profile.get('activity_level') == 'light' %}selected{% endif %}>Light</option>
-                    <option value="moderate" {% if profile.get('activity_level') == 'moderate' %}selected{% endif %}>Moderate</option>
-                    <option value="active" {% if profile.get('activity_level') == 'active' %}selected{% endif %}>Active</option>
-                </select>
-            </label>
-            <div class="activity-help">
-                <p>Choose the closest match. These are only rough examples:</p>
-                <ul>
-                    <li><strong>Sedentary:</strong> mostly sitting; little or no planned exercise.</li>
-                    <li><strong>Light:</strong> light exercise or walking around 1–3 days per week.</li>
-                    <li><strong>Moderate:</strong> moderate exercise around 3–5 days per week.</li>
-                    <li><strong>Active:</strong> hard exercise or a physically active job most days of the week.</li>
-                </ul>
+        <div class="mt-8 grid gap-6 lg:grid-cols-[1.3fr_0.7fr]">
+            <form class="space-y-5 rounded-[1.75rem] border border-stone-200 bg-white/85 p-5 shadow-sm sm:p-6" method="post">
+                <div class="grid gap-4 sm:grid-cols-2">
+                    <label class="grid gap-2 text-sm font-extrabold uppercase tracking-[0.08em] text-slate-500">
+                        Age
+                        <input class="rounded-xl border border-stone-200 bg-white px-3 py-2.5 text-base text-slate-700 outline-none transition focus:border-[#b8a9d9]" type="number" name="age" min="13" required value="{{ profile.get('age', '') }}">
+                    </label>
+                    <label class="grid gap-2 text-sm font-extrabold uppercase tracking-[0.08em] text-slate-500">
+                        Height (cm)
+                        <input class="rounded-xl border border-stone-200 bg-white px-3 py-2.5 text-base text-slate-700 outline-none transition focus:border-[#b8a9d9]" type="number" name="height" min="1" step="0.1" required value="{{ profile.get('height', '') }}">
+                    </label>
+                    <label class="grid gap-2 text-sm font-extrabold uppercase tracking-[0.08em] text-slate-500">
+                        Weight (kg)
+                        <input class="rounded-xl border border-stone-200 bg-white px-3 py-2.5 text-base text-slate-700 outline-none transition focus:border-[#b8a9d9]" type="number" name="weight" min="1" step="0.1" required value="{{ profile.get('weight', '') }}">
+                    </label>
+                    <label class="grid gap-2 text-sm font-extrabold uppercase tracking-[0.08em] text-slate-500">
+                        Target weight (kg)
+                        <input class="rounded-xl border border-stone-200 bg-white px-3 py-2.5 text-base text-slate-700 outline-none transition focus:border-[#b8a9d9]" type="number" name="target_weight" min="1" step="0.1" required value="{{ profile.get('target_weight', '') }}">
+                    </label>
+                </div>
+
+                <label class="grid gap-2 text-sm font-extrabold uppercase tracking-[0.08em] text-slate-500">
+                    Biological sex used for calorie estimate
+                    <select class="rounded-xl border border-stone-200 bg-white px-3 py-2.5 text-base text-slate-700 outline-none transition focus:border-[#b8a9d9]" name="biological_sex" required>
+                        <option value="" disabled {% if not profile.get('biological_sex') %}selected{% endif %}>Choose an option</option>
+                        <option value="female" {% if profile.get('biological_sex') == 'female' %}selected{% endif %}>Female</option>
+                        <option value="male" {% if profile.get('biological_sex') == 'male' %}selected{% endif %}>Male</option>
+                        <option value="prefer_not_to_say" {% if profile.get('biological_sex') == 'prefer_not_to_say' %}selected{% endif %}>Prefer not to say</option>
+                    </select>
+                </label>
+                <p class="text-sm text-slate-500">This is only used to make the calorie estimate more personalised. “Prefer not to say” uses a middle estimate.</p>
+
+                <label class="grid gap-2 text-sm font-extrabold uppercase tracking-[0.08em] text-slate-500">
+                    Activity level
+                    <select class="rounded-xl border border-stone-200 bg-white px-3 py-2.5 text-base text-slate-700 outline-none transition focus:border-[#b8a9d9]" name="activity_level" required>
+                        <option value="" disabled {% if not profile.get('activity_level') %}selected{% endif %}>Choose an activity level</option>
+                        <option value="sedentary" {% if profile.get('activity_level') == 'sedentary' %}selected{% endif %}>Sedentary</option>
+                        <option value="light" {% if profile.get('activity_level') == 'light' %}selected{% endif %}>Light</option>
+                        <option value="moderate" {% if profile.get('activity_level') == 'moderate' %}selected{% endif %}>Moderate</option>
+                        <option value="active" {% if profile.get('activity_level') == 'active' %}selected{% endif %}>Active</option>
+                    </select>
+                </label>
+
+                <div class="rounded-2xl bg-[#fff9f3] p-4 text-sm text-slate-600">
+                    <p class="font-extrabold text-slate-700">Choose the closest match. These are only rough examples:</p>
+                    <ul class="mt-3 list-disc space-y-1 pl-5">
+                        <li><strong>Sedentary:</strong> mostly sitting; little or no planned exercise.</li>
+                        <li><strong>Light:</strong> light exercise or walking around 1–3 days per week.</li>
+                        <li><strong>Moderate:</strong> moderate exercise around 3–5 days per week.</li>
+                        <li><strong>Active:</strong> hard exercise or a physically active job most days of the week.</li>
+                    </ul>
+                </div>
+
+                <fieldset class="space-y-3 rounded-2xl border border-stone-200 bg-[#fffaf5] p-4">
+                    <legend class="px-1 text-sm font-extrabold uppercase tracking-[0.08em] text-slate-500">Goal</legend>
+                    <label class="flex items-center gap-2 text-slate-600"><input type="radio" name="goal" value="lose_weight" required {% if profile.get('goal') == 'lose_weight' %}checked{% endif %} class="accent-[#efa7a0]"> Lose weight</label>
+                    <label class="flex items-center gap-2 text-slate-600"><input type="radio" name="goal" value="maintain_weight" {% if profile.get('goal') == 'maintain_weight' %}checked{% endif %} class="accent-[#efa7a0]"> Maintain weight</label>
+                    <label class="flex items-center gap-2 text-slate-600"><input type="radio" name="goal" value="low_calorie" {% if profile.get('goal') == 'low_calorie' %}checked{% endif %} class="accent-[#efa7a0]"> Low calorie</label>
+                    <label class="flex items-center gap-2 text-slate-600"><input type="radio" name="goal" value="high_protein" {% if profile.get('goal') == 'high_protein' %}checked{% endif %} class="accent-[#efa7a0]"> High protein</label>
+                </fieldset>
+
+                <fieldset class="space-y-3 rounded-2xl border border-stone-200 bg-[#fffaf5] p-4">
+                    <legend class="px-1 text-sm font-extrabold uppercase tracking-[0.08em] text-slate-500">Dietary preferences</legend>
+                    <label class="flex items-center gap-2 text-slate-600"><input type="checkbox" name="dietary_preferences" value="vegetarian" {% if 'vegetarian' in profile.get('dietary_preferences', []) %}checked{% endif %} class="accent-[#efa7a0]"> Vegetarian</label>
+                    <label class="flex items-center gap-2 text-slate-600"><input type="checkbox" name="dietary_preferences" value="vegan" {% if 'vegan' in profile.get('dietary_preferences', []) %}checked{% endif %} class="accent-[#efa7a0]"> Vegan</label>
+                    <label class="flex items-center gap-2 text-slate-600"><input type="checkbox" name="dietary_preferences" value="gluten-free" {% if 'gluten-free' in profile.get('dietary_preferences', []) %}checked{% endif %} class="accent-[#efa7a0]"> Gluten-free</label>
+                    <label class="flex items-center gap-2 text-slate-600"><input type="checkbox" name="dietary_preferences" value="dairy-free" {% if 'dairy-free' in profile.get('dietary_preferences', []) %}checked{% endif %} class="accent-[#efa7a0]"> Dairy-free</label>
+                    <label class="flex items-center gap-2 text-slate-600"><input type="checkbox" name="dietary_preferences" value="nut-free" {% if 'nut-free' in profile.get('dietary_preferences', []) %}checked{% endif %} class="accent-[#efa7a0]"> Nut-free</label>
+                </fieldset>
+
+                <button type="submit" class="inline-flex items-center justify-center rounded-full bg-[#efa7a0] px-5 py-3 text-sm font-extrabold text-slate-700 transition hover:bg-[#f5b7ac]">Save profile and calculate</button>
+            </form>
+
+            <div class="space-y-5">
+                {% if error %}
+                    <p class="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-bold text-red-700">{{ error }}</p>
+                {% endif %}
+
+                {% if targets %}
+                    <section class="rounded-[1.75rem] border border-stone-200 bg-white/85 p-5 shadow-sm" aria-live="polite">
+                        <p class="mb-2 text-xs font-extrabold uppercase tracking-[0.18em] text-[#b8a9d9]">Estimates</p>
+                        <h2 class="font-display text-3xl text-slate-700">Your daily targets</h2>
+                        <div class="mt-4 space-y-2 text-slate-600">
+                            <p><strong class="text-slate-700">{{ targets.calories }} kcal</strong> per day</p>
+                            <p><strong class="text-slate-700">{{ targets.protein }} g protein</strong> per day</p>
+                            <p><strong class="text-slate-700">BMI: {{ targets.bmi }}</strong></p>
+                        </div>
+                        <p class="mt-4 text-sm text-slate-500">BMI is a simple height-and-weight estimate for adults. It does not measure body fat or account for factors such as muscle mass.</p>
+                        <p class="mt-2 text-sm text-slate-500">These are simple estimates for this project, not medical or dietary advice.</p>
+                    </section>
+                {% endif %}
             </div>
-            <fieldset>
-                <legend>Goal</legend>
-                <label><input type="radio" name="goal" value="lose_weight" required {% if profile.get('goal') == 'lose_weight' %}checked{% endif %}> Lose weight</label>
-                <label><input type="radio" name="goal" value="maintain_weight" {% if profile.get('goal') == 'maintain_weight' %}checked{% endif %}> Maintain weight</label>
-                <label><input type="radio" name="goal" value="low_calorie" {% if profile.get('goal') == 'low_calorie' %}checked{% endif %}> Low calorie</label>
-                <label><input type="radio" name="goal" value="high_protein" {% if profile.get('goal') == 'high_protein' %}checked{% endif %}> High protein</label>
-            </fieldset>
-            <fieldset>
-                <legend>Dietary preferences</legend>
-                <label><input type="checkbox" name="dietary_preferences" value="vegetarian" {% if 'vegetarian' in profile.get('dietary_preferences', []) %}checked{% endif %}> Vegetarian</label>
-                <label><input type="checkbox" name="dietary_preferences" value="vegan" {% if 'vegan' in profile.get('dietary_preferences', []) %}checked{% endif %}> Vegan</label>
-                <label><input type="checkbox" name="dietary_preferences" value="gluten-free" {% if 'gluten-free' in profile.get('dietary_preferences', []) %}checked{% endif %}> Gluten-free</label>
-                <label><input type="checkbox" name="dietary_preferences" value="dairy-free" {% if 'dairy-free' in profile.get('dietary_preferences', []) %}checked{% endif %}> Dairy-free</label>
-                <label><input type="checkbox" name="dietary_preferences" value="nut-free" {% if 'nut-free' in profile.get('dietary_preferences', []) %}checked{% endif %}> Nut-free</label>
-            </fieldset>
-            <button type="submit">Save profile and calculate</button>
-        </form>
-
-        {% if error %}
-            <p class="form-error">{{ error }}</p>
-        {% endif %}
-
-        {% if targets %}
-            <section class="estimate-card" aria-live="polite">
-                <p class="eyebrow">Estimates</p>
-                <h2>Your daily targets</h2>
-                <p><strong>{{ targets.calories }} kcal</strong> per day</p>
-                <p><strong>{{ targets.protein }} g protein</strong> per day</p>
-                <p><strong>BMI: {{ targets.bmi }}</strong></p>
-                <p class="estimate-note">BMI is a simple height-and-weight estimate for adults. It does not measure body fat or account for factors such as muscle mass.</p>
-                <p class="estimate-note">These are simple estimates for this project, not medical or dietary advice.</p>
-            </section>
-        {% endif %}
+        </div>
     </section>
 {% endblock %}

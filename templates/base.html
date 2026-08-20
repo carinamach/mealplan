@@ -4,24 +4,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Meal Plan{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Nunito', 'Segoe UI', 'sans-serif'],
+                        display: ['Fraunces', 'Georgia', 'serif']
+                    },
+                    colors: {
+                        peach: '#efa7a0',
+                        lilac: '#b8a9d9',
+                        blush: '#f7d9d5',
+                        apricot: '#f6c6a8',
+                        cream: '#fff9f3'
+                    }
+                }
+            }
+        }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
-<body>
-    <header class="site-header">
-        <a class="logo" href="{{ url_for('home') }}"><span class="logo-mark" aria-hidden="true">🍽️</span>Meal Plan</a>
-        <nav aria-label="Main navigation">
-            <a href="{{ url_for('recipes') }}" class="{{ 'is-active' if request.endpoint in ('recipes', 'recipe_detail') else '' }}">Recipes</a>
-            <a href="{{ url_for('favorites') }}" class="{{ 'is-active' if request.endpoint == 'favorites' else '' }}">Favorites</a>
-            <a href="{{ url_for('profile') }}" class="{{ 'is-active' if request.endpoint == 'profile' else '' }}">Profile</a>
-            <a href="{{ url_for('meal_plan') }}" class="{{ 'is-active' if request.endpoint == 'meal_plan' else '' }}">Meal plan</a>
-            <a href="{{ url_for('shopping_list') }}" class="{{ 'is-active' if request.endpoint == 'shopping_list' else '' }}">Shopping list</a>
-        </nav>
+<body class="min-h-screen bg-[#fffaf5] font-sans text-slate-700 antialiased">
+    <header class="sticky top-0 z-20 border-b border-stone-200/80 bg-white/85 backdrop-blur-sm">
+        <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
+            <a class="inline-flex items-center gap-3 font-display text-xl font-semibold tracking-tight text-slate-700 no-underline" href="{{ url_for('home') }}">
+                <span class="grid h-9 w-9 place-items-center rounded-xl bg-[#f7d9d5] text-lg shadow-inner shadow-white/60" aria-hidden="true">🍽️</span>
+                Meal Plan
+            </a>
+            <nav aria-label="Main navigation" class="flex flex-wrap items-center gap-2">
+                <a href="{{ url_for('recipes') }}" class="rounded-full px-3 py-2 text-sm font-extrabold text-slate-500 transition hover:bg-[#e8e1f3] hover:text-slate-700 {{ 'bg-[#e8e1f3] text-slate-700' if request.endpoint in ('recipes', 'recipe_detail') else '' }}">Recipes</a>
+                <a href="{{ url_for('favorites') }}" class="rounded-full px-3 py-2 text-sm font-extrabold text-slate-500 transition hover:bg-[#e8e1f3] hover:text-slate-700 {{ 'bg-[#e8e1f3] text-slate-700' if request.endpoint == 'favorites' else '' }}">Favorites</a>
+                <a href="{{ url_for('profile') }}" class="rounded-full px-3 py-2 text-sm font-extrabold text-slate-500 transition hover:bg-[#e8e1f3] hover:text-slate-700 {{ 'bg-[#e8e1f3] text-slate-700' if request.endpoint == 'profile' else '' }}">Profile</a>
+                <a href="{{ url_for('meal_plan') }}" class="rounded-full px-3 py-2 text-sm font-extrabold text-slate-500 transition hover:bg-[#e8e1f3] hover:text-slate-700 {{ 'bg-[#e8e1f3] text-slate-700' if request.endpoint == 'meal_plan' else '' }}">Meal plan</a>
+                <a href="{{ url_for('shopping_list') }}" class="rounded-full px-3 py-2 text-sm font-extrabold text-slate-500 transition hover:bg-[#e8e1f3] hover:text-slate-700 {{ 'bg-[#e8e1f3] text-slate-700' if request.endpoint == 'shopping_list' else '' }}">Shopping list</a>
+            </nav>
+        </div>
     </header>
 
-    <main class="page-content">
+    <main class="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         {% block content %}{% endblock %}
     </main>
 
