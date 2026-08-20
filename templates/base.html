@@ -17,7 +17,6 @@
             <a href="{{ url_for('favorites') }}" class="{{ 'is-active' if request.endpoint == 'favorites' else '' }}">Favorites</a>
             <a href="{{ url_for('profile') }}" class="{{ 'is-active' if request.endpoint == 'profile' else '' }}">Profile</a>
             <a href="{{ url_for('meal_plan') }}" class="{{ 'is-active' if request.endpoint == 'meal_plan' else '' }}">Meal plan</a>
-            <a href="{{ url_for('weekly_plan') }}" class="{{ 'is-active' if request.endpoint == 'weekly_plan' else '' }}">Weekly plan</a>
             <a href="{{ url_for('shopping_list') }}" class="{{ 'is-active' if request.endpoint == 'shopping_list' else '' }}">Shopping list</a>
         </nav>
     </header>

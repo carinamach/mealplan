@@ -56,13 +56,24 @@ def format_amount(amount):
     return str(round(amount, 1))
 
 
-def build_shopping_list(meals):
-    """Collect, combine, and group ingredients from selected meals."""
+def build_shopping_list(meals, portions=None):
+    """Collect, combine, and group ingredients from selected meals.
+
+    `meals` is a mapping of meal_name -> recipe. `portions` is an optional
+    dict mapping meal_name -> number_of_portions the user intends to cook for
+    that meal; this scales ingredient amounts accordingly. By default each
+    meal is treated as one portion.
+    """
+    portions = portions or {}
     combined = {}
 
-    for recipe in meals.values():
+    for meal_name, recipe in meals.items():
         if not recipe:
             continue
+
+        planned = float(portions.get(meal_name, 1) or 1)
+        recipe_servings = float(recipe.get("servings", 1) or 1)
+        multiplier = planned / recipe_servings
 
         for ingredient in recipe["ingredients"]:
             name = ingredient["name"]
@@ -72,7 +83,55 @@ def build_shopping_list(meals):
             if key not in combined:
                 combined[key] = {"name": name, "unit": unit, "amount": 0}
 
-            combined[key]["amount"] += ingredient["amount"]
+            combined[key]["amount"] += ingredient["amount"] * multiplier
+
+    grouped = {category: [] for category in CATEGORY_ORDER}
+    for item in sorted(combined.values(), key=lambda item: item["name"].casefold()):
+        item["amount"] = format_amount(item["amount"])
+        grouped[categorize_ingredient(item["name"])].append(item)
+
+    return [(category, items) for category, items in grouped.items() if items]
+
+
+def build_weekly_shopping_list(weekly_plan):
+    """Build a combined shopping list from a weekly plan.
+
+    Each planned meal is counted as one serving by default. If a recipe's
+    `servings` value is greater than 1, ingredient amounts are scaled so that
+    one planned meal corresponds to `1 / servings` of the recipe's ingredient
+    quantities. The function returns the grouped list and the total number of
+    planned portions in the week.
+    """
+    combined = {}
+    portions = 0
+
+    for day_plan in weekly_plan.values():
+        meals = day_plan.get("meals", {})
+        for recipe in meals.values():
+            if not recipe:
+                continue
+
+            portions += 1
+            recipe_servings = recipe.get("servings", 1) or 1
+            # Each planned meal represents one desired portion.
+            multiplier = 1.0 / recipe_servings
+
+            for ingredient in recipe["ingredients"]:
+                name = ingredient["name"]
+                unit = ingredient.get("unit") or ""
+                key = (name.casefold(), unit.casefold())
+
+                if key not in combined:
+                    combined[key] = {"name": name, "unit": unit, "amount": 0}
+
+                combined[key]["amount"] += ingredient["amount"] * multiplier
+
+    grouped = {category: [] for category in CATEGORY_ORDER}
+    for item in sorted(combined.values(), key=lambda item: item["name"].casefold()):
+        item["amount"] = format_amount(item["amount"])
+        grouped[categorize_ingredient(item["name"])].append(item)
+
+    return [(category, items) for category, items in grouped.items() if items], portions
 
     grouped = {category: [] for category in CATEGORY_ORDER}
     for item in sorted(combined.values(), key=lambda item: item["name"].casefold()):

@@ -9,7 +9,11 @@
     </section>
 
     {% if shopping_list %}
-        <p class="plan-intro">Ingredients from your selected meals, combined where they match.</p>
+        {% if weekly %}
+            <p class="plan-intro">Ingredients combined for the whole week — {{ portions }} planned portions.</p>
+        {% else %}
+            <p class="plan-intro">Ingredients from your selected meals, combined where they match.</p>
+        {% endif %}
         <section class="shopping-list" data-shopping-list aria-label="Shopping list">
             {% for category, items in shopping_list %}
                 <section class="shopping-category">

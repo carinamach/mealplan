@@ -472,6 +472,31 @@ h1 {
     padding: 1.3rem 1.4rem 1.45rem;
 }
 
+/* Compact weekday styles */
+.week-day.compact {
+    margin-bottom: 0.8rem;
+    padding: 0.6rem 0.6rem 0.9rem;
+    border-radius: 0.8rem;
+    background: rgba(255,255,255,0.9);
+}
+.week-day.compact .week-day-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.5rem;
+}
+.week-day.compact .day-name { margin: 0; font-size: 1rem; }
+.week-day.compact .week-day-total { margin: 0; font-size: 0.95rem; color: var(--muted); }
+.compact-grid {
+    gap: 0.5rem;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.compact-meal { padding: 0.55rem; font-size: 0.92rem; }
+.compact-meal .small { font-size: 0.8rem; margin: 0; }
+.compact-meal .tiny { font-size: 0.76rem; margin-top: 0.25rem; color: var(--muted); }
+.swap-button.small { padding: 0.35rem 0.6rem; font-size: 0.78rem; border-radius: 0.6rem; }
+
 .plan-meal h2 {
     margin: 0.55rem 0 0.85rem;
     font-size: 1.25rem;
