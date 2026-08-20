@@ -772,3 +772,42 @@ h1 {
         padding: 1.2rem;
     }
 }
+
+/* Modal styles for weekly-plan swap */
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+}
+.modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+}
+.modal-content {
+    position: relative;
+    width: min(640px, 92%);
+    margin: 6vh auto;
+    background: var(--card);
+    border-radius: 1rem;
+    padding: 1rem 1.1rem;
+    box-shadow: var(--shadow);
+    z-index: 1;
+}
+.modal-close {
+    position: absolute;
+    right: 0.6rem;
+    top: 0.4rem;
+    border: 0;
+    background: transparent;
+    font-size: 1.4rem;
+    cursor: pointer;
+}
+.swap-option {
+    padding: 0.7rem 0.6rem;
+    border-bottom: 1px solid var(--line);
+}
+.swap-option h3 { margin: 0 0 0.25rem 0; }
+.swap-option p { margin: 0 0 0.6rem 0; color: var(--muted); }
+.choose-alternative { background: var(--peach); }

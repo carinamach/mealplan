@@ -17,14 +17,12 @@
                 <section class="meal-plan-grid" aria-label="{{ day }} meals">
                     {% for meal_name, recipe in plan.meals.items() %}
                         {% if recipe %}
-                            <article class="plan-meal">
+                            <article class="plan-meal" data-day="{{ day }}" data-meal="{{ meal_name }}">
                                 <p class="recipe-type">{{ meal_name }}</p>
-                                <h2><a href="{{ url_for('recipe_detail', recipe_id=recipe.id) }}">{{ recipe.name }}</a></h2>
-                                <p class="meal-stat">{{ recipe.calories }} kcal</p>
-                                <p class="meal-stat">{{ recipe.protein }} g protein</p>
-                                <form method="post" action="{{ url_for('swap_weekly_meal', day=day, meal_name=meal_name) }}">
-                                    <button class="swap-button" type="submit">Swap</button>
-                                </form>
+                                <h2 class="meal-name"><a href="{{ url_for('recipe_detail', recipe_id=recipe.id) }}">{{ recipe.name }}</a></h2>
+                                <p class="meal-stat meal-calories">{{ recipe.calories }} kcal</p>
+                                <p class="meal-stat meal-protein">{{ recipe.protein }} g protein</p>
+                                <button class="swap-button" type="button" data-day="{{ day }}" data-meal="{{ meal_name }}">Swap</button>
                             </article>
                         {% endif %}
                     {% endfor %}
@@ -40,4 +38,101 @@
             <a class="button-link" href="{{ url_for('profile') }}">Go to profile</a>
         </section>
     {% endif %}
+{% endblock %}
+
+{% block scripts %}
+    <div id="swap-modal" class="modal" aria-hidden="true">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content" role="dialog" aria-modal="true" aria-label="Choose alternative recipe">
+            <button id="swap-modal-close" class="modal-close">×</button>
+            <h2>Choose an alternative</h2>
+            <div id="swap-options"></div>
+        </div>
+    </div>
+    <script>
+        // Modal and swap handling for weekly plan
+        (function(){
+            const modal = document.getElementById('swap-modal');
+            const optionsContainer = document.getElementById('swap-options');
+            const closeBtn = document.getElementById('swap-modal-close');
+
+            function openModal() { modal.setAttribute('aria-hidden','false'); modal.style.display = 'block'; }
+            function closeModal() { modal.setAttribute('aria-hidden','true'); modal.style.display = 'none'; optionsContainer.innerHTML = ''; }
+
+            document.addEventListener('click', async (e) => {
+                const btn = e.target.closest('.swap-button');
+                if (!btn) return;
+                const day = btn.dataset.day;
+                const meal = btn.dataset.meal;
+                // Fetch alternatives
+                try {
+                    const res = await fetch(`/weekly-plan/alternatives/${encodeURIComponent(day)}/${encodeURIComponent(meal)}`);
+                    if (!res.ok) throw new Error('Failed');
+                    const data = await res.json();
+                    const alternatives = data.alternatives || [];
+                    if (!alternatives.length) {
+                        optionsContainer.innerHTML = '<p>No alternatives available.</p>';
+                    } else {
+                        optionsContainer.innerHTML = alternatives.map(a =>
+                            `<article class="swap-option" data-id="${a.id}">
+                                <h3><a href="${a.url}">${a.name}</a></h3>
+                                <p>${a.calories} kcal · ${a.protein} g protein</p>
+                                <button class="choose-alternative" data-id="${a.id}" data-day="${day}" data-meal="${meal}">Choose</button>
+                            </article>`
+                        ).join('');
+                    }
+                    openModal();
+                } catch (err) {
+                    console.error(err);
+                }
+            });
+
+            // Delegated close handling (works even if elements are re-rendered)
+            document.addEventListener('click', (e) => {
+                if (e.target.matches('.modal-close')) closeModal();
+                if (e.target.classList && e.target.classList.contains('modal-backdrop')) closeModal();
+            });
+
+            // Choose an alternative
+            document.addEventListener('click', async (e) => {
+                const choose = e.target.closest('.choose-alternative');
+                if (!choose) return;
+                const recipeId = choose.dataset.id;
+                const day = choose.dataset.day;
+                const meal = choose.dataset.meal;
+
+                try {
+                    const res = await fetch(`/weekly-plan/swap/${encodeURIComponent(day)}/${encodeURIComponent(meal)}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ recipe_id: recipeId }),
+                    });
+                    if (!res.ok) throw new Error('Swap failed');
+                    const result = await res.json();
+
+                    // Update the specific meal card
+                    const selector = `.plan-meal[data-day="${day}"][data-meal="${meal}"]`;
+                    const card = document.querySelector(selector);
+                    if (card && result.meal) {
+                        const nameEl = card.querySelector('.meal-name');
+                        const caloriesEl = card.querySelector('.meal-calories');
+                        const proteinEl = card.querySelector('.meal-protein');
+                        if (nameEl) nameEl.innerHTML = `<a href="${result.meal.url}">${result.meal.name}</a>`;
+                        if (caloriesEl) caloriesEl.textContent = `${result.meal.calories} kcal`;
+                        if (proteinEl) proteinEl.textContent = `${result.meal.protein} g protein`;
+                    }
+
+                    // Update totals for the day
+                    const totalEl = card ? card.closest('.week-day').querySelector('.week-day-total') : null;
+                    if (totalEl && result.totals) {
+                        totalEl.innerHTML = `<strong>${result.totals.total_calories} kcal</strong> · <strong>${result.totals.total_protein} g protein</strong>`;
+                    }
+
+                    closeModal();
+                } catch (err) {
+                    console.error(err);
+                }
+            });
+        })();
+    </script>
 {% endblock %}
