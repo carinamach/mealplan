@@ -1,6 +1,6 @@
 import unittest
 
-from shopping_list import build_shopping_list, categorize_ingredient
+from shopping_list import build_meal_summary, build_shopping_list, categorize_ingredient
 
 
 class ShoppingListTests(unittest.TestCase):
@@ -53,6 +53,38 @@ class ShoppingListTests(unittest.TestCase):
 
         shopping_list = dict(build_shopping_list(meals))
         self.assertEqual(shopping_list["Fruit"][0]["name"], "banana")
+
+    def test_meal_summary_lists_each_selected_meal_and_portions(self):
+        meals = {
+            "Breakfast": {"name": "Apple cinnamon porridge"},
+            "Lunch": {"name": "Chicken quinoa bowl"},
+            "Snack": None,
+        }
+
+        summary = build_meal_summary(meals, portion_multiplier=3)
+
+        self.assertEqual(summary[0]["meal_name"], "Breakfast")
+        self.assertEqual(summary[0]["recipe_name"], "Apple cinnamon porridge")
+        self.assertEqual(summary[0]["portions"], 3)
+        self.assertEqual(summary[1]["meal_name"], "Lunch")
+        self.assertEqual(summary[1]["portions"], 3)
+
+    def test_shopping_list_scales_for_more_portions(self):
+        meals = {
+            "Breakfast": {
+                "ingredients": [
+                    {"name": "banana", "amount": 1, "unit": ""},
+                    {"name": "milk", "amount": 250, "unit": "ml"},
+                ]
+            }
+        }
+
+        shopping_list = dict(build_shopping_list(meals, portion_multiplier=3))
+        banana = next(item for item in shopping_list["Fruit"] if item["name"] == "banana")
+        milk = next(item for item in shopping_list["Dairy"] if item["name"] == "milk")
+
+        self.assertEqual(banana["amount"], "3")
+        self.assertEqual(milk["amount"], "750")
 
 
 if __name__ == "__main__":

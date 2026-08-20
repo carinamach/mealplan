@@ -294,6 +294,18 @@ h1 {
     background: var(--blush);
 }
 
+.recipe-card-image,
+.recipe-detail-image {
+    display: block;
+    width: 100%;
+    object-fit: cover;
+}
+
+.recipe-card-image {
+    margin: 0 0 0.9rem;
+    border-radius: var(--radius) var(--radius) 1rem 1rem;
+}
+
 .recipe-card h2 {
     margin: 0.3rem 0 0.4rem;
     font-size: 1.28rem;
@@ -324,6 +336,7 @@ h1 {
     display: inline-flex;
     align-items: center;
     width: fit-content;
+    margin-top: 0.2rem;
     padding: 0.2rem 0.65rem;
     border-radius: 999px;
     background: var(--pale-lavender);
@@ -400,7 +413,8 @@ h1 {
 
 .recipe-detail-image {
     min-height: 240px;
-    margin: -1.6rem -1.6rem 1.4rem;
+    margin: 0 auto 1.4rem;
+    border-radius: var(--radius);
 }
 
 .recipe-section {

@@ -6,7 +6,11 @@
     <a class="back-link" href="{{ url_for('recipes') }}">← Back to recipes</a>
 
     <article class="recipe-detail">
-        <div class="recipe-detail-image" aria-hidden="true">🥗</div>
+        {% if recipe.image %}
+            <img src="{{ recipe.image }}" alt="{{ recipe.name }}" class="recipe-detail-image">
+        {% else %}
+            <div class="recipe-detail-image" aria-hidden="true">🥗</div>
+        {% endif %}
         <p class="recipe-type">{{ recipe.meal_type }}</p>
         <h1>{{ recipe.name }}</h1>
         <p class="recipe-meta">Original recipe: {{ recipe.servings }} servings - {{ recipe.calories }} kcal per serving</p>

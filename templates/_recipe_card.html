@@ -5,7 +5,11 @@
         </button>
     </form>
     <a class="recipe-card-link" href="{{ url_for('recipe_detail', recipe_id=recipe.id) }}">
-        <div class="recipe-image-placeholder" aria-hidden="true">🥗</div>
+        {% if recipe.image %}
+            <img src="{{ recipe.image }}" alt="{{ recipe.name }}" class="recipe-image recipe-card-image">
+        {% else %}
+            <div class="recipe-image-placeholder">🥗</div>
+        {% endif %}
         <p class="recipe-type">{{ recipe.meal_type }}</p>
         <h2>{{ recipe.name }}</h2>
         <p class="recipe-meta">{{ recipe.servings }} servings - {{ recipe.calories }} kcal per serving</p>

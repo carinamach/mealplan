@@ -56,8 +56,27 @@ def format_amount(amount):
     return str(round(amount, 1))
 
 
-def build_shopping_list(meals):
+def build_meal_summary(meals, portion_multiplier=1):
+    """Return the selected meals with how many portions each should be included."""
+    multiplier = max(1, int(portion_multiplier or 1))
+    summary = []
+
+    for meal_name, recipe in (meals or {}).items():
+        if not recipe:
+            continue
+
+        summary.append({
+            "meal_name": meal_name,
+            "recipe_name": recipe.get("name", meal_name),
+            "portions": multiplier,
+        })
+
+    return summary
+
+
+def build_shopping_list(meals, portion_multiplier=1):
     """Collect, combine, and group ingredients from selected meals."""
+    multiplier = max(1, int(portion_multiplier or 1))
     combined = {}
 
     for recipe in meals.values():
@@ -72,7 +91,7 @@ def build_shopping_list(meals):
             if key not in combined:
                 combined[key] = {"name": name, "unit": unit, "amount": 0}
 
-            combined[key]["amount"] += ingredient["amount"]
+            combined[key]["amount"] += ingredient["amount"] * multiplier
 
     grouped = {category: [] for category in CATEGORY_ORDER}
     for item in sorted(combined.values(), key=lambda item: item["name"].casefold()):

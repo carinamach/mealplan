@@ -9,7 +9,29 @@
     </section>
 
     {% if shopping_list %}
-        <p class="plan-intro">Ingredients from your selected meals, combined where they match.</p>
+        <section class="shopping-controls" aria-label="Shopping list portion controls">
+            <form method="get" action="{{ url_for('shopping_list') }}">
+                <label for="portion-count">Adjust portion count</label>
+                <div class="portion-row">
+                    <input id="portion-count" name="portions" type="number" min="1" step="1" value="{{ portion_multiplier }}">
+                    <button type="submit" class="button-link">Update list</button>
+                </div>
+            </form>
+        </section>
+
+        <section class="meal-summary" aria-label="Meals included in the shopping list">
+            <h2>Meals included</h2>
+            <ul>
+                {% for meal in meal_summary %}
+                    <li>
+                        <strong>{{ meal.meal_name }}:</strong> {{ meal.recipe_name }}
+                        <span>({{ meal.portions }} {% if meal.portions == 1 %}portion{% else %}portions{% endif %})</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        </section>
+
+        <p class="plan-intro">Ingredients from your selected meals, combined where they match, scaled for {{ portion_multiplier }} {% if portion_multiplier == 1 %}portion{% else %}portions{% endif %}.</p>
         <section class="shopping-list" data-shopping-list aria-label="Shopping list">
             {% for category, items in shopping_list %}
                 <section class="shopping-category">

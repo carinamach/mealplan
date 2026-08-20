@@ -7,7 +7,7 @@ from flask import Flask, abort, redirect, render_template, request, session, url
 from calculations import calculate_targets
 from meal_planner import calculate_plan_totals, find_swap_recipe, generate_daily_plan
 from recipe_filters import MEAL_TYPES, filter_recipes
-from shopping_list import build_shopping_list
+from shopping_list import build_meal_summary, build_shopping_list
 
 
 app = Flask(__name__)
@@ -193,8 +193,18 @@ def swap_meal(meal_name):
 def shopping_list():
     """Display a combined shopping list from the saved meal plan."""
     plan = session.get("meal_plan")
-    grouped_items = build_shopping_list(plan["meals"]) if plan else []
-    return render_template("shopping_list.html", shopping_list=grouped_items)
+    portion_multiplier = request.args.get("portions", default=1, type=int)
+    if portion_multiplier is None or portion_multiplier < 1:
+        portion_multiplier = 1
+
+    grouped_items = build_shopping_list(plan["meals"], portion_multiplier=portion_multiplier) if plan else []
+    meal_summary = build_meal_summary(plan["meals"], portion_multiplier=portion_multiplier) if plan else []
+    return render_template(
+        "shopping_list.html",
+        shopping_list=grouped_items,
+        meal_summary=meal_summary,
+        portion_multiplier=portion_multiplier,
+    )
 
 
 if __name__ == "__main__":
