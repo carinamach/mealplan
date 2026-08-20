@@ -18,9 +18,9 @@
                         <h2 class="mt-3 font-display text-2xl text-slate-700"><a class="text-inherit no-underline hover:underline" href="{{ url_for('recipe_detail', recipe_id=recipe.id) }}">{{ recipe.name }}</a></h2>
                         <p class="mt-4 rounded-2xl bg-[#fff9f3] px-3 py-2 text-sm font-extrabold text-slate-700">{{ recipe.calories }} kcal</p>
                         <p class="mt-3 rounded-2xl bg-[#fff9f3] px-3 py-2 text-sm font-extrabold text-slate-700">{{ recipe.protein }} g protein</p>
-                        <form method="post" action="{{ url_for('swap_meal', meal_name=meal_name) }}" class="mt-5">
-                            <button class="inline-flex items-center justify-center rounded-full bg-[#e8e1f3] px-4 py-2.5 text-sm font-extrabold text-slate-700 transition hover:bg-[#d9cceb]" type="submit">Swap</button>
-                        </form>
+                        <div class="mt-5">
+                            <button type="button" data-meal="{{ meal_name }}" class="swap-open inline-flex items-center justify-center rounded-full bg-[#e8e1f3] px-4 py-2.5 text-sm font-extrabold text-slate-700 transition hover:bg-[#d9cceb]">Swap</button>
+                        </div>
                     </article>
                 {% endif %}
             {% endfor %}
@@ -28,8 +28,12 @@
         <section class="mt-8 rounded-[1.8rem] border border-stone-200 bg-white/80 p-5 shadow-sm sm:p-6">
             <h2 class="font-display text-3xl text-slate-700">Daily total</h2>
             <div class="mt-4 grid gap-2 sm:grid-cols-2">
-                <p class="rounded-2xl bg-[#fff9f3] px-4 py-3 text-base font-extrabold text-slate-700"><strong>{{ plan.total_calories }} kcal</strong></p>
+                <p class="rounded-2xl bg-[#fff9f3] px-4 py-3 text-base font-extrabold text-slate-700"><strong>Daily total:{{ plan.total_calories }} kcal</strong></p>
                 <p class="rounded-2xl bg-[#fff9f3] px-4 py-3 text-base font-extrabold text-slate-700"><strong>{{ plan.total_protein }} g protein</strong></p>
+            </div>
+            <div class="mt-4 grid gap-2 sm:grid-cols-2">
+                <p class="rounded-2xl bg-[#fff9f3] px-4 py-3 text-base font-extrabold text-slate-700"><strong> Target: {{ targets.calories }} kcal</strong></p>
+                <p class="rounded-2xl bg-[#fff9f3] px-4 py-3 text-base font-extrabold text-slate-700"><strong></strong></p>
             </div>
             {% if plan.total_calories > targets.calories %}
                 {% set green_percentage = targets.calories / plan.total_calories * 100 %}
@@ -40,21 +44,21 @@
                 {% set red_percentage = 0 %}
                 {% set target_marker_position = 100 %}
             {% endif %}
-            <div class="mt-5 overflow-hidden rounded-full bg-stone-100" role="progressbar" aria-label="Daily calorie progress" aria-valuemin="0" aria-valuemax="{{ targets.calories }}" aria-valuenow="{{ plan.total_calories }}">
+            <!-- <div class="mt-5 overflow-hidden rounded-full bg-stone-100" role="progressbar" aria-label="Daily calorie progress" aria-valuemin="0" aria-valuemax="{{ targets.calories }}" aria-valuenow="{{ plan.total_calories }}">
                 <div class="h-4 rounded-full bg-[#efa7a0]" style="width: {{ green_percentage }}%"></div>
                 {% if red_percentage > 0 %}
                     <div class="h-4 rounded-full bg-[#c97b86]" style="width: {{ red_percentage }}%"></div>
                 {% endif %}
-            </div>
-            <p class="mt-3 text-sm text-slate-500"><span class="font-bold text-slate-700">Peach: planned calories</span> · <span class="font-bold text-slate-700">Line: daily target</span>{% if red_percentage > 0 %} · <span class="font-bold text-slate-700">Rose: above target</span>{% endif %}</p>
+            </div> -->
+            <!-- <p class="mt-3 text-sm text-slate-500"><span class="font-bold text-slate-700">Peach: planned calories</span> · <span class="font-bold text-slate-700">Line: daily target</span>{% if red_percentage > 0 %} · <span class="font-bold text-slate-700">Rose: above target</span>{% endif %}</p> -->
             <p class="mt-2 text-sm text-slate-500">{{ plan.total_calories }} of {{ targets.calories }} kcal</p>
             {% set calorie_difference = targets.calories - plan.total_calories %}
             {% if calorie_difference > 0 %}
-                <p class="mt-4 text-sm text-slate-600"><strong class="text-slate-700">{{ calorie_difference }} kcal remaining</strong> to reach your estimated daily target.</p>
+                <p class="mt-4 text-lg text-slate-600"><strong class="text-slate-700">{{ calorie_difference }} kcal remaining</strong> to reach your estimated daily target.</p>
             {% elif calorie_difference < 0 %}
-                <p class="mt-4 text-sm text-slate-600"><strong class="text-slate-700">{{ calorie_difference|abs }} kcal above</strong> your estimated daily target.</p>
+                <p class="mt-4 text-lg text-slate-600"><strong class="text-slate-700">{{ calorie_difference|abs }} kcal above</strong> your estimated daily target.</p>
             {% else %}
-                <p class="mt-4 text-sm text-slate-600"><strong class="text-slate-700">This plan matches your estimated daily calorie target.</strong></p>
+                <p class="mt-4 text-lg text-slate-600"><strong class="text-slate-700">This plan matches your estimated daily calorie target.</strong></p>
             {% endif %}
             <p class="mt-4 text-sm text-slate-500">This is a simple estimate based on the predefined recipes and may not match your target exactly.</p>
             <p class="mt-6"><a class="inline-flex items-center justify-center rounded-full bg-[#efa7a0] px-5 py-3 text-sm font-extrabold text-slate-700 no-underline transition hover:bg-[#f5b7ac]" href="{{ url_for('shopping_list') }}">View shopping list</a></p>
@@ -66,4 +70,87 @@
             <a class="mt-5 inline-flex items-center justify-center rounded-full bg-[#efa7a0] px-5 py-3 text-sm font-extrabold text-slate-700 no-underline transition hover:bg-[#f5b7ac]" href="{{ url_for('profile') }}">Go to profile</a>
         </section>
     {% endif %}
-{% endblock %}
+        <!-- Swap modal (hidden by default) -->
+        <div id="swap-modal" class="fixed inset-0 z-50 hidden overflow-y-auto" aria-hidden="true">
+            <div id="swap-backdrop" class="absolute inset-0 bg-black/40"></div>
+            <div class="relative mx-auto my-12 w-[min(920px,92%)] rounded-2xl bg-white p-6 shadow-lg max-h-[80vh] overflow-auto">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-bold">Choose replacement recipe</h3>
+                    <button id="swap-close" class="text-slate-600 hover:text-slate-900">✕</button>
+                </div>
+                <p id="swap-for" class="mt-2 text-sm text-slate-500">Select a recipe to replace the chosen meal.</p>
+                <div class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                    {% for r in recipes %}
+                        <div class="rounded-lg border p-3">
+                            <a class="block no-underline text-inherit" href="{{ url_for('recipe_detail', recipe_id=r.id) }}">
+                                <img src="{{ r.image }}" alt="{{ r.name }}" class="mb-2 w-full rounded-md object-cover h-36">
+                                <h4 class="font-semibold">{{ r.name }}</h4>
+                            </a>
+                            <p class="mt-1 text-sm text-slate-500">{{ r.calories }} kcal · {{ r.protein }} g protein</p>
+                            <div class="mt-3 flex items-center justify-end">
+                                <button type="button" class="swap-select inline-flex items-center justify-center rounded-full bg-[#efa7a0] px-3 py-1 text-sm font-extrabold text-slate-700" data-recipe-id="{{ r.id }}">Select</button>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <script>
+            (function(){
+                const modal = document.getElementById('swap-modal');
+                const backdrop = document.getElementById('swap-backdrop');
+                const closeBtn = document.getElementById('swap-close');
+                const swapFor = document.getElementById('swap-for');
+                let currentMeal = null;
+
+                function openModal(mealName){
+                    currentMeal = mealName;
+                    swapFor.textContent = 'Choose a replacement for ' + mealName + '.';
+                    modal.classList.remove('hidden');
+                    modal.setAttribute('aria-hidden','false');
+                    // lock background scroll
+                    document.body.classList.add('overflow-hidden');
+                }
+
+                function closeModal(){
+                    modal.classList.add('hidden');
+                    modal.setAttribute('aria-hidden','true');
+                    currentMeal = null;
+                    // restore background scroll
+                    document.body.classList.remove('overflow-hidden');
+                }
+
+                document.querySelectorAll('.swap-open').forEach(btn=>{
+                    btn.addEventListener('click', e=>{
+                        openModal(btn.dataset.meal);
+                    });
+                });
+
+                closeBtn.addEventListener('click', closeModal);
+                backdrop.addEventListener('click', closeModal);
+                document.addEventListener('keydown', e=>{ if(e.key === 'Escape') closeModal(); });
+
+                document.querySelectorAll('.swap-select').forEach(btn=>{
+                    btn.addEventListener('click', async ()=>{
+                        if(!currentMeal) return;
+                        const fd = new FormData();
+                        fd.append('meal_name', currentMeal);
+                        fd.append('recipe_id', btn.dataset.recipeId);
+
+                        try{
+                            const res = await fetch("{{ url_for('swap_select') }}", { method: 'POST', body: fd });                            if(res.status === 204){
+                                window.location.reload();
+                            } else {
+                                const text = await res.text();
+                                alert('Swap failed: ' + res.status + '\n' + text);
+                            }
+                        }catch(err){
+                            alert('Swap failed: ' + err.message);
+                        }
+                    });
+                });
+            })();
+        </script>
+
+    {% endblock %}

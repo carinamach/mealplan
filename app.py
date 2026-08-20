@@ -39,7 +39,10 @@ def get_favorite_ids():
 @app.route("/")
 def home():
     """Display the application's home page."""
-    return render_template("index.html")
+    # Show a selection of recipes on the homepage for quick access
+    recipes = load_recipes()
+    favorite_ids = set(get_favorite_ids())
+    return render_template("index.html", recipes=recipes[:6], favorite_ids=favorite_ids)
 
 
 @app.route("/recipes")
@@ -164,7 +167,38 @@ def meal_plan():
         )
         session["meal_plan"] = plan
 
-    return render_template("meal_plan.html", plan=plan, targets=targets)
+    return render_template("meal_plan.html", plan=plan, targets=targets, recipes=load_recipes())
+
+
+@app.post("/meal-plan/swap-select")
+def swap_select():
+    """Swap a meal to a user-selected recipe (AJAX from modal).
+
+    Expects form fields `meal_name` and `recipe_id`.
+    """
+    plan = session.get("meal_plan")
+    profile_data = session.get("profile")
+
+    meal_name = request.form.get("meal_name")
+    try:
+        recipe_id = int(request.form.get("recipe_id"))
+    except (TypeError, ValueError):
+        abort(400)
+
+    if not plan or not profile_data or meal_name not in plan["meals"]:
+        abort(404)
+
+    # Load and validate recipe
+    new_recipe = next((r for r in load_recipes() if r["id"] == recipe_id), None)
+    if new_recipe is None:
+        abort(404)
+
+    plan["meals"][meal_name] = new_recipe
+    plan.update(calculate_plan_totals(plan["meals"]))
+    session["meal_plan"] = plan
+
+    # Return empty response for AJAX caller to refresh
+    return ("", 204)
 
 
 @app.post("/meal-plan/swap/<meal_name>")
