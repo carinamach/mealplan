@@ -3,6 +3,60 @@
 {% block title %}Meal Plan | Daily plan{% endblock %}
 
 {% block content %}
+    {% if weekly_plan %}
+        <section class="recipe-heading">
+            <p class="eyebrow">Monday to Sunday</p>
+            <h1>Weekly meal plan</h1>
+            <div class="plan-actions">
+                <button id="reset-weekly-plan" class="button-link" type="button">Reset to standard</button>
+                <button id="mealprep-weekly-plan" class="button-link" type="button">Make mealprep-friendly</button>
+            </div>
+        </section>
+
+        <p class="plan-intro">Each day uses the same meal-generation logic, aiming for about {{ targets.calories }} kcal and {{ targets.protein }} g protein.</p>
+        {% for day in weekdays %}
+            {% set plan = weekly_plan[day] %}
+            <section class="week-day compact">
+                <div class="week-day-header">
+                    <h3 class="day-name">{{ day }}</h3>
+                    <p class="week-day-total"><strong>{{ plan.total_calories }} kcal</strong> · <strong>{{ plan.total_protein }} g</strong></p>
+                </div>
+                <section class="meal-plan-grid compact-grid" aria-label="{{ day }} meals">
+                    {% for meal_name, recipe in plan.meals.items() %}
+                        {% if recipe %}
+                            {% set planned = weekly_portions.get(day, {}).get(meal_name, 1) if weekly_portions is defined else 1 %}
+                            <article class="plan-meal compact-meal" data-day="{{ day }}" data-meal="{{ meal_name }}">
+                                <p class="recipe-type small">{{ meal_name }}</p>
+                                <h4 class="meal-name small"><a href="{{ url_for('recipe_detail', recipe_id=recipe.id) }}">{{ recipe.name }}</a></h4>
+                                <p class="meal-stat tiny">{{ recipe.calories }} kcal · {{ recipe.protein }} g</p>
+                                <div class="portion-control">
+                                    <label class="small">Portions
+                                        <div class="portion-spinner" data-day="{{ day }}" data-meal="{{ meal_name }}">
+                                            <button type="button" class="portion-btn portion-decrease" aria-label="Decrease portions" data-day="{{ day }}" data-meal="{{ meal_name }}">−</button>
+                                            <input type="number" min="1" class="weekly-portion-input" data-day="{{ day }}" data-meal="{{ meal_name }}" value="{{ planned }}" aria-label="Portions">
+                                            <button type="button" class="portion-btn portion-increase" aria-label="Increase portions" data-day="{{ day }}" data-meal="{{ meal_name }}">+</button>
+                                        </div>
+                                    </label>
+                                </div>
+                                <button class="swap-button small" type="button" data-day="{{ day }}" data-meal="{{ meal_name }}">Swap</button>
+                            </article>
+                        {% endif %}
+                    {% endfor %}
+                </section>
+            </section>
+        {% endfor %}
+
+        <!-- Modal used for weekly swap alternatives -->
+        <div id="swap-modal" class="modal" aria-hidden="true">
+            <div class="modal-backdrop"></div>
+            <div class="modal-content" role="dialog" aria-modal="true" aria-label="Choose alternative recipe">
+                <button class="modal-close">×</button>
+                <h2>Choose an alternative</h2>
+                <div id="swap-options"></div>
+            </div>
+        </div>
+    {% endif %}
+
     {% if plan %}
         <section class="plan-total">
             <h2>Daily total</h2>
@@ -47,52 +101,6 @@
         </section>
     {% endif %}
 
-    {% if weekly_plan %}
-        <section class="recipe-heading">
-            <p class="eyebrow">Monday to Sunday</p>
-            <h1>Weekly meal plan</h1>
-        </section>
-
-        <p class="plan-intro">Each day uses the same meal-generation logic, aiming for about {{ targets.calories }} kcal and {{ targets.protein }} g protein.</p>
-        {% for day in weekdays %}
-            {% set plan = weekly_plan[day] %}
-            <section class="week-day compact">
-                <div class="week-day-header">
-                    <h3 class="day-name">{{ day }}</h3>
-                    <p class="week-day-total"><strong>{{ plan.total_calories }} kcal</strong> · <strong>{{ plan.total_protein }} g</strong></p>
-                </div>
-                <section class="meal-plan-grid compact-grid" aria-label="{{ day }} meals">
-                    {% for meal_name, recipe in plan.meals.items() %}
-                        {% if recipe %}
-                            {% set planned = weekly_portions.get(day, {}).get(meal_name, 1) if weekly_portions is defined else 1 %}
-                            <article class="plan-meal compact-meal" data-day="{{ day }}" data-meal="{{ meal_name }}">
-                                <p class="recipe-type small">{{ meal_name }}</p>
-                                <h4 class="meal-name small"><a href="{{ url_for('recipe_detail', recipe_id=recipe.id) }}">{{ recipe.name }}</a></h4>
-                                <p class="meal-stat tiny">{{ recipe.calories }} kcal · {{ recipe.protein }} g</p>
-                                <div class="portion-control">
-                                    <label class="small">Portions
-                                        <input type="number" min="1" class="weekly-portion-input" data-day="{{ day }}" data-meal="{{ meal_name }}" value="{{ planned }}">
-                                    </label>
-                                </div>
-                                <button class="swap-button small" type="button" data-day="{{ day }}" data-meal="{{ meal_name }}">Swap</button>
-                            </article>
-                        {% endif %}
-                    {% endfor %}
-                </section>
-            </section>
-        {% endfor %}
-
-        <!-- Modal used for weekly swap alternatives -->
-        <div id="swap-modal" class="modal" aria-hidden="true">
-            <div class="modal-backdrop"></div>
-            <div class="modal-content" role="dialog" aria-modal="true" aria-label="Choose alternative recipe">
-                <button class="modal-close">×</button>
-                <h2>Choose an alternative</h2>
-                <div id="swap-options"></div>
-            </div>
-        </div>
-    {% endif %}
-
 {% endblock %}
 
 {% block scripts %}
@@ -117,6 +125,47 @@
                 // (daily totals update handled elsewhere if needed)
             }).catch(console.error);
         });
+                    // Handle reset to standard
+                    document.addEventListener('click', async (e) => {
+                        const btn = e.target.closest && e.target.closest('#reset-weekly-plan');
+                        if (!btn) return;
+                        if (!confirm('Reset the weekly meal plan to standard portions and recipes?')) return;
+                        const prevText = btn.textContent;
+                        btn.disabled = true;
+                        btn.textContent = 'Resetting...';
+                        try {
+                            const res = await fetch('/weekly-plan/reset', { method: 'POST', headers: { 'Content-Type': 'application/json' } });
+                            if (!res.ok) throw new Error('Reset failed');
+                            // reload to reflect server-side reset
+                            window.location.reload();
+                        } catch (err) {
+                            console.error(err);
+                            alert('Failed to reset weekly plan. Check console for details.');
+                            btn.disabled = false;
+                            btn.textContent = prevText;
+                        }
+                    });
+                    
+                    // Make mealprep-friendly: copy one day's meals to every day
+                    document.addEventListener('click', async (e) => {
+                        const btn = e.target.closest && e.target.closest('#mealprep-weekly-plan');
+                        if (!btn) return;
+                        const sourceDay = prompt('Which day should be repeated across the week? (e.g. Monday)') || 'Monday';
+                        if (!confirm(`Make the whole week use ${sourceDay}'s meals?`)) return;
+                        const prevText = btn.textContent;
+                        btn.disabled = true;
+                        btn.textContent = 'Applying...';
+                        try {
+                            const res = await fetch('/weekly-plan/mealprep', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ source_day: sourceDay }) });
+                            if (!res.ok) throw new Error('Mealprep failed');
+                            window.location.reload();
+                        } catch (err) {
+                            console.error(err);
+                            alert('Failed to apply mealprep. Check console for details.');
+                            btn.disabled = false;
+                            btn.textContent = prevText;
+                        }
+                    });
     </script>
         <script>
             (function(){
@@ -187,6 +236,23 @@
 
                         closeModal();
                     } catch (err) { console.error(err); }
+                });
+
+                // Handle plus/minus on weekly portions
+                document.addEventListener('click', (e) => {
+                    const dec = e.target.closest && e.target.closest('.portion-decrease');
+                    const inc = e.target.closest && e.target.closest('.portion-increase');
+                    if (!dec && !inc) return;
+                    const btn = dec || inc;
+                    const day = btn.dataset.day;
+                    const meal = btn.dataset.meal;
+                    const selector = `.weekly-portion-input[data-day="${day}"][data-meal="${meal}"]`;
+                    const input = document.querySelector(selector);
+                    if (!input) return;
+                    let value = Number(input.value) || 1;
+                    value = dec ? Math.max(1, value - 1) : value + 1;
+                    input.value = value;
+                    input.dispatchEvent(new Event('change', { bubbles: true }));
                 });
 
                 // Handle weekly portion changes
