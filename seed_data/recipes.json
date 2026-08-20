@@ -25,6 +25,7 @@
   {
     "id": 14,
     "name": "Avocado egg toast",
+    "image": "https://res.cloudinary.com/vu4ewfhl/image/upload/v1787241040/bakd-raw-by-karolin-baitinger-k9HhDB9eOyo-unsplash.jpg",
     "meal_type": "breakfast",
     "servings": 1,
     "ingredients": [
@@ -46,6 +47,7 @@
   {
     "id": 15,
     "name": "Banana protein pancakes",
+    "image": "https://res.cloudinary.com/vu4ewfhl/image/upload/v1787241234/iffany-crepe-9335472_1920.png",
     "meal_type": "breakfast",
     "servings": 1,
     "ingredients": [
@@ -68,6 +70,7 @@
   {
     "id": 16,
     "name": "Tomato feta omelette",
+    "image": "https://res.cloudinary.com/vu4ewfhl/image/upload/v1787241328/engin_akyurt-omelet-2802888_1920.jpg",
     "meal_type": "breakfast",
     "servings": 1,
     "ingredients": [
@@ -90,6 +93,7 @@
   {
     "id": 17,
     "name": "Peanut butter overnight oats",
+    "image": "https://res.cloudinary.com/vu4ewfhl/image/upload/v1787241468/pexels-busi-1851898444-30008116.jpg",
     "meal_type": "breakfast",
     "servings": 1,
     "ingredients": [
@@ -112,6 +116,7 @@
   {
     "id": 18,
     "name": "Smoked salmon bagel",
+    "image": "https://res.cloudinary.com/vu4ewfhl/image/upload/v1787241526/pexels-stephen-leonardi-587681991-35926369.jpg",
     "meal_type": "breakfast",
     "servings": 1,
     "ingredients": [
@@ -134,6 +139,7 @@
   {
     "id": 19,
     "name": "Chicken avocado wrap",
+    "image": "https://res.cloudinary.com/vu4ewfhl/image/upload/v1787241564/pexels-nano-erdozain-120534369-29535635.jpg",
     "meal_type": "lunch",
     "servings": 1,
     "ingredients": [
@@ -156,6 +162,7 @@
   {
     "id": 20,
     "name": "Tuna pasta salad",
+    "image": "https://res.cloudinary.com/vu4ewfhl/image/upload/v1787241641/pexels-eiliv-aceron-29416110-6896393.jpg",
     "meal_type": "lunch",
     "servings": 2,
     "ingredients": [
@@ -178,6 +185,7 @@
   {
     "id": 21,
     "name": "Chicken pesto pasta",
+    "image": "https://res.cloudinary.com/vu4ewfhl/image/upload/v1787241690/pexels-ouqiao-1507903-17588091.jpg",
     "meal_type": "lunch",
     "servings": 2,
     "ingredients": [
@@ -200,6 +208,7 @@
   {
     "id": 22,
     "name": "Mediterranean quinoa bowl",
+    "image": "https://res.cloudinary.com/vu4ewfhl/image/upload/v1787241729/pexels-the-castlebar-3902897-5893800.jpg",
     "meal_type": "lunch",
     "servings": 2,
     "ingredients": [
@@ -222,6 +231,7 @@
   {
     "id": 23,
     "name": "Turkey rice bowl",
+    "image": "https://source.unsplash.com/800x450/?lunch,turkey,rice",
     "meal_type": "lunch",
     "servings": 2,
     "ingredients": [
@@ -243,6 +253,7 @@
   {
     "id": 24,
     "name": "Mozzarella tomato toast",
+    "image": "https://source.unsplash.com/800x450/?lunch,toast,mozzarella,tomato",
     "meal_type": "lunch",
     "servings": 1,
     "ingredients": [
@@ -265,6 +276,7 @@
   {
     "id": 25,
     "name": "Chicken fajita bowl",
+    "image": "https://source.unsplash.com/800x450/?lunch,fajita,chicken,bowl",
     "meal_type": "lunch",
     "servings": 2,
     "ingredients": [
@@ -287,6 +299,7 @@
   {
     "id": 26,
     "name": "Creamy tomato chicken",
+    "image": "https://source.unsplash.com/800x450/?dinner,chicken,tomato,creamy",
     "meal_type": "dinner",
     "servings": 2,
     "ingredients": [
@@ -309,6 +322,7 @@
   {
     "id": 27,
     "name": "Beef and vegetable stir-fry",
+    "image": "https://source.unsplash.com/800x450/?dinner,beef,stir-fry,vegetables",
     "meal_type": "dinner",
     "servings": 2,
     "ingredients": [
@@ -330,6 +344,7 @@
   {
     "id": 28,
     "name": "Vegetable chickpea pasta",
+    "image": "https://source.unsplash.com/800x450/?dinner,pasta,chickpea,vegetable",
     "meal_type": "dinner",
     "servings": 2,
     "ingredients": [
@@ -352,6 +367,7 @@
   {
     "id": 29,
     "name": "Shrimp garlic noodles",
+    "image": "https://source.unsplash.com/800x450/?dinner,shrimp,noodles,garlic",
     "meal_type": "dinner",
     "servings": 2,
     "ingredients": [
@@ -374,6 +390,7 @@
   {
     "id": 30,
     "name": "Turkey meatball pasta",
+    "image": "https://source.unsplash.com/800x450/?dinner,turkey,meatballs,pasta",
     "meal_type": "dinner",
     "servings": 2,
     "ingredients": [
@@ -395,6 +412,7 @@
   {
     "id": 31,
     "name": "Vegetable tofu curry",
+    "image": "https://source.unsplash.com/800x450/?dinner,tofu,curry,vegetable",
     "meal_type": "dinner",
     "servings": 2,
     "ingredients": [
@@ -416,6 +434,7 @@
   {
     "id": 32,
     "name": "Chicken sweet potato tray bake",
+    "image": "https://source.unsplash.com/800x450/?dinner,tray-bake,chicken,sweet-potato",
     "meal_type": "dinner",
     "servings": 2,
     "ingredients": [
@@ -437,6 +456,7 @@
   {
     "id": 33,
     "name": "Black bean burrito bowl",
+    "image": "https://source.unsplash.com/800x450/?dinner,burrito,bowl,black-bean",
     "meal_type": "dinner",
     "servings": 2,
     "ingredients": [
@@ -459,6 +479,7 @@
   {
     "id": 34,
     "name": "Cod with roasted vegetables",
+    "image": "https://source.unsplash.com/800x450/?dinner,cod,roasted,vegetables",
     "meal_type": "dinner",
     "servings": 2,
     "ingredients": [
@@ -480,6 +501,7 @@
   {
     "id": 35,
     "name": "Lentil vegetable curry",
+    "image": "https://source.unsplash.com/800x450/?dinner,lentil,curry,vegetable",
     "meal_type": "dinner",
     "servings": 3,
     "ingredients": [
@@ -501,6 +523,7 @@
   {
     "id": 36,
     "name": "Apple peanut butter snack",
+    "image": "https://source.unsplash.com/800x450/?snack,apple,peanut-butter",
     "meal_type": "snack",
     "servings": 1,
     "ingredients": [
@@ -521,6 +544,7 @@
   {
     "id": 37,
     "name": "Greek yogurt granola cup",
+    "image": "https://source.unsplash.com/800x450/?snack,greek-yogurt,granola,berries",
     "meal_type": "snack",
     "servings": 1,
     "ingredients": [
@@ -542,6 +566,7 @@
   {
     "id": 38,
     "name": "Hummus veggie crackers",
+    "image": "https://source.unsplash.com/800x450/?snack,hummus,veggie,crackers",
     "meal_type": "snack",
     "servings": 1,
     "ingredients": [
@@ -563,6 +588,7 @@
   {
     "id": 39,
     "name": "Cottage cheese berry bowl",
+    "image": "https://source.unsplash.com/800x450/?snack,cottage-cheese,berries",
     "meal_type": "snack",
     "servings": 1,
     "ingredients": [
@@ -584,6 +610,7 @@
   {
     "id": 40,
     "name": "Chocolate banana smoothie",
+    "image": "https://source.unsplash.com/800x450/?snack,smoothie,banana,chocolate",
     "meal_type": "snack",
     "servings": 1,
     "ingredients": [
@@ -606,6 +633,7 @@
   {
     "id": 41,
     "name": "Edamame snack bowl",
+    "image": "https://source.unsplash.com/800x450/?snack,edamame,sesame",
     "meal_type": "snack",
     "servings": 1,
     "ingredients": [
@@ -627,6 +655,7 @@
   {
     "id": 42,
     "name": "Rice cakes with avocado",
+    "image": "https://source.unsplash.com/800x450/?snack,rice-cakes,avocado,cherry-tomatoes",
     "meal_type": "snack",
     "servings": 1,
     "ingredients": [
