@@ -22,6 +22,9 @@
                                 <h2><a href="{{ url_for('recipe_detail', recipe_id=recipe.id) }}">{{ recipe.name }}</a></h2>
                                 <p class="meal-stat">{{ recipe.calories }} kcal</p>
                                 <p class="meal-stat">{{ recipe.protein }} g protein</p>
+                                <form method="post" action="{{ url_for('swap_weekly_meal', day=day, meal_name=meal_name) }}">
+                                    <button class="swap-button" type="submit">Swap</button>
+                                </form>
                             </article>
                         {% endif %}
                     {% endfor %}

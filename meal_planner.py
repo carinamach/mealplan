@@ -102,6 +102,33 @@ def generate_daily_plan(recipes, calorie_target, goal):
 
 
 def generate_weekly_plan(recipes, calorie_target, goal):
-    """Build a Monday–Sunday plan by repeating the daily meal-generation logic."""
-    daily_plan = generate_daily_plan(recipes, calorie_target, goal)
-    return {day: deepcopy(daily_plan) for day in WEEKDAYS}
+    """Build a Monday–Sunday plan with some variation between days.
+
+    Instead of repeating the same daily plan for every weekday, generate a
+    daily plan for each day and remove the chosen recipes from the working
+    pool so subsequent days favor different recipes. If the pool becomes
+    insufficient for a required meal type, fall back to the full recipe set.
+    """
+    recipes_pool = list(recipes)
+    weekly = {}
+
+    for day in WEEKDAYS:
+        try:
+            daily = generate_daily_plan(recipes_pool, calorie_target, goal)
+        except ValueError:
+            # Not enough variety left in the pool; reset and try again.
+            recipes_pool = list(recipes)
+            daily = generate_daily_plan(recipes_pool, calorie_target, goal)
+
+        weekly[day] = deepcopy(daily)
+
+        # Remove selected recipes from the pool to encourage variety.
+        chosen = [r for r in daily["meals"].values() if r]
+        for r in chosen:
+            recipes_pool = [rec for rec in recipes_pool if rec["id"] != r["id"]]
+
+        # If pool empties, reset so remaining days can still be filled.
+        if not recipes_pool:
+            recipes_pool = list(recipes)
+
+    return weekly

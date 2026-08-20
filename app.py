@@ -211,6 +211,32 @@ def weekly_plan():
     return render_template("weekly_plan.html", weekly_plan=plan, weekdays=WEEKDAYS, targets=targets)
 
 
+@app.post("/weekly-plan/swap/<day>/<meal_name>")
+def swap_weekly_meal(day, meal_name):
+    """Swap one meal in the saved weekly plan for the given day and meal."""
+    plan = session.get("weekly_plan")
+    profile_data = session.get("profile")
+
+    if not plan or not profile_data or day not in plan:
+        abort(404)
+
+    day_plan = plan[day]
+    if meal_name not in day_plan["meals"]:
+        abort(404)
+
+    current_recipe = day_plan["meals"][meal_name]
+    if current_recipe is None:
+        abort(404)
+
+    alternative = find_swap_recipe(current_recipe, load_recipes(), profile_data["goal"])
+    if alternative:
+        day_plan["meals"][meal_name] = alternative
+        day_plan.update(calculate_plan_totals(day_plan["meals"]))
+        session["weekly_plan"] = plan
+
+    return redirect(url_for("weekly_plan"))
+
+
 @app.route("/shopping-list")
 def shopping_list():
     """Display a combined shopping list from the saved meal plan."""
