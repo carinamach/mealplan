@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Meal Plan | Weekly plan{% endblock %}
+
+{% block content %}
+    <section class="recipe-heading">
+        <p class="eyebrow">Monday to Sunday</p>
+        <h1>Weekly meal plan</h1>
+    </section>
+
+    {% if weekly_plan %}
+        <p class="plan-intro">Each day uses the same meal-generation logic, aiming for about {{ targets.calories }} kcal and {{ targets.protein }} g protein.</p>
+        {% for day in weekdays %}
+            {% set plan = weekly_plan[day] %}
+            <section class="week-day">
+                <h2>{{ day }}</h2>
+                <section class="meal-plan-grid" aria-label="{{ day }} meals">
+                    {% for meal_name, recipe in plan.meals.items() %}
+                        {% if recipe %}
+                            <article class="plan-meal">
+                                <p class="recipe-type">{{ meal_name }}</p>
+                                <h2><a href="{{ url_for('recipe_detail', recipe_id=recipe.id) }}">{{ recipe.name }}</a></h2>
+                                <p class="meal-stat">{{ recipe.calories }} kcal</p>
+                                <p class="meal-stat">{{ recipe.protein }} g protein</p>
+                            </article>
+                        {% endif %}
+                    {% endfor %}
+                </section>
+                <p class="week-day-total"><strong>{{ plan.total_calories }} kcal</strong> · <strong>{{ plan.total_protein }} g protein</strong></p>
+            </section>
+        {% endfor %}
+        <p><a class="button-link" href="{{ url_for('meal_plan') }}">View daily plan</a></p>
+    {% else %}
+        <section class="profile-form">
+            <h2>Create your profile first</h2>
+            <p>Save your profile and daily calorie estimate before generating a weekly meal plan.</p>
+            <a class="button-link" href="{{ url_for('profile') }}">Go to profile</a>
+        </section>
+    {% endif %}
+{% endblock %}

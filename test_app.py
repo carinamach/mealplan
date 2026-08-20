@@ -111,5 +111,36 @@ class ShoppingListPageTest(unittest.TestCase):
         )
 
 
+class RecipePageFilterTest(unittest.TestCase):
+    def test_recipes_page_can_filter_by_meal_type(self):
+        client = app.test_client()
+        response = client.get("/recipes?meal_type=breakfast")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b"Apple cinnamon porridge", response.data)
+        self.assertNotIn(b"Chicken avocado wrap", response.data)
+
+    def test_recipes_page_can_filter_by_saved_dietary_preferences(self):
+        client = app.test_client()
+        client.post(
+            "/profile",
+            data={
+                "age": "30",
+                "height": "170",
+                "weight": "70",
+                "target_weight": "65",
+                "biological_sex": "female",
+                "activity_level": "moderate",
+                "goal": "lose_weight",
+                "dietary_preferences": ["vegetarian"],
+            },
+        )
+        response = client.get("/recipes?match_diet=1")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b"Apple cinnamon porridge", response.data)
+        self.assertNotIn(b"Chicken avocado wrap", response.data)
+
+
 if __name__ == "__main__":
     unittest.main()

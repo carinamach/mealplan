@@ -56,3 +56,32 @@ if (shoppingList) {
         localStorage.setItem(storageKey, JSON.stringify(checkedItems));
     });
 }
+
+const searchInput = document.querySelector("[data-recipe-search]");
+const recipeCards = document.querySelectorAll("[data-recipe-card]");
+const recipeGrid = document.querySelector("[data-recipe-grid]");
+const emptyRecipes = document.querySelector("[data-empty-recipes]");
+
+if (searchInput && recipeCards.length) {
+    function applyRecipeSearch() {
+        const query = searchInput.value.trim().toLowerCase();
+        let visibleCount = 0;
+
+        recipeCards.forEach((card) => {
+            const isMatch = !query || (card.dataset.searchText || "").toLowerCase().includes(query);
+            card.hidden = !isMatch;
+            if (isMatch) {
+                visibleCount += 1;
+            }
+        });
+
+        if (recipeGrid) {
+            recipeGrid.hidden = visibleCount === 0;
+        }
+        if (emptyRecipes) {
+            emptyRecipes.hidden = visibleCount !== 0;
+        }
+    }
+
+    searchInput.addEventListener("input", applyRecipeSearch);
+}

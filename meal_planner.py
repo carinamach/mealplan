@@ -1,6 +1,10 @@
 """Simple meal-plan selection using the predefined recipe data."""
 
+from copy import deepcopy
 from itertools import product
+
+
+WEEKDAYS = ("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
 
 
 def calculate_plan_totals(meals):
@@ -95,3 +99,9 @@ def generate_daily_plan(recipes, calorie_target, goal):
             }
 
     return best_plan
+
+
+def generate_weekly_plan(recipes, calorie_target, goal):
+    """Build a Monday–Sunday plan by repeating the daily meal-generation logic."""
+    daily_plan = generate_daily_plan(recipes, calorie_target, goal)
+    return {day: deepcopy(daily_plan) for day in WEEKDAYS}

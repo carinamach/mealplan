@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Meal Plan | Favorites{% endblock %}
+
+{% block content %}
+    <section class="recipe-heading">
+        <p class="eyebrow">Saved recipes</p>
+        <h1>Favorites</h1>
+        <p>{% if recipes %}{{ recipes|length }} saved recipe{{ 's' if recipes|length != 1 else '' }}.{% else %}Mark recipes with a heart on the recipes page to save them here.{% endif %}</p>
+    </section>
+
+    {% if recipes %}
+        <section class="recipe-grid" aria-label="Favorite recipes">
+            {% for recipe in recipes %}
+                {% include "_recipe_card.html" %}
+            {% endfor %}
+        </section>
+    {% else %}
+        <section class="profile-form">
+            <h2>No favorites yet</h2>
+            <p>Browse the recipe collection and tap Favorite to save recipes in this session.</p>
+            <a class="button-link" href="{{ url_for('recipes') }}">Go to recipes</a>
+        </section>
+    {% endif %}
+{% endblock %}

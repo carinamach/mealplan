@@ -6,27 +6,41 @@
     <section class="recipe-heading">
         <p class="eyebrow">Recipe collection</p>
         <h1>Recipes</h1>
-        <p>{{ recipes|length }} predefined recipes to use later in your meal plans.</p>
+        <p>{{ recipes|length }} recipes{% if selected_meal_type or match_diet or search_query %} matching your filters{% else %} to use later in your meal plans{% endif %}.</p>
     </section>
 
-    <section class="recipe-grid" aria-label="All recipes">
+    <form class="recipe-filters" method="get" action="{{ url_for('recipes') }}" data-recipe-filters>
+        <label class="recipe-search">
+            Search recipes
+            <input type="search" name="q" value="{{ search_query }}" placeholder="Search names or ingredients" data-recipe-search>
+        </label>
+        <div class="filter-group" role="group" aria-label="Meal type">
+            <button type="submit" name="meal_type" value="" class="filter-chip{% if not selected_meal_type %} is-active{% endif %}">All</button>
+            {% for meal_type in meal_types %}
+                <button type="submit" name="meal_type" value="{{ meal_type }}" class="filter-chip{% if selected_meal_type == meal_type %} is-active{% endif %}">{{ meal_type }}</button>
+            {% endfor %}
+        </div>
+        {% if selected_meal_type %}
+            <input type="hidden" name="meal_type" value="{{ selected_meal_type }}">
+        {% endif %}
+        {% if dietary_preferences %}
+            <label class="diet-filter">
+                <input type="checkbox" name="match_diet" value="1" {% if match_diet %}checked{% endif %}>
+                Match my dietary preferences
+            </label>
+            <button class="filter-apply" type="submit">Apply diet filter</button>
+        {% else %}
+            <p class="field-help">Save dietary preferences in your <a href="{{ url_for('profile') }}">profile</a> to filter recipes by diet.</p>
+        {% endif %}
+    </form>
+
+    <section class="recipe-grid" aria-label="All recipes" data-recipe-grid {% if not recipes %}hidden{% endif %}>
         {% for recipe in recipes %}
-            <a class="recipe-card" href="{{ url_for('recipe_detail', recipe_id=recipe.id) }}">
-                <div class="recipe-image-placeholder" aria-hidden="true">🥗</div>
-                <p class="recipe-type">{{ recipe.meal_type }}</p>
-                <h2>{{ recipe.name }}</h2>
-                <p class="recipe-meta">{{ recipe.servings }} servings - {{ recipe.calories }} kcal per serving</p>
-                <dl class="nutrition">
-                    <div><dt>Protein</dt><dd>{{ recipe.protein }} g</dd></div>
-                    <div><dt>Carbs</dt><dd>{{ recipe.carbohydrates }} g</dd></div>
-                    <div><dt>Fat</dt><dd>{{ recipe.fat }} g</dd></div>
-                </dl>
-                <p class="tags">
-                    {% for tag in recipe.tags %}
-                        <span>{{ tag }}</span>
-                    {% endfor %}
-                </p>
-            </a>
+            {% include "_recipe_card.html" %}
         {% endfor %}
+    </section>
+    <section class="profile-form" data-empty-recipes {% if recipes %}hidden{% endif %}>
+        <h2>No matching recipes</h2>
+        <p>Try another search, meal type, or turn off the dietary preference filter.</p>
     </section>
 {% endblock %}
