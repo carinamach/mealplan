@@ -83,7 +83,7 @@ def build_shopping_list(meals, portion_multiplier=1):
         if not recipe:
             continue
 
-        planned = float(portions.get(meal_name, 1) or 1)
+        planned = float(portion_multiplier or 1)
         recipe_servings = float(recipe.get("servings", 1) or 1)
         multiplier = planned / recipe_servings
 
