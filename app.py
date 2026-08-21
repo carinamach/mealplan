@@ -223,9 +223,70 @@ def swap_meal(meal_name):
     return redirect(url_for("meal_plan"))
 
 
+@app.post("/weekly-plan/reset")
+def reset_weekly_plan():
+    """Reset the weekly plan and portion selections back to generated defaults."""
+    profile_data = session.get("profile")
+    targets = session.get("targets")
+
+    if not profile_data or not targets:
+        # Nothing to reset if no profile/targets saved
+        return ("No profile", 400)
+
+    # Regenerate weekly plan using the same logic as meal_plan view
+    weekly = generate_weekly_plan(
+        load_recipes(),
+        calorie_target=targets["calories"],
+        goal=profile_data["goal"],
+    )
+    session["weekly_plan"] = weekly
+
+    # Clear any saved weekly portions so UI shows default (1)
+    session.pop("weekly_plan_portions", None)
+
+    return {"status": "ok"}
+
+
+@app.post('/weekly-plan/mealprep')
+def make_weekmealprep():
+    """Copy one day's meals across the whole weekly plan to make meal-prepping easier.
+
+    Expects JSON { source_day: 'Monday' } (case-sensitive names from WEEKDAYS). If missing, uses 'Monday'.
+    """
+    if not request.is_json:
+        return ("Expected JSON", 400)
+
+    data = request.get_json() or {}
+    source_day = data.get('source_day', 'Monday')
+
+    weekly = session.get('weekly_plan')
+    if not weekly or source_day not in weekly:
+        return ("No weekly plan or invalid source day", 400)
+
+    source_plan = weekly[source_day]
+    # Copy meals (deep copy minimal fields) to every day
+    for day in list(weekly.keys()):
+        # shallow copy of dict structure; recipes are dicts already
+        weekly[day]['meals'] = {m: source_plan['meals'].get(m) for m in source_plan['meals'].keys()}
+        weekly[day].update(calculate_plan_totals(weekly[day]['meals']))
+
+    session['weekly_plan'] = weekly
+    # Optionally clear weekly portions to default
+    session.pop('weekly_plan_portions', None)
+
+    return { 'status': 'ok' }
+
+
 @app.route("/shopping-list")
 def shopping_list():
     """Display a combined shopping list from the saved meal plan."""
+    # Prefer a saved weekly plan if available; otherwise fall back to the daily plan.
+    weekly = session.get("weekly_plan")
+    if weekly:
+        portions_map = session.get('weekly_plan_portions', {})
+        grouped_items, portions = build_weekly_shopping_list(weekly, portions_map=portions_map)
+        return render_template("shopping_list.html", shopping_list=grouped_items, portions=portions, weekly=True)
+
     plan = session.get("meal_plan")
     portion_multiplier = request.args.get("portions", default=1, type=int)
     if portion_multiplier is None or portion_multiplier < 1:

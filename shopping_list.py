@@ -79,9 +79,13 @@ def build_shopping_list(meals, portion_multiplier=1):
     multiplier = max(1, int(portion_multiplier or 1))
     combined = {}
 
-    for recipe in meals.values():
+    for meal_name, recipe in meals.items():
         if not recipe:
             continue
+
+        planned = float(portions.get(meal_name, 1) or 1)
+        recipe_servings = float(recipe.get("servings", 1) or 1)
+        multiplier = planned / recipe_servings
 
         for ingredient in recipe["ingredients"]:
             name = ingredient["name"]
@@ -99,3 +103,50 @@ def build_shopping_list(meals, portion_multiplier=1):
         grouped[categorize_ingredient(item["name"])].append(item)
 
     return [(category, items) for category, items in grouped.items() if items]
+
+
+def build_weekly_shopping_list(weekly_plan, portions_map=None):
+    """Build a combined shopping list from a weekly plan.
+
+    `weekly_plan` is a mapping day -> plan. `portions_map` is an optional
+    mapping day -> { meal_name: planned_portions } that controls how many
+    portions the user intends to cook for each meal. If omitted, each planned
+    meal counts as one portion. Ingredient amounts are scaled by
+    `planned_portions / recipe.servings` for each occurrence and then summed
+    across the week.
+
+    Returns a tuple of (grouped_list, total_planned_portions).
+    """
+    portions_map = portions_map or {}
+    combined = {}
+    total_portions = 0
+
+    for day, day_plan in weekly_plan.items():
+        meals = day_plan.get("meals", {})
+        day_portions = portions_map.get(day, {})
+
+        for meal_name, recipe in meals.items():
+            if not recipe:
+                continue
+
+            planned = float(day_portions.get(meal_name, 1) or 1)
+            total_portions += planned
+            recipe_servings = float(recipe.get("servings", 1) or 1)
+            multiplier = planned / recipe_servings
+
+            for ingredient in recipe["ingredients"]:
+                name = ingredient["name"]
+                unit = ingredient.get("unit") or ""
+                key = (name.casefold(), unit.casefold())
+
+                if key not in combined:
+                    combined[key] = {"name": name, "unit": unit, "amount": 0}
+
+                combined[key]["amount"] += ingredient["amount"] * multiplier
+
+    grouped = {category: [] for category in CATEGORY_ORDER}
+    for item in sorted(combined.values(), key=lambda item: item["name"].casefold()):
+        item["amount"] = format_amount(item["amount"])
+        grouped[categorize_ingredient(item["name"])].append(item)
+
+    return [(category, items) for category, items in grouped.items() if items], int(total_portions)
