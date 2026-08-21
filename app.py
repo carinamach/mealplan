@@ -5,9 +5,9 @@ from pathlib import Path
 from flask import Flask, abort, redirect, render_template, request, session, url_for
 
 from calculations import calculate_targets
-from meal_planner import WEEKDAYS, calculate_plan_totals, find_swap_recipe, generate_daily_plan, generate_weekly_plan
+from meal_planner import calculate_plan_totals, find_swap_recipe, generate_daily_plan
 from recipe_filters import MEAL_TYPES, filter_recipes
-from shopping_list import build_shopping_list, build_weekly_shopping_list
+from shopping_list import build_meal_summary, build_shopping_list
 
 
 app = Flask(__name__)
@@ -39,7 +39,10 @@ def get_favorite_ids():
 @app.route("/")
 def home():
     """Display the application's home page."""
-    return render_template("index.html")
+    # Show a selection of recipes on the homepage for quick access
+    recipes = load_recipes()
+    favorite_ids = set(get_favorite_ids())
+    return render_template("index.html", recipes=recipes[:6], favorite_ids=favorite_ids)
 
 
 @app.route("/recipes")
@@ -134,7 +137,6 @@ def profile():
                 biological_sex=profile_data["biological_sex"],
             )
             session.pop("meal_plan", None)
-            session.pop("weekly_plan", None)
             return redirect(url_for("profile"))
         except (KeyError, ValueError) as exception:
             error = str(exception)
@@ -165,88 +167,38 @@ def meal_plan():
         )
         session["meal_plan"] = plan
 
-    # Also ensure a weekly plan exists in session for the combined page.
-    weekly = session.get("weekly_plan")
-    if weekly is None:
-        weekly = generate_weekly_plan(
-            load_recipes(),
-            calorie_target=targets["calories"],
-            goal=profile_data["goal"],
-        )
-        session["weekly_plan"] = weekly
-
-    # Portions stored per-meal for daily plan
-    portions = session.get("meal_plan_portions", {})
-    # Portions stored per-day+meal for weekly plan
-    weekly_portions = session.get("weekly_plan_portions", {})
-
-    return render_template("meal_plan.html", plan=plan, weekly_plan=weekly, weekdays=WEEKDAYS, targets=targets, portions=portions, weekly_portions=weekly_portions)
+    return render_template("meal_plan.html", plan=plan, targets=targets, recipes=load_recipes())
 
 
-@app.post('/meal-plan/portions/<meal_name>')
-def set_meal_portions(meal_name):
-    """Set how many portions the user plans to cook for one meal (AJAX JSON).
+@app.post("/meal-plan/swap-select")
+def swap_select():
+    """Swap a meal to a user-selected recipe (AJAX from modal).
 
-    Returns updated per-portion and total calories/protein for that meal and
-    updated daily totals.
+    Expects form fields `meal_name` and `recipe_id`.
     """
-    if not request.is_json:
+    plan = session.get("meal_plan")
+    profile_data = session.get("profile")
+
+    meal_name = request.form.get("meal_name")
+    try:
+        recipe_id = int(request.form.get("recipe_id"))
+    except (TypeError, ValueError):
         abort(400)
 
-    data = request.get_json() or {}
-    try:
-        portions_value = int(data.get('portions', 1))
-    except Exception:
-        portions_value = 1
-
-    plan = session.get('meal_plan')
-    if not plan or meal_name not in plan['meals']:
+    if not plan or not profile_data or meal_name not in plan["meals"]:
         abort(404)
 
-    recipe = plan['meals'][meal_name]
-    if not recipe:
+    # Load and validate recipe
+    new_recipe = next((r for r in load_recipes() if r["id"] == recipe_id), None)
+    if new_recipe is None:
         abort(404)
 
-    # store portions in session
-    portions = session.get('meal_plan_portions', {})
-    portions[meal_name] = max(1, portions_value)
-    session['meal_plan_portions'] = portions
+    plan["meals"][meal_name] = new_recipe
+    plan.update(calculate_plan_totals(plan["meals"]))
+    session["meal_plan"] = plan
 
-    # compute per-portion and totals
-    servings = recipe.get('servings', 1) or 1
-    per_portion_cal = recipe['calories'] / servings
-    per_portion_protein = recipe['protein'] / servings
-    total_cal = per_portion_cal * portions[meal_name]
-    total_protein = per_portion_protein * portions[meal_name]
-
-    # recalc daily totals accounting for portions
-    daily_cal = 0
-    daily_protein = 0
-    for m, r in plan['meals'].items():
-        if not r:
-            continue
-        p = portions.get(m, 1)
-        s = r.get('servings', 1) or 1
-        cal_per = r['calories'] / s
-        prot_per = r['protein'] / s
-        daily_cal += cal_per * p
-        daily_protein += prot_per * p
-
-    # update session plan totals (keep original plan structure for other uses)
-    session['meal_plan_totals'] = {'total_calories': daily_cal, 'total_protein': daily_protein}
-
-    return {
-        'meal': {
-            'per_portion_calories': round(per_portion_cal, 1),
-            'per_portion_protein': round(per_portion_protein, 1),
-            'total_calories': round(total_cal, 1),
-            'total_protein': round(total_protein, 1),
-        },
-        'daily_totals': {
-            'total_calories': round(daily_cal, 1),
-            'total_protein': round(daily_protein, 1),
-        }
-    }
+    # Return empty response for AJAX caller to refresh
+    return ("", 204)
 
 
 @app.post("/meal-plan/swap/<meal_name>")
@@ -269,149 +221,6 @@ def swap_meal(meal_name):
         session["meal_plan"] = plan
 
     return redirect(url_for("meal_plan"))
-
-
-@app.route("/weekly-plan")
-def weekly_plan():
-    # Weekly plan was merged into the daily meal-plan page; redirect there.
-    return redirect(url_for('meal_plan'))
-
-
-@app.post("/weekly-plan/swap/<day>/<meal_name>")
-def swap_weekly_meal(day, meal_name):
-    """Swap one meal in the saved weekly plan for the given day and meal."""
-    plan = session.get("weekly_plan")
-    profile_data = session.get("profile")
-
-    if not plan or not profile_data or day not in plan:
-        abort(404)
-
-    day_plan = plan[day]
-    if meal_name not in day_plan["meals"]:
-        abort(404)
-
-    current_recipe = day_plan["meals"][meal_name]
-    if current_recipe is None:
-        abort(404)
-
-    # If the client posted a specific recipe id (AJAX), use it.
-    if request.is_json:
-        data = request.get_json() or {}
-        recipe_id = data.get("recipe_id")
-        if recipe_id:
-            try:
-                chosen = get_recipe(int(recipe_id))
-            except Exception:
-                return ("Not found", 404)
-            day_plan["meals"][meal_name] = chosen
-            day_plan.update(calculate_plan_totals(day_plan["meals"]))
-            session["weekly_plan"] = plan
-            return {
-                "meal": {
-                    "id": chosen["id"],
-                    "name": chosen["name"],
-                    "calories": chosen["calories"],
-                    "protein": chosen["protein"],
-                    "url": url_for("recipe_detail", recipe_id=chosen["id"]),
-                },
-                "totals": {
-                    "total_calories": day_plan["total_calories"],
-                    "total_protein": day_plan["total_protein"],
-                },
-            }
-
-    # Fallback for non-AJAX: pick an automatic alternative and redirect.
-    alternative = find_swap_recipe(current_recipe, load_recipes(), profile_data["goal"])
-    if alternative:
-        day_plan["meals"][meal_name] = alternative
-        day_plan.update(calculate_plan_totals(day_plan["meals"]))
-        session["weekly_plan"] = plan
-
-    return redirect(url_for("weekly_plan"))
-
-
-@app.post("/weekly-plan/portions/<day>/<meal_name>")
-def set_weekly_portions(day, meal_name):
-    """Set how many portions the user plans to cook for one weekly meal (AJAX JSON)."""
-    if not request.is_json:
-        abort(400)
-
-    data = request.get_json() or {}
-    try:
-        portions_value = int(data.get('portions', 1))
-    except Exception:
-        portions_value = 1
-
-    weekly = session.get('weekly_plan')
-    if not weekly or day not in weekly:
-        abort(404)
-
-    day_plan = weekly[day]
-    if meal_name not in day_plan.get('meals', {}):
-        abort(404)
-
-    # store portions in session
-    weekly_portions = session.get('weekly_plan_portions', {})
-    weekly_portions.setdefault(day, {})[meal_name] = max(1, portions_value)
-    session['weekly_plan_portions'] = weekly_portions
-
-    # recompute day totals accounting for portions
-    total_cal = 0
-    total_protein = 0
-    for m, r in day_plan['meals'].items():
-        if not r:
-            continue
-        p = weekly_portions.get(day, {}).get(m, 1)
-        s = r.get('servings', 1) or 1
-        cal_per = r['calories'] / s
-        prot_per = r['protein'] / s
-        total_cal += cal_per * p
-        total_protein += prot_per * p
-
-    # save updated totals in session weekly_plan as well
-    day_plan['total_calories'] = total_cal
-    day_plan['total_protein'] = total_protein
-    session['weekly_plan'] = weekly
-
-    return {
-        'day_totals': {
-            'total_calories': round(total_cal, 1),
-            'total_protein': round(total_protein, 1),
-        },
-        'portions': weekly_portions.get(day, {}).get(meal_name, 1)
-    }
-
-
-@app.route("/weekly-plan/alternatives/<day>/<meal_name>")
-def weekly_alternatives(day, meal_name):
-    """Return JSON alternatives for a given day and meal to power the swap UI."""
-    plan = session.get("weekly_plan")
-    profile_data = session.get("profile")
-
-    if not plan or not profile_data or day not in plan:
-        abort(404)
-
-    day_plan = plan[day]
-    current = day_plan["meals"].get(meal_name)
-    if not current:
-        return ([], 200)
-
-    # Find same-type alternatives, exclude current id
-    candidates = [r for r in load_recipes() if r["meal_type"] == current["meal_type"] and r["id"] != current["id"]]
-
-    # Return up to 5 alternatives sorted by closeness in calories
-    candidates.sort(key=lambda r: abs(r["calories"] - current["calories"]))
-    results = []
-    for r in candidates[:5]:
-        results.append({
-            "id": r["id"],
-            "name": r["name"],
-            "calories": r["calories"],
-            "protein": r["protein"],
-            "url": url_for("recipe_detail", recipe_id=r["id"]),
-        })
-
-    return {"alternatives": results}
 
 
 @app.post("/weekly-plan/reset")
@@ -479,11 +288,18 @@ def shopping_list():
         return render_template("shopping_list.html", shopping_list=grouped_items, portions=portions, weekly=True)
 
     plan = session.get("meal_plan")
-    portions_map = session.get('meal_plan_portions', {})
-    grouped_items = build_shopping_list(plan["meals"], portions=portions_map) if plan else []
-    # compute total planned portions for display
-    total_portions = sum(int(v) for v in (portions_map.values() or [1])) if portions_map else (len(plan["meals"]) if plan else 0)
-    return render_template("shopping_list.html", shopping_list=grouped_items, portions=total_portions, weekly=False)
+    portion_multiplier = request.args.get("portions", default=1, type=int)
+    if portion_multiplier is None or portion_multiplier < 1:
+        portion_multiplier = 1
+
+    grouped_items = build_shopping_list(plan["meals"], portion_multiplier=portion_multiplier) if plan else []
+    meal_summary = build_meal_summary(plan["meals"], portion_multiplier=portion_multiplier) if plan else []
+    return render_template(
+        "shopping_list.html",
+        shopping_list=grouped_items,
+        meal_summary=meal_summary,
+        portion_multiplier=portion_multiplier,
+    )
 
 
 if __name__ == "__main__":

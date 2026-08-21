@@ -2,6 +2,7 @@
   {
     "id": 13,
     "name": "Apple cinnamon porridge",
+    "image": "https://res.cloudinary.com/vu4ewfhl/image/upload/v1787237689/Gemini_Generated_Image_bbetw7bbetw7bbet.jpg",
     "meal_type": "breakfast",
     "servings": 1,
     "ingredients": [
@@ -24,6 +25,7 @@
   {
     "id": 14,
     "name": "Avocado egg toast",
+    "image": "https://res.cloudinary.com/vu4ewfhl/image/upload/v1787241040/bakd-raw-by-karolin-baitinger-k9HhDB9eOyo-unsplash.jpg",
     "meal_type": "breakfast",
     "servings": 1,
     "ingredients": [
@@ -45,6 +47,7 @@
   {
     "id": 15,
     "name": "Banana protein pancakes",
+    "image": "https://res.cloudinary.com/vu4ewfhl/image/upload/v1787241234/iffany-crepe-9335472_1920.png",
     "meal_type": "breakfast",
     "servings": 1,
     "ingredients": [
@@ -67,6 +70,7 @@
   {
     "id": 16,
     "name": "Tomato feta omelette",
+    "image": "https://res.cloudinary.com/vu4ewfhl/image/upload/v1787241328/engin_akyurt-omelet-2802888_1920.jpg",
     "meal_type": "breakfast",
     "servings": 1,
     "ingredients": [
@@ -89,6 +93,7 @@
   {
     "id": 17,
     "name": "Peanut butter overnight oats",
+    "image": "https://res.cloudinary.com/vu4ewfhl/image/upload/v1787241468/pexels-busi-1851898444-30008116.jpg",
     "meal_type": "breakfast",
     "servings": 1,
     "ingredients": [
@@ -111,6 +116,7 @@
   {
     "id": 18,
     "name": "Smoked salmon bagel",
+    "image": "https://res.cloudinary.com/vu4ewfhl/image/upload/v1787241526/pexels-stephen-leonardi-587681991-35926369.jpg",
     "meal_type": "breakfast",
     "servings": 1,
     "ingredients": [
@@ -133,6 +139,7 @@
   {
     "id": 19,
     "name": "Chicken avocado wrap",
+    "image": "https://res.cloudinary.com/vu4ewfhl/image/upload/v1787241564/pexels-nano-erdozain-120534369-29535635.jpg",
     "meal_type": "lunch",
     "servings": 1,
     "ingredients": [
@@ -155,6 +162,7 @@
   {
     "id": 20,
     "name": "Tuna pasta salad",
+    "image": "https://res.cloudinary.com/vu4ewfhl/image/upload/v1787241641/pexels-eiliv-aceron-29416110-6896393.jpg",
     "meal_type": "lunch",
     "servings": 2,
     "ingredients": [
@@ -177,6 +185,7 @@
   {
     "id": 21,
     "name": "Chicken pesto pasta",
+    "image": "https://res.cloudinary.com/vu4ewfhl/image/upload/v1787241690/pexels-ouqiao-1507903-17588091.jpg",
     "meal_type": "lunch",
     "servings": 2,
     "ingredients": [
@@ -199,6 +208,7 @@
   {
     "id": 22,
     "name": "Mediterranean quinoa bowl",
+    "image": "https://res.cloudinary.com/vu4ewfhl/image/upload/v1787241729/pexels-the-castlebar-3902897-5893800.jpg",
     "meal_type": "lunch",
     "servings": 2,
     "ingredients": [
@@ -221,6 +231,7 @@
   {
     "id": 23,
     "name": "Turkey rice bowl",
+    "image": "https://res.cloudinary.com/vu4ewfhl/image/upload/v1787295192/joannawielgosz-chicken-7249273_1920_1.jpg",
     "meal_type": "lunch",
     "servings": 2,
     "ingredients": [
@@ -242,6 +253,7 @@
   {
     "id": 24,
     "name": "Mozzarella tomato toast",
+    "image": "https://res.cloudinary.com/vu4ewfhl/image/upload/v1787293276/pexels-matreding-11218685.jpg",
     "meal_type": "lunch",
     "servings": 1,
     "ingredients": [
@@ -264,6 +276,7 @@
   {
     "id": 25,
     "name": "Chicken fajita bowl",
+    "image": "https://res.cloudinary.com/vu4ewfhl/image/upload/v1787293566/pexels-davegarcia-32371282.jpg",
     "meal_type": "lunch",
     "servings": 2,
     "ingredients": [
@@ -286,6 +299,7 @@
   {
     "id": 26,
     "name": "Creamy tomato chicken",
+    "image": "https://res.cloudinary.com/vu4ewfhl/image/upload/v1787293620/pexels-prabal-9609844.jpg",
     "meal_type": "dinner",
     "servings": 2,
     "ingredients": [
@@ -308,6 +322,7 @@
   {
     "id": 27,
     "name": "Beef and vegetable stir-fry",
+    "image": "https://res.cloudinary.com/vu4ewfhl/image/upload/v1787293659/pexels-davegarcia-37743272.jpg",
     "meal_type": "dinner",
     "servings": 2,
     "ingredients": [
@@ -329,6 +344,7 @@
   {
     "id": 28,
     "name": "Vegetable chickpea pasta",
+    "image": "https://res.cloudinary.com/vu4ewfhl/image/upload/v1787293740/pexels-fewmiracles-497047241-38000378.jpg",
     "meal_type": "dinner",
     "servings": 2,
     "ingredients": [
@@ -351,6 +367,7 @@
   {
     "id": 29,
     "name": "Shrimp garlic noodles",
+    "image": "https://res.cloudinary.com/vu4ewfhl/image/upload/v1787293796/pexels-daniela-elena-tentis-118658-725997.jpg",
     "meal_type": "dinner",
     "servings": 2,
     "ingredients": [
@@ -373,6 +390,7 @@
   {
     "id": 30,
     "name": "Turkey meatball pasta",
+    "image": "https://res.cloudinary.com/vu4ewfhl/image/upload/v1787293856/pexels-anh-nguyen-517648218-30323136.jpg",
     "meal_type": "dinner",
     "servings": 2,
     "ingredients": [
@@ -394,6 +412,7 @@
   {
     "id": 31,
     "name": "Vegetable tofu curry",
+    "image": "https://res.cloudinary.com/vu4ewfhl/image/upload/v1787293915/pexels-tharunthejusjp-37303310.jpg",
     "meal_type": "dinner",
     "servings": 2,
     "ingredients": [
@@ -415,6 +434,7 @@
   {
     "id": 32,
     "name": "Chicken sweet potato tray bake",
+    "image": "https://res.cloudinary.com/vu4ewfhl/image/upload/v1787294512/pexels-nguy-n-ti-n-th-nh-2150376175-32659125.jpg",
     "meal_type": "dinner",
     "servings": 2,
     "ingredients": [
@@ -436,6 +456,7 @@
   {
     "id": 33,
     "name": "Black bean burrito bowl",
+    "image": "https://res.cloudinary.com/vu4ewfhl/image/upload/v1787294543/pexels-alesiakozik-6065181.jpg",
     "meal_type": "dinner",
     "servings": 2,
     "ingredients": [
@@ -458,6 +479,7 @@
   {
     "id": 34,
     "name": "Cod with roasted vegetables",
+    "image": "https://res.cloudinary.com/vu4ewfhl/image/upload/v1787294578/pexels-nadin-sh-78971847-12918197.jpg",
     "meal_type": "dinner",
     "servings": 2,
     "ingredients": [
@@ -479,6 +501,7 @@
   {
     "id": 35,
     "name": "Lentil vegetable curry",
+    "image": "https://res.cloudinary.com/vu4ewfhl/image/upload/v1787294616/pexels-nic-scrollstoppingphotos-28286241.jpg",
     "meal_type": "dinner",
     "servings": 3,
     "ingredients": [
@@ -500,6 +523,7 @@
   {
     "id": 36,
     "name": "Apple peanut butter snack",
+    "image": "https://res.cloudinary.com/vu4ewfhl/image/upload/v1787294671/pexels-shkrabaanthony-6823301.jpg",
     "meal_type": "snack",
     "servings": 1,
     "ingredients": [
@@ -520,6 +544,7 @@
   {
     "id": 37,
     "name": "Greek yogurt granola cup",
+    "image": "https://res.cloudinary.com/vu4ewfhl/image/upload/v1787294719/pexels-valeriya-7474043.jpg",
     "meal_type": "snack",
     "servings": 1,
     "ingredients": [
@@ -541,6 +566,7 @@
   {
     "id": 38,
     "name": "Hummus veggie crackers",
+    "image": "https://res.cloudinary.com/vu4ewfhl/image/upload/v1787295027/pexels-shkrabaanthony-5852258.jpg",
     "meal_type": "snack",
     "servings": 1,
     "ingredients": [
@@ -562,6 +588,7 @@
   {
     "id": 39,
     "name": "Cottage cheese berry bowl",
+    "image": "https://res.cloudinary.com/vu4ewfhl/image/upload/v1787294991/pexels-thepaintedsquare-15048297.jpg",
     "meal_type": "snack",
     "servings": 1,
     "ingredients": [
@@ -583,6 +610,7 @@
   {
     "id": 40,
     "name": "Chocolate banana smoothie",
+    "image": "https://res.cloudinary.com/vu4ewfhl/image/upload/v1787294932/pexels-minchephoto-7491906.jpg",
     "meal_type": "snack",
     "servings": 1,
     "ingredients": [
@@ -605,6 +633,7 @@
   {
     "id": 41,
     "name": "Edamame snack bowl",
+    "image": "https://res.cloudinary.com/vu4ewfhl/image/upload/v1787294882/pexels-khezez-29935499.jpg",
     "meal_type": "snack",
     "servings": 1,
     "ingredients": [
@@ -626,6 +655,7 @@
   {
     "id": 42,
     "name": "Rice cakes with avocado",
+    "image": "https://res.cloudinary.com/vu4ewfhl/image/upload/v1787294769/pexels-taryn-elliott-4281817.jpg",
     "meal_type": "snack",
     "servings": 1,
     "ingredients": [

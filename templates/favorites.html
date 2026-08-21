@@ -3,23 +3,23 @@
 {% block title %}Meal Plan | Favorites{% endblock %}
 
 {% block content %}
-    <section class="recipe-heading">
-        <p class="eyebrow">Saved recipes</p>
-        <h1>Favorites</h1>
-        <p>{% if recipes %}{{ recipes|length }} saved recipe{{ 's' if recipes|length != 1 else '' }}.{% else %}Mark recipes with a heart on the recipes page to save them here.{% endif %}</p>
+    <section class="mb-6 max-w-3xl">
+        <p class="mb-2 text-xs font-extrabold uppercase tracking-[0.18em] text-[#b8a9d9]">Saved recipes</p>
+        <h1 class="font-display text-4xl font-semibold tracking-tight text-slate-700 sm:text-5xl">Favorites</h1>
+        <p class="mt-3 text-slate-500">{% if recipes %}{{ recipes|length }} saved recipe{{ 's' if recipes|length != 1 else '' }}.{% else %}Mark recipes with a heart on the recipes page to save them here.{% endif %}</p>
     </section>
 
     {% if recipes %}
-        <section class="recipe-grid" aria-label="Favorite recipes">
+        <section class="grid gap-5 md:grid-cols-2 xl:grid-cols-3" aria-label="Favorite recipes">
             {% for recipe in recipes %}
                 {% include "_recipe_card.html" %}
             {% endfor %}
         </section>
     {% else %}
-        <section class="profile-form">
-            <h2>No favorites yet</h2>
-            <p>Browse the recipe collection and tap Favorite to save recipes in this session.</p>
-            <a class="button-link" href="{{ url_for('recipes') }}">Go to recipes</a>
+        <section class="rounded-[1.5rem] border border-stone-200 bg-white/80 p-6 shadow-sm">
+            <h2 class="font-display text-3xl text-slate-700">No favorites yet</h2>
+            <p class="mt-3 text-slate-500">Browse the recipe collection and tap Favorite to save recipes in this session.</p>
+            <a class="mt-5 inline-flex items-center justify-center rounded-full bg-[#efa7a0] px-5 py-3 text-sm font-extrabold text-slate-700 no-underline transition hover:bg-[#f5b7ac]" href="{{ url_for('recipes') }}">Go to recipes</a>
         </section>
     {% endif %}
 {% endblock %}

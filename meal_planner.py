@@ -4,36 +4,52 @@ from copy import deepcopy
 from itertools import product
 
 
-WEEKDAYS = ("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
-
-
 def calculate_plan_totals(meals):
-    """Calculate totals from the recipes currently selected in a plan."""
-    selected_recipes = [recipe for recipe in meals.values() if recipe]
-    return {
-        "total_calories": sum(recipe["calories"] for recipe in selected_recipes),
-        "total_protein": sum(recipe["protein"] for recipe in selected_recipes),
-    }
+    """Calculate daily totals from one portion of each selected meal."""
 
+    total_calories = 0
+    total_protein = 0
+
+    for recipe in meals.values():
+        if not recipe:
+            continue
+
+        total_calories += recipe.get("calories", 0)
+        total_protein += recipe.get("protein", 0)
+
+    return {
+        "total_calories": round(total_calories),
+        "total_protein": round(total_protein, 1),
+    }
 
 def find_swap_recipe(current_recipe, recipes, goal):
     """Find a same-type alternative that is close in calories and suits the goal."""
+
     alternatives = [
         recipe
         for recipe in recipes
-        if recipe["meal_type"] == current_recipe["meal_type"] and recipe["id"] != current_recipe["id"]
+        if (
+            recipe["meal_type"] == current_recipe["meal_type"]
+            and recipe["id"] != current_recipe["id"]
+        )
     ]
 
     if not alternatives:
         return None
 
     def swap_score(recipe):
-        calorie_difference = abs(recipe["calories"] - current_recipe["calories"])
+        current_servings = current_recipe.get("servings", 1) or 1
+        recipe_servings = recipe.get("servings", 1) or 1
+
+        current_calories = current_recipe.get("calories", 0) / current_servings
+        recipe_calories = recipe.get("calories", 0) / recipe_servings
+
+        calorie_difference = abs(recipe_calories - current_calories)
 
         if goal == "high_protein":
-            goal_score = -recipe["protein"]
+            goal_score = -(recipe.get("protein", 0) / recipe_servings)
         elif goal in ("lose_weight", "low_calorie"):
-            goal_score = recipe["calories"]
+            goal_score = recipe_calories
         else:
             goal_score = 0
 
@@ -43,58 +59,103 @@ def find_swap_recipe(current_recipe, recipes, goal):
 
 
 def generate_daily_plan(recipes, calorie_target, goal):
-    """Choose the recipe combination closest to the daily calorie target.
-
-    The recipe collection is small, so trying every breakfast/lunch/dinner/snack
-    combination is easy to understand and fast enough for this project.
     """
+    Choose breakfast, lunch, dinner and optionally a snack.
+
+    The combination is selected based on calories per portion.
+    The algorithm first prefers combinations that reach the calorie target.
+    Among those, it chooses the combination with the smallest calorie surplus.
+
+    If no combination reaches the target, it chooses the combination
+    that gets closest to the target from below.
+    """
+
     meals_by_type = {
-        "breakfast": [recipe for recipe in recipes if recipe["meal_type"] == "breakfast"],
-        "lunch": [recipe for recipe in recipes if recipe["meal_type"] == "lunch"],
-        "dinner": [recipe for recipe in recipes if recipe["meal_type"] == "dinner"],
-        "snack": [recipe for recipe in recipes if recipe["meal_type"] == "snack"],
+        "breakfast": [
+            recipe
+            for recipe in recipes
+            if recipe["meal_type"] == "breakfast"
+        ],
+        "lunch": [
+            recipe
+            for recipe in recipes
+            if recipe["meal_type"] == "lunch"
+        ],
+        "dinner": [
+            recipe
+            for recipe in recipes
+            if recipe["meal_type"] == "dinner"
+        ],
+        "snack": [
+            recipe
+            for recipe in recipes
+            if recipe["meal_type"] == "snack"
+        ],
     }
 
-    if not all(meals_by_type[meal_type] for meal_type in ("breakfast", "lunch", "dinner")):
-        raise ValueError("Recipes are needed for breakfast, lunch, and dinner.")
+    if not all(
+        meals_by_type[meal_type]
+        for meal_type in ("breakfast", "lunch", "dinner")
+    ):
+        raise ValueError(
+            "Recipes are needed for breakfast, lunch, and dinner."
+        )
 
     best_plan = None
     best_score = None
 
-    # None means that a snack is optional, not required.
+    # A snack is optional.
+    snack_options = [None] + meals_by_type["snack"]
+
     for breakfast, lunch, dinner, snack in product(
         meals_by_type["breakfast"],
         meals_by_type["lunch"],
         meals_by_type["dinner"],
-        [None, *meals_by_type["snack"]],
+        snack_options,
     ):
-        selected_recipes = [breakfast, lunch, dinner]
-        if snack:
-            selected_recipes.append(snack)
+        meals = {
+            "Breakfast": breakfast,
+            "Lunch": lunch,
+            "Dinner": dinner,
+            "Snack": snack,
+        }
 
-        totals = calculate_plan_totals(
-            {
-                "Breakfast": breakfast,
-                "Lunch": lunch,
-                "Dinner": dinner,
-                "Snack": snack,
-            }
-        )
+        totals = calculate_plan_totals(meals)
+
         total_calories = totals["total_calories"]
         total_protein = totals["total_protein"]
 
-        # High-protein plans prefer more protein only when calorie closeness is equal.
-        score = (abs(total_calories - calorie_target), -total_protein if goal == "high_protein" else 0)
+        # 0 = target reached
+        # 1 = target not reached
+        #
+        # This makes reaching the calorie target more important
+        # than simply being mathematically close to it.
+        if total_calories >= calorie_target:
+            target_group = 0
+            calorie_difference = total_calories - calorie_target
+        else:
+            target_group = 1
+            calorie_difference = calorie_target - total_calories
+
+        # High-protein plans prefer more protein when calorie
+        # performance is otherwise comparable.
+        protein_score = (
+            -total_protein
+            if goal == "high_protein"
+            else 0
+        )
+
+        score = (
+            target_group,
+            calorie_difference,
+            protein_score,
+        )
 
         if best_score is None or score < best_score:
             best_score = score
+
             best_plan = {
-                "meals": {
-                    "Breakfast": breakfast,
-                    "Lunch": lunch,
-                    "Dinner": dinner,
-                    "Snack": snack,
-                },
+                "meals": meals,
                 **totals,
             }
 
@@ -102,33 +163,17 @@ def generate_daily_plan(recipes, calorie_target, goal):
 
 
 def generate_weekly_plan(recipes, calorie_target, goal):
-    """Build a Monday–Sunday plan with some variation between days.
+    """Build a Monday–Sunday plan using the same meals each day."""
 
-    Instead of repeating the same daily plan for every weekday, generate a
-    daily plan for each day and remove the chosen recipes from the working
-    pool so subsequent days favor different recipes. If the pool becomes
-    insufficient for a required meal type, fall back to the full recipe set.
-    """
-    recipes_pool = list(recipes)
+    daily = generate_daily_plan(
+        recipes,
+        calorie_target,
+        goal,
+    )
+
     weekly = {}
 
     for day in WEEKDAYS:
-        try:
-            daily = generate_daily_plan(recipes_pool, calorie_target, goal)
-        except ValueError:
-            # Not enough variety left in the pool; reset and try again.
-            recipes_pool = list(recipes)
-            daily = generate_daily_plan(recipes_pool, calorie_target, goal)
-
         weekly[day] = deepcopy(daily)
-
-        # Remove selected recipes from the pool to encourage variety.
-        chosen = [r for r in daily["meals"].values() if r]
-        for r in chosen:
-            recipes_pool = [rec for rec in recipes_pool if rec["id"] != r["id"]]
-
-        # If pool empties, reset so remaining days can still be filled.
-        if not recipes_pool:
-            recipes_pool = list(recipes)
 
     return weekly

@@ -152,8 +152,7 @@ nav a.is-active {
 
 h1,
 h2,
-.recipe-card h2,
-.plan-meal h2 {
+.recipe-card h2 {
     font-family: var(--display);
     font-weight: 600;
     letter-spacing: -0.03em;
@@ -294,6 +293,18 @@ h1 {
     background: var(--blush);
 }
 
+.recipe-card-image,
+.recipe-detail-image {
+    display: block;
+    width: 100%;
+    object-fit: cover;
+}
+
+.recipe-card-image {
+    margin: 0 0 0.9rem;
+    border-radius: var(--radius) var(--radius) 1rem 1rem;
+}
+
 .recipe-card h2 {
     margin: 0.3rem 0 0.4rem;
     font-size: 1.28rem;
@@ -324,6 +335,7 @@ h1 {
     display: inline-flex;
     align-items: center;
     width: fit-content;
+    margin-top: 0.2rem;
     padding: 0.2rem 0.65rem;
     border-radius: 999px;
     background: var(--pale-lavender);
@@ -400,7 +412,8 @@ h1 {
 
 .recipe-detail-image {
     min-height: 240px;
-    margin: -1.6rem -1.6rem 1.4rem;
+    margin: 0 auto 1.4rem;
+    border-radius: var(--radius);
 }
 
 .recipe-section {
@@ -451,76 +464,14 @@ h1 {
     margin: 0.6rem 0 0;
 }
 
+
 .meal-prep-nutrition h2 {
     margin-bottom: 0.8rem;
     font-size: 1.05rem;
 }
 
-.plan-intro {
-    margin: -0.6rem 0 1.5rem;
-    color: var(--muted);
-}
+/* Weekly-plan styles removed. Keep common button styles used elsewhere. */
 
-.meal-plan-grid {
-    display: grid;
-    gap: 1rem;
-    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-}
-
-.plan-meal,
-.plan-total {
-    padding: 1.3rem 1.4rem 1.45rem;
-}
-
-/* Compact weekday styles */
-.week-day.compact {
-    margin-bottom: 0.8rem;
-    padding: 0.6rem 0.6rem 0.9rem;
-    border-radius: 0.8rem;
-    background: rgba(255,255,255,0.9);
-}
-.week-day.compact .week-day-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 0.6rem;
-    margin-bottom: 0.5rem;
-}
-.week-day.compact .day-name { margin: 0; font-size: 1rem; }
-.week-day.compact .week-day-total { margin: 0; font-size: 0.95rem; color: var(--muted); }
-.compact-grid {
-    gap: 0.5rem;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-}
-.compact-meal { padding: 0.55rem; font-size: 0.92rem; }
-.compact-meal .small { font-size: 0.8rem; margin: 0; }
-.compact-meal .tiny { font-size: 0.76rem; margin-top: 0.25rem; color: var(--muted); }
-.swap-button.small { padding: 0.35rem 0.6rem; font-size: 0.78rem; border-radius: 0.6rem; }
-
-.plan-meal h2 {
-    margin: 0.55rem 0 0.85rem;
-    font-size: 1.25rem;
-}
-
-.plan-meal h2 a {
-    text-decoration: none;
-}
-
-.plan-meal h2 a:hover,
-.plan-meal h2 a:focus-visible {
-    text-decoration: underline;
-    text-decoration-color: var(--peach);
-}
-
-.meal-stat {
-    margin: 0.35rem 0;
-    padding: 0.45rem 0.65rem;
-    border-radius: 0.85rem;
-    background: var(--cream);
-    font-weight: 700;
-}
-
-.swap-button,
 .button-link,
 .profile-form button {
     display: inline-flex;
@@ -537,95 +488,11 @@ h1 {
     cursor: pointer;
 }
 
-.swap-button {
-    margin-top: 0.85rem;
-    background: var(--pale-lavender);
-}
-
-.swap-button:hover,
 .button-link:hover,
 .profile-form button:hover,
-.swap-button:focus-visible,
 .button-link:focus-visible,
 .profile-form button:focus-visible {
     filter: brightness(0.97);
-}
-
-.plan-total {
-    margin-top: 1.4rem;
-}
-
-.plan-total h2,
-.plan-total p {
-    margin: 0.4rem 0;
-}
-
-.daily-figures {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.75rem;
-    margin: 1rem 0 1.2rem;
-}
-
-.daily-figures p {
-    margin: 0;
-    padding: 0.9rem 1rem;
-    border-radius: 1.1rem;
-    background: var(--blush);
-}
-
-.daily-figures p:last-child {
-    background: var(--pale-lavender);
-}
-
-.calorie-progress {
-    position: relative;
-    display: flex;
-    height: 14px;
-    margin-top: 1rem;
-    overflow: hidden;
-    border-radius: 999px;
-    background: var(--pale-lavender);
-}
-
-.calorie-progress-green,
-.calorie-progress-red {
-    height: 100%;
-}
-
-.calorie-progress-green {
-    border-radius: 999px 0 0 999px;
-    background: var(--peach);
-}
-
-.calorie-progress-red {
-    background: var(--over);
-}
-
-.target-marker {
-    position: absolute;
-    top: -4px;
-    bottom: -4px;
-    width: 3px;
-    transform: translateX(-1px);
-    background: var(--text);
-}
-
-.progress-label {
-    color: var(--muted);
-    font-size: 0.9rem;
-}
-
-.green-key {
-    color: #c57d76;
-}
-
-.red-key {
-    color: var(--over);
-}
-
-.target-key {
-    color: var(--text);
 }
 
 .profile-page {
@@ -779,8 +646,7 @@ h1 {
 
     .nutrition,
     .recipe-detail .nutrition,
-    .meal-prep-nutrition .nutrition,
-    .daily-figures {
+    .meal-prep-nutrition .nutrition {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }
@@ -798,41 +664,4 @@ h1 {
     }
 }
 
-/* Modal styles for weekly-plan swap */
-.modal {
-    display: none;
-    position: fixed;
-    inset: 0;
-    z-index: 9999;
-}
-.modal-backdrop {
-    position: absolute;
-    inset: 0;
-    background: rgba(0,0,0,0.45);
-}
-.modal-content {
-    position: relative;
-    width: min(640px, 92%);
-    margin: 6vh auto;
-    background: var(--card);
-    border-radius: 1rem;
-    padding: 1rem 1.1rem;
-    box-shadow: var(--shadow);
-    z-index: 1;
-}
-.modal-close {
-    position: absolute;
-    right: 0.6rem;
-    top: 0.4rem;
-    border: 0;
-    background: transparent;
-    font-size: 1.4rem;
-    cursor: pointer;
-}
-.swap-option {
-    padding: 0.7rem 0.6rem;
-    border-bottom: 1px solid var(--line);
-}
-.swap-option h3 { margin: 0 0 0.25rem 0; }
-.swap-option p { margin: 0 0 0.6rem 0; color: var(--muted); }
-.choose-alternative { background: var(--peach); }
+/* Weekly-plan modal styles removed */

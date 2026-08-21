@@ -3,66 +3,37 @@
 {% block title %}Meal Plan | Daily plan{% endblock %}
 
 {% block content %}
-    {% if weekly_plan %}
-        <section class="recipe-heading">
-            <p class="eyebrow">Monday to Sunday</p>
-            <h1>Weekly meal plan</h1>
-            <div class="plan-actions">
-                <button id="reset-weekly-plan" class="button-link" type="button">Reset to standard</button>
-                <button id="mealprep-weekly-plan" class="button-link" type="button">Make mealprep-friendly</button>
-            </div>
-        </section>
-
-        <p class="plan-intro">Each day uses the same meal-generation logic, aiming for about {{ targets.calories }} kcal and {{ targets.protein }} g protein.</p>
-        {% for day in weekdays %}
-            {% set plan = weekly_plan[day] %}
-            <section class="week-day compact">
-                <div class="week-day-header">
-                    <h3 class="day-name">{{ day }}</h3>
-                    <p class="week-day-total"><strong>{{ plan.total_calories }} kcal</strong> · <strong>{{ plan.total_protein }} g</strong></p>
-                </div>
-                <section class="meal-plan-grid compact-grid" aria-label="{{ day }} meals">
-                    {% for meal_name, recipe in plan.meals.items() %}
-                        {% if recipe %}
-                            {% set planned = weekly_portions.get(day, {}).get(meal_name, 1) if weekly_portions is defined else 1 %}
-                            <article class="plan-meal compact-meal" data-day="{{ day }}" data-meal="{{ meal_name }}">
-                                <p class="recipe-type small">{{ meal_name }}</p>
-                                <h4 class="meal-name small"><a href="{{ url_for('recipe_detail', recipe_id=recipe.id) }}">{{ recipe.name }}</a></h4>
-                                <p class="meal-stat tiny">{{ recipe.calories }} kcal · {{ recipe.protein }} g</p>
-                                <div class="portion-control">
-                                    <label class="small">Portions
-                                        <div class="portion-spinner" data-day="{{ day }}" data-meal="{{ meal_name }}">
-                                            <button type="button" class="portion-btn portion-decrease" aria-label="Decrease portions" data-day="{{ day }}" data-meal="{{ meal_name }}">−</button>
-                                            <input type="number" min="1" class="weekly-portion-input" data-day="{{ day }}" data-meal="{{ meal_name }}" value="{{ planned }}" aria-label="Portions">
-                                            <button type="button" class="portion-btn portion-increase" aria-label="Increase portions" data-day="{{ day }}" data-meal="{{ meal_name }}">+</button>
-                                        </div>
-                                    </label>
-                                </div>
-                                <button class="swap-button small" type="button" data-day="{{ day }}" data-meal="{{ meal_name }}">Swap</button>
-                            </article>
-                        {% endif %}
-                    {% endfor %}
-                </section>
-            </section>
-        {% endfor %}
-
-        <!-- Modal used for weekly swap alternatives -->
-        <div id="swap-modal" class="modal" aria-hidden="true">
-            <div class="modal-backdrop"></div>
-            <div class="modal-content" role="dialog" aria-modal="true" aria-label="Choose alternative recipe">
-                <button class="modal-close">×</button>
-                <h2>Choose an alternative</h2>
-                <div id="swap-options"></div>
-            </div>
-        </div>
-    {% endif %}
+    <section class="mb-6 max-w-3xl">
+        <p class="mb-2 text-xs font-extrabold uppercase tracking-[0.18em] text-[#b8a9d9]">Your daily plan</p>
+        <h1 class="font-display text-4xl font-semibold tracking-tight text-slate-700 sm:text-5xl">Meal plan</h1>
+    </section>
 
     {% if plan %}
-        <section class="plan-total">
-            <h2>Daily total</h2>
-            <div class="daily-figures">
-                <p><strong>{{ plan.total_calories }} kcal</strong></p>
-                <p><strong>{{ plan.total_protein }} g protein</strong></p>
+        <p class="mb-6 text-slate-500">This simple plan is selected to be close to your estimated target of {{ targets.calories }} kcal.</p>
+        <section class="grid gap-5 md:grid-cols-2 xl:grid-cols-4" aria-label="Daily meal plan">
+            {% for meal_name, recipe in plan.meals.items() %}
+                {% if recipe %}
+                    <article class="rounded-[1.6rem] border border-stone-200 bg-white/80 p-5 shadow-sm">
+                        <p class="recipe-type">{{ meal_name }}</p>
+                        <h2 class="mt-3 font-display text-2xl text-slate-700"><a class="text-inherit no-underline hover:underline" href="{{ url_for('recipe_detail', recipe_id=recipe.id) }}">{{ recipe.name }}</a></h2>
+                        <p class="mt-4 rounded-2xl bg-[#fff9f3] px-3 py-2 text-sm font-extrabold text-slate-700">{{ recipe.calories }} kcal</p>
+                        <p class="mt-3 rounded-2xl bg-[#fff9f3] px-3 py-2 text-sm font-extrabold text-slate-700">{{ recipe.protein }} g protein</p>
+                        <div class="mt-5">
+                            <button type="button" data-meal="{{ meal_name }}" class="swap-open inline-flex items-center justify-center rounded-full bg-[#e8e1f3] px-4 py-2.5 text-sm font-extrabold text-slate-700 transition hover:bg-[#d9cceb]">Swap</button>
+                        </div>
+                    </article>
+                {% endif %}
+            {% endfor %}
+        </section>
+        <section class="mt-8 rounded-[1.8rem] border border-stone-200 bg-white/80 p-5 shadow-sm sm:p-6">
+            <h2 class="font-display text-3xl text-slate-700">Daily total</h2>
+            <div class="mt-4 grid gap-2 sm:grid-cols-2">
+                <p class="rounded-2xl bg-[#fff9f3] px-4 py-3 text-base font-extrabold text-slate-700"><strong>Daily total:{{ plan.total_calories }} kcal</strong></p>
+                <p class="rounded-2xl bg-[#fff9f3] px-4 py-3 text-base font-extrabold text-slate-700"><strong>{{ plan.total_protein }} g protein</strong></p>
+            </div>
+            <div class="mt-4 grid gap-2 sm:grid-cols-2">
+                <p class="rounded-2xl bg-[#fff9f3] px-4 py-3 text-base font-extrabold text-slate-700"><strong> Target: {{ targets.calories }} kcal</strong></p>
+                <p class="rounded-2xl bg-[#fff9f3] px-4 py-3 text-base font-extrabold text-slate-700"><strong></strong></p>
             </div>
             {% if plan.total_calories > targets.calories %}
                 {% set green_percentage = targets.calories / plan.total_calories * 100 %}
@@ -73,213 +44,113 @@
                 {% set red_percentage = 0 %}
                 {% set target_marker_position = 100 %}
             {% endif %}
-            <div class="calorie-progress" role="progressbar" aria-label="Daily calorie progress" aria-valuemin="0" aria-valuemax="{{ targets.calories }}" aria-valuenow="{{ plan.total_calories }}">
-                <div class="calorie-progress-green" style="width: {{ green_percentage }}%"></div>
+            <!-- <div class="mt-5 overflow-hidden rounded-full bg-stone-100" role="progressbar" aria-label="Daily calorie progress" aria-valuemin="0" aria-valuemax="{{ targets.calories }}" aria-valuenow="{{ plan.total_calories }}">
+                <div class="h-4 rounded-full bg-[#efa7a0]" style="width: {{ green_percentage }}%"></div>
                 {% if red_percentage > 0 %}
-                    <div class="calorie-progress-red" style="width: {{ red_percentage }}%"></div>
+                    <div class="h-4 rounded-full bg-[#c97b86]" style="width: {{ red_percentage }}%"></div>
                 {% endif %}
-                <span class="target-marker" style="left: {{ target_marker_position }}%" aria-hidden="true"></span>
-            </div>
-            <p class="progress-label"><span class="green-key">Peach: planned calories</span> · <span class="target-key">Line: daily target</span>{% if red_percentage > 0 %} · <span class="red-key">Rose: above target</span>{% endif %}</p>
-            <p class="progress-label">{{ plan.total_calories }} of {{ targets.calories }} kcal</p>
+            </div> -->
+            <!-- <p class="mt-3 text-sm text-slate-500"><span class="font-bold text-slate-700">Peach: planned calories</span> · <span class="font-bold text-slate-700">Line: daily target</span>{% if red_percentage > 0 %} · <span class="font-bold text-slate-700">Rose: above target</span>{% endif %}</p> -->
+            <p class="mt-2 text-sm text-slate-500">{{ plan.total_calories }} of {{ targets.calories }} kcal</p>
             {% set calorie_difference = targets.calories - plan.total_calories %}
             {% if calorie_difference > 0 %}
-                <p><strong>{{ calorie_difference }} kcal remaining</strong> to reach your estimated daily target.</p>
+                <p class="mt-4 text-lg text-slate-600"><strong class="text-slate-700">{{ calorie_difference }} kcal remaining</strong> to reach your estimated daily target.</p>
             {% elif calorie_difference < 0 %}
-                <p><strong>{{ calorie_difference|abs }} kcal above</strong> your estimated daily target.</p>
+                <p class="mt-4 text-lg text-slate-600"><strong class="text-slate-700">{{ calorie_difference|abs }} kcal above</strong> your estimated daily target.</p>
             {% else %}
-                <p><strong>This plan matches your estimated daily calorie target.</strong></p>
+                <p class="mt-4 text-lg text-slate-600"><strong class="text-slate-700">This plan matches your estimated daily calorie target.</strong></p>
             {% endif %}
-            <p class="estimate-note">This is a simple estimate based on the predefined recipes and may not match your target exactly.</p>
-            <p><a class="button-link" href="{{ url_for('shopping_list') }}">View shopping list</a></p>
+            <p class="mt-4 text-sm text-slate-500">This is a simple estimate based on the predefined recipes and may not match your target exactly.</p>
+            <p class="mt-6"><a class="inline-flex items-center justify-center rounded-full bg-[#efa7a0] px-5 py-3 text-sm font-extrabold text-slate-700 no-underline transition hover:bg-[#f5b7ac]" href="{{ url_for('shopping_list') }}">View shopping list</a></p>
         </section>
     {% else %}
-        <section class="profile-form">
-            <h2>Create your profile first</h2>
-            <p>Save your profile and daily calorie estimate before generating a meal plan.</p>
-            <a class="button-link" href="{{ url_for('profile') }}">Go to profile</a>
+        <section class="rounded-[1.5rem] border border-stone-200 bg-white/80 p-6 shadow-sm">
+            <h2 class="font-display text-3xl text-slate-700">Create your profile first</h2>
+            <p class="mt-3 text-slate-500">Save your profile and daily calorie estimate before generating a meal plan.</p>
+            <a class="mt-5 inline-flex items-center justify-center rounded-full bg-[#efa7a0] px-5 py-3 text-sm font-extrabold text-slate-700 no-underline transition hover:bg-[#f5b7ac]" href="{{ url_for('profile') }}">Go to profile</a>
         </section>
     {% endif %}
+        <!-- Swap modal (hidden by default) -->
+        <div id="swap-modal" class="fixed inset-0 z-50 hidden overflow-y-auto" aria-hidden="true">
+            <div id="swap-backdrop" class="absolute inset-0 bg-black/40"></div>
+            <div class="relative mx-auto my-12 w-[min(920px,92%)] rounded-2xl bg-white p-6 shadow-lg max-h-[80vh] overflow-auto">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-bold">Choose replacement recipe</h3>
+                    <button id="swap-close" class="text-slate-600 hover:text-slate-900">✕</button>
+                </div>
+                <p id="swap-for" class="mt-2 text-sm text-slate-500">Select a recipe to replace the chosen meal.</p>
+                <div class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                    {% for r in recipes %}
+                        <div class="rounded-lg border p-3">
+                            <a class="block no-underline text-inherit" href="{{ url_for('recipe_detail', recipe_id=r.id) }}">
+                                <img src="{{ r.image }}" alt="{{ r.name }}" class="mb-2 w-full rounded-md object-cover h-36">
+                                <h4 class="font-semibold">{{ r.name }}</h4>
+                            </a>
+                            <p class="mt-1 text-sm text-slate-500">{{ r.calories }} kcal · {{ r.protein }} g protein</p>
+                            <div class="mt-3 flex items-center justify-end">
+                                <button type="button" class="swap-select inline-flex items-center justify-center rounded-full bg-[#efa7a0] px-3 py-1 text-sm font-extrabold text-slate-700" data-recipe-id="{{ r.id }}">Select</button>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
 
-{% endblock %}
-
-{% block scripts %}
-    {{ super() }}
-    <script>
-        // Handle portions input via AJAX
-        document.addEventListener('input', function(e) {
-            const el = e.target.closest('.portion-input');
-            if (!el) return;
-            const meal = el.dataset.meal;
-            const portions = Number(el.value) || 1;
-
-            fetch(`/meal-plan/portions/${encodeURIComponent(meal)}`, {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({portions: portions})
-            }).then(r => r.json()).then(data => {
-                const stats = document.getElementById('portion-stats-' + meal);
-                if (stats && data.meal) {
-                    stats.textContent = `Per portion: ${data.meal.per_portion_calories} kcal · ${data.meal.per_portion_protein} g protein · Total: ${data.meal.total_calories} kcal`;
-                }
-                // (daily totals update handled elsewhere if needed)
-            }).catch(console.error);
-        });
-                    // Handle reset to standard
-                    document.addEventListener('click', async (e) => {
-                        const btn = e.target.closest && e.target.closest('#reset-weekly-plan');
-                        if (!btn) return;
-                        if (!confirm('Reset the weekly meal plan to standard portions and recipes?')) return;
-                        const prevText = btn.textContent;
-                        btn.disabled = true;
-                        btn.textContent = 'Resetting...';
-                        try {
-                            const res = await fetch('/weekly-plan/reset', { method: 'POST', headers: { 'Content-Type': 'application/json' } });
-                            if (!res.ok) throw new Error('Reset failed');
-                            // reload to reflect server-side reset
-                            window.location.reload();
-                        } catch (err) {
-                            console.error(err);
-                            alert('Failed to reset weekly plan. Check console for details.');
-                            btn.disabled = false;
-                            btn.textContent = prevText;
-                        }
-                    });
-                    
-                    // Make mealprep-friendly: copy one day's meals to every day
-                    document.addEventListener('click', async (e) => {
-                        const btn = e.target.closest && e.target.closest('#mealprep-weekly-plan');
-                        if (!btn) return;
-                        const sourceDay = prompt('Which day should be repeated across the week? (e.g. Monday)') || 'Monday';
-                        if (!confirm(`Make the whole week use ${sourceDay}'s meals?`)) return;
-                        const prevText = btn.textContent;
-                        btn.disabled = true;
-                        btn.textContent = 'Applying...';
-                        try {
-                            const res = await fetch('/weekly-plan/mealprep', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ source_day: sourceDay }) });
-                            if (!res.ok) throw new Error('Mealprep failed');
-                            window.location.reload();
-                        } catch (err) {
-                            console.error(err);
-                            alert('Failed to apply mealprep. Check console for details.');
-                            btn.disabled = false;
-                            btn.textContent = prevText;
-                        }
-                    });
-    </script>
         <script>
             (function(){
                 const modal = document.getElementById('swap-modal');
-                const optionsContainer = document.getElementById('swap-options');
+                const backdrop = document.getElementById('swap-backdrop');
+                const closeBtn = document.getElementById('swap-close');
+                const swapFor = document.getElementById('swap-for');
+                let currentMeal = null;
 
-                function openModal() { modal && modal.setAttribute('aria-hidden','false'); if(modal) modal.style.display = 'block'; }
-                function closeModal() { if(modal) modal.setAttribute('aria-hidden','true'); if(modal) modal.style.display = 'none'; if(optionsContainer) optionsContainer.innerHTML = ''; }
+                function openModal(mealName){
+                    currentMeal = mealName;
+                    swapFor.textContent = 'Choose a replacement for ' + mealName + '.';
+                    modal.classList.remove('hidden');
+                    modal.setAttribute('aria-hidden','false');
+                    // lock background scroll
+                    document.body.classList.add('overflow-hidden');
+                }
 
-                document.addEventListener('click', async (e) => {
-                    const btn = e.target.closest && e.target.closest('.swap-button');
-                    if (!btn) return;
-                    const day = btn.dataset.day;
-                    const meal = btn.dataset.meal;
-                    try {
-                        const res = await fetch(`/weekly-plan/alternatives/${encodeURIComponent(day)}/${encodeURIComponent(meal)}`);
-                        if (!res.ok) throw new Error('Failed to load alternatives');
-                        const data = await res.json();
-                        const alternatives = data.alternatives || [];
-                        if (!optionsContainer) return;
-                        if (!alternatives.length) {
-                            optionsContainer.innerHTML = '<p>No alternatives available.</p>';
-                        } else {
-                            optionsContainer.innerHTML = alternatives.map(a =>
-                                `<article class="swap-option" data-id="${a.id}">
-                                    <h3><a href="${a.url}">${a.name}</a></h3>
-                                    <p>${a.calories} kcal · ${a.protein} g protein</p>
-                                    <button class="choose-alternative" data-id="${a.id}" data-day="${day}" data-meal="${meal}">Choose</button>
-                                </article>`
-                            ).join('');
-                        }
-                        openModal();
-                    } catch (err) { console.error(err); }
+                function closeModal(){
+                    modal.classList.add('hidden');
+                    modal.setAttribute('aria-hidden','true');
+                    currentMeal = null;
+                    // restore background scroll
+                    document.body.classList.remove('overflow-hidden');
+                }
+
+                document.querySelectorAll('.swap-open').forEach(btn=>{
+                    btn.addEventListener('click', e=>{
+                        openModal(btn.dataset.meal);
+                    });
                 });
 
-                document.addEventListener('click', (e) => {
-                    if (e.target.matches && e.target.matches('.modal-close')) closeModal();
-                    if (e.target.classList && e.target.classList.contains('modal-backdrop')) closeModal();
-                });
+                closeBtn.addEventListener('click', closeModal);
+                backdrop.addEventListener('click', closeModal);
+                document.addEventListener('keydown', e=>{ if(e.key === 'Escape') closeModal(); });
 
-                document.addEventListener('click', async (e) => {
-                    const choose = e.target.closest && e.target.closest('.choose-alternative');
-                    if (!choose) return;
-                    const recipeId = choose.dataset.id;
-                    const day = choose.dataset.day;
-                    const meal = choose.dataset.meal;
+                document.querySelectorAll('.swap-select').forEach(btn=>{
+                    btn.addEventListener('click', async ()=>{
+                        if(!currentMeal) return;
+                        const fd = new FormData();
+                        fd.append('meal_name', currentMeal);
+                        fd.append('recipe_id', btn.dataset.recipeId);
 
-                    try {
-                        const res = await fetch(`/weekly-plan/swap/${encodeURIComponent(day)}/${encodeURIComponent(meal)}`, {
-                            method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ recipe_id: recipeId }),
-                        });
-                        if (!res.ok) throw new Error('Swap failed');
-                        const result = await res.json();
-
-                        const selector = `.plan-meal[data-day="${day}"][data-meal="${meal}"]`;
-                        const card = document.querySelector(selector);
-                        if (card && result.meal) {
-                            const nameEl = card.querySelector('.meal-name');
-                            const statEl = card.querySelector('.meal-stat');
-                            if (nameEl) nameEl.innerHTML = `<a href="${result.meal.url}">${result.meal.name}</a>`;
-                            if (statEl) statEl.textContent = `${result.meal.calories} kcal · ${result.meal.protein} g`;
+                        try{
+                            const res = await fetch("{{ url_for('swap_select') }}", { method: 'POST', body: fd });                            if(res.status === 204){
+                                window.location.reload();
+                            } else {
+                                const text = await res.text();
+                                alert('Swap failed: ' + res.status + '\n' + text);
+                            }
+                        }catch(err){
+                            alert('Swap failed: ' + err.message);
                         }
-
-                        const totalEl = card ? card.closest('.week-day').querySelector('.week-day-total') : null;
-                        if (totalEl && result.totals) {
-                            totalEl.innerHTML = `<strong>${result.totals.total_calories} kcal</strong> · <strong>${result.totals.total_protein} g protein</strong>`;
-                        }
-
-                        closeModal();
-                    } catch (err) { console.error(err); }
-                });
-
-                // Handle plus/minus on weekly portions
-                document.addEventListener('click', (e) => {
-                    const dec = e.target.closest && e.target.closest('.portion-decrease');
-                    const inc = e.target.closest && e.target.closest('.portion-increase');
-                    if (!dec && !inc) return;
-                    const btn = dec || inc;
-                    const day = btn.dataset.day;
-                    const meal = btn.dataset.meal;
-                    const selector = `.weekly-portion-input[data-day="${day}"][data-meal="${meal}"]`;
-                    const input = document.querySelector(selector);
-                    if (!input) return;
-                    let value = Number(input.value) || 1;
-                    value = dec ? Math.max(1, value - 1) : value + 1;
-                    input.value = value;
-                    input.dispatchEvent(new Event('change', { bubbles: true }));
-                });
-
-                // Handle weekly portion changes
-                document.addEventListener('change', async (e) => {
-                    const input = e.target.closest && e.target.closest('.weekly-portion-input');
-                    if (!input) return;
-                    const day = input.dataset.day;
-                    const meal = input.dataset.meal;
-                    const portions = Number(input.value) || 1;
-
-                    try {
-                        const res = await fetch(`/weekly-plan/portions/${encodeURIComponent(day)}/${encodeURIComponent(meal)}`, {
-                            method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ portions: portions }),
-                        });
-                        if (!res.ok) throw new Error('Failed to save portions');
-                        const data = await res.json();
-
-                        // update day totals in UI
-                        const selector = `.plan-meal[data-day="${day}"][data-meal="${meal}"]`;
-                        const card = document.querySelector(selector);
-                        const totalEl = card ? card.closest('.week-day').querySelector('.week-day-total') : null;
-                        if (totalEl && data.day_totals) {
-                            totalEl.innerHTML = `<strong>${data.day_totals.total_calories} kcal</strong> · <strong>${data.day_totals.total_protein} g protein</strong>`;
-                        }
-                    } catch (err) { console.error(err); }
+                    });
                 });
             })();
         </script>
-{% endblock %}
- 
+
+    {% endblock %}

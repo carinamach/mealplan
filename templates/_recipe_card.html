@@ -1,22 +1,26 @@
-<article class="recipe-card" data-recipe-card data-search-text="{{ recipe.name }} {% for ingredient in recipe.ingredients %}{{ ingredient.name }} {% endfor %}">
-    <form class="favorite-form" method="post" action="{{ url_for('toggle_favorite', recipe_id=recipe.id) }}">
-        <button type="submit" class="favorite-button{% if recipe.id in favorite_ids %} is-favorite{% endif %}" aria-pressed="{{ 'true' if recipe.id in favorite_ids else 'false' }}">
+<article class="recipe-card group relative flex h-full flex-col overflow-hidden rounded-[1.75rem] border border-stone-200 bg-white/90 p-4 shadow-[0_12px_30px_rgba(61,53,69,0.08)] transition duration-200 hover:-translate-y-1 hover:shadow-[0_18px_36px_rgba(61,53,69,0.12)]" data-recipe-card data-search-text="{{ recipe.name }} {% for ingredient in recipe.ingredients %}{{ ingredient.name }} {% endfor %}">
+    <form class="favorite-form absolute right-5 top-5 z-10" method="post" action="{{ url_for('toggle_favorite', recipe_id=recipe.id) }}">
+        <button type="submit" class="rounded-full border border-white/80 bg-white/90 px-3 py-1.5 text-xs font-extrabold text-slate-700 shadow-sm transition hover:bg-[#f7d9d5] {% if recipe.id in favorite_ids %} bg-[#f7d9d5] {% endif %}" aria-pressed="{{ 'true' if recipe.id in favorite_ids else 'false' }}">
             {% if recipe.id in favorite_ids %}♥ Favorited{% else %}♡ Favorite{% endif %}
         </button>
     </form>
-    <a class="recipe-card-link" href="{{ url_for('recipe_detail', recipe_id=recipe.id) }}">
-        <div class="recipe-image-placeholder" aria-hidden="true">🥗</div>
+    <a class="flex h-full flex-col text-inherit no-underline" href="{{ url_for('recipe_detail', recipe_id=recipe.id) }}">
+        {% if recipe.image %}
+            <img src="{{ recipe.image }}" alt="{{ recipe.name }}" class="recipe-card-image mb-4 h-52 w-full rounded-[1.25rem] object-cover">
+        {% else %}
+            <div class="recipe-image-placeholder mb-4 h-52 rounded-[1.25rem]">🥗</div>
+        {% endif %}
         <p class="recipe-type">{{ recipe.meal_type }}</p>
-        <h2>{{ recipe.name }}</h2>
-        <p class="recipe-meta">{{ recipe.servings }} servings - {{ recipe.calories }} kcal per serving</p>
-        <dl class="nutrition">
-            <div><dt>Protein</dt><dd>{{ recipe.protein }} g</dd></div>
-            <div><dt>Carbs</dt><dd>{{ recipe.carbohydrates }} g</dd></div>
-            <div><dt>Fat</dt><dd>{{ recipe.fat }} g</dd></div>
+        <h2 class="mt-3 mb-2 font-display text-2xl leading-tight text-slate-700">{{ recipe.name }}</h2>
+        <p class="text-sm text-slate-500">{{ recipe.servings }} servings - {{ recipe.calories }} kcal per serving</p>
+        <dl class="mt-4 grid grid-cols-3 gap-2">
+            <div class="rounded-2xl bg-[#fff9f3] px-2 py-3 text-center"><dt class="text-[10px] font-extrabold uppercase tracking-[0.08em] text-slate-500">Protein</dt><dd class="mt-1 text-sm font-extrabold text-slate-700">{{ recipe.protein }} g</dd></div>
+            <div class="rounded-2xl bg-[#fff9f3] px-2 py-3 text-center"><dt class="text-[10px] font-extrabold uppercase tracking-[0.08em] text-slate-500">Carbs</dt><dd class="mt-1 text-sm font-extrabold text-slate-700">{{ recipe.carbohydrates }} g</dd></div>
+            <div class="rounded-2xl bg-[#fff9f3] px-2 py-3 text-center"><dt class="text-[10px] font-extrabold uppercase tracking-[0.08em] text-slate-500">Fat</dt><dd class="mt-1 text-sm font-extrabold text-slate-700">{{ recipe.fat }} g</dd></div>
         </dl>
-        <p class="tags">
+        <p class="mt-4 flex flex-wrap gap-2">
             {% for tag in recipe.tags %}
-                <span>{{ tag }}</span>
+                <span class="rounded-full bg-[#f7d9d5] px-2.5 py-1 text-[11px] font-extrabold uppercase tracking-[0.05em] text-slate-700">{{ tag }}</span>
             {% endfor %}
         </p>
     </a>
